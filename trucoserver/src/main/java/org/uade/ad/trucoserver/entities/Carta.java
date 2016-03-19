@@ -1,9 +1,17 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.Comparator;
+
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
 
+/**
+ * El orden natural es por numero de carta?
+ * 
+ * @author Grupo9
+ *
+ */
 @Entity(name="carta")
 @Access(value=AccessType.FIELD)
 public class Carta implements Comparable<Carta> {
@@ -66,7 +74,10 @@ public class Carta implements Comparable<Carta> {
 	}
 
 	public int compareTo(Carta o) {
-		// TODO Auto-generated method stub
+		if (numero < o.numero)
+			return -1;
+		else if (numero > o.numero)
+			return 1;
 		return 0;
 	}
 
@@ -110,5 +121,20 @@ public class Carta implements Comparable<Carta> {
 		this.numero = numero;
 	}
 	
-	
+	/**
+	 * Comparador por valor de truco
+	 * 
+	 * @author Grupo9
+	 *
+	 */
+	public static class ValorTrucoComparador implements Comparator<Carta> {
+
+		public int compare(Carta o1, Carta o2) {
+			if (o1.getPesoTruco() < o2.getPesoTruco())
+				return -1;
+			else if (o1.getPesoTruco() > o2.getPesoTruco())
+				return 1;
+			return 0;
+		}
+	}
 }

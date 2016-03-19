@@ -29,5 +29,7 @@
 	</dependencies>
 	<build>
 		<finalName>trucoweb</finalName>
+		<plugins>
+		</plugins>
 	</build>
 </project>

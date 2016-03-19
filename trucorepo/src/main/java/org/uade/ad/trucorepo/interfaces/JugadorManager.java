@@ -9,6 +9,8 @@ import org.uade.ad.trucorepo.dtos.JugadorDTO;
 
 public interface JugadorManager extends Remote {
 
+	public static final String SERVICENAME = ""; //Nombre del servicio (para el Naming.lookup)
+	
 	public JugadorDTO registrarJugador(String email, String apodo, String password) throws RemoteException;
 	
 	public GrupoDTO crearGrupo(String nombreGrupo, Set<JugadorDTO> integrantes) throws RemoteException;
