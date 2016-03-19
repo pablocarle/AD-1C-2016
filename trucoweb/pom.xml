@@ -7,6 +7,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>trucoweb Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+	<properties>
+		<jdk>1.8</jdk>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -30,6 +33,15 @@
 	<build>
 		<finalName>trucoweb</finalName>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.5.1</version>
+				<configuration>
+					<source>${jdk}</source>
+					<target>${jdk}</target>
+				</configuration>
+			</plugin>
 		</plugins>
 	</build>
 </project>
