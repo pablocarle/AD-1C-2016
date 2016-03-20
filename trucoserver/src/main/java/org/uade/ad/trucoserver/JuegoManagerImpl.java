@@ -1,7 +1,7 @@
 package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
-import java.rmi.server.RemoteObject;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Map;
 import java.util.Set;
 
@@ -15,7 +15,12 @@ import org.uade.ad.trucorepo.interfaces.JuegoManager;
  * @author Grupo9
  *
  */
-public class JuegoManagerImpl extends RemoteObject implements JuegoManager {
+public class JuegoManagerImpl extends UnicastRemoteObject implements JuegoManager {
+
+	protected JuegoManagerImpl() throws RemoteException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 
 	private static final long serialVersionUID = 1L;
 
