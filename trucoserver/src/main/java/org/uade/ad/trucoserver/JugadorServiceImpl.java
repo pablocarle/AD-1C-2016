@@ -6,11 +6,15 @@ import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
-import org.uade.ad.trucorepo.interfaces.JugadorManager;
+import org.uade.ad.trucorepo.interfaces.JugadorService;
+import org.uade.ad.trucoserver.business.JugadorManager;
+import org.uade.ad.trucoserver.entities.Jugador;
 
-public class JugadorManagerImpl extends UnicastRemoteObject implements JugadorManager {
+public class JugadorServiceImpl extends UnicastRemoteObject implements JugadorService {
 
-	protected JugadorManagerImpl() throws RemoteException {
+	private JugadorManager manager = JugadorManager.getManager();
+	
+	protected JugadorServiceImpl() throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -22,8 +26,12 @@ public class JugadorManagerImpl extends UnicastRemoteObject implements JugadorMa
 
 	@Override
 	public JugadorDTO registrarJugador(String email, String apodo, String password) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			Jugador jugador = manager.registrarJugador(apodo, email, password);
+			return jugador.getDTO();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	@Override
@@ -31,5 +39,4 @@ public class JugadorManagerImpl extends UnicastRemoteObject implements JugadorMa
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

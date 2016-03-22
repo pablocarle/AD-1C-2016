@@ -5,8 +5,8 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-import org.uade.ad.trucorepo.interfaces.JuegoManager;
-import org.uade.ad.trucorepo.interfaces.JugadorManager;
+import org.uade.ad.trucorepo.interfaces.JuegoService;
+import org.uade.ad.trucorepo.interfaces.JugadorService;
 
 public class Server {
 
@@ -17,12 +17,12 @@ public class Server {
 	private void init() {
 		try {
 			LocateRegistry.createRegistry(1099);
-			JuegoManager juegoManager = new JuegoManagerImpl();
-			JugadorManager jugadorManager = new JugadorManagerImpl();
-			Naming.rebind("//localhost/" + JuegoManager.SERVICENAME, juegoManager);
-			Naming.rebind("//localhost/" + JugadorManager.SERVICENAME, jugadorManager);
-			System.out.println("Jugador Manager: " + "//localhost/" + JugadorManager.SERVICENAME);
-			System.out.println("Juego Manager: " + "//localhost/" + JuegoManager.SERVICENAME);
+			JuegoService juegoManager = new JuegoServiceImpl();
+			JugadorService jugadorManager = new JugadorServiceImpl();
+			Naming.rebind("//localhost/" + JuegoService.SERVICENAME, juegoManager);
+			Naming.rebind("//localhost/" + JugadorService.SERVICENAME, jugadorManager);
+			System.out.println("Jugador Manager: " + "//localhost/" + JugadorService.SERVICENAME);
+			System.out.println("Juego Manager: " + "//localhost/" + JuegoService.SERVICENAME);
 		} catch (RemoteException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

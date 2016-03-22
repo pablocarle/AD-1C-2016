@@ -5,6 +5,7 @@ import java.util.Comparator;
 import javax.persistence.Access;
 import javax.persistence.AccessType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
 
 /**
  * El orden natural es por numero de carta?
@@ -16,6 +17,7 @@ import javax.persistence.Entity;
 @Access(value=AccessType.FIELD)
 public class Carta implements Comparable<Carta> {
 
+	@Id
 	private int idCarta;
 	private String palo;
 	private int pesoEnvido;

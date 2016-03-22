@@ -7,7 +7,7 @@ import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
-import org.uade.ad.trucorepo.interfaces.JuegoManager;
+import org.uade.ad.trucorepo.interfaces.JuegoService;
 
 /**
  * Entry point servicios de juego
@@ -15,9 +15,9 @@ import org.uade.ad.trucorepo.interfaces.JuegoManager;
  * @author Grupo9
  *
  */
-public class JuegoManagerImpl extends UnicastRemoteObject implements JuegoManager {
+public class JuegoServiceImpl extends UnicastRemoteObject implements JuegoService {
 
-	protected JuegoManagerImpl() throws RemoteException {
+	protected JuegoServiceImpl() throws RemoteException {
 		super();
 		// TODO Auto-generated constructor stub
 	}
