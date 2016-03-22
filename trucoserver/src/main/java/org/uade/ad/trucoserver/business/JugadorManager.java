@@ -26,6 +26,9 @@ public class JugadorManager {
 			throw new Exception("Ya existe");
 		} else {
 			Jugador nuevo = new Jugador();
+			nuevo.setApodo(apodo);
+			nuevo.setEmail(email);
+			nuevo.setPassword(password);
 			dao.guardar(nuevo);
 			return nuevo;
 		}

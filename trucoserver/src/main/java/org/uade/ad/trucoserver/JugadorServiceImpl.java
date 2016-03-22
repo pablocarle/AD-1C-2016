@@ -30,7 +30,7 @@ public class JugadorServiceImpl extends UnicastRemoteObject implements JugadorSe
 			Jugador jugador = manager.registrarJugador(apodo, email, password);
 			return jugador.getDTO();
 		} catch (Exception e) {
-			return null;
+			throw new RemoteException(e.getMessage(), e);
 		}
 	}
 
