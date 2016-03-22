@@ -13,43 +13,49 @@ public class GenericDaoImpl<T, ID extends Serializable> implements GenericDao<T,
 	
 	@Override
 	public Session getSession() {
-		// TODO Auto-generated method stub
-		return null;
+		return factory.getCurrentSession();
 	}
 
 	@Override
-	public T getPorId(ID id) {
+	public T getPorId(Class<T> clasz, ID id) {
 		Session session = getSession();
-		return null;
+		return session.get(clasz, id);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public List<T> getTodos() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<T> getTodos(Class<T> clasz) {
+		Session session = getSession();
+		return session.createQuery("from " + clasz.getName() + " where 1 = 1").list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<T> getMuchos(Query criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		return criteria.list();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getUnico(Query criteria) {
-		// TODO Auto-generated method stub
-		return null;
+		return (T) criteria.uniqueResult();
 	}
 
 	@Override
 	public void guardar(T entity) {
-		// TODO Auto-generated method stub
-		
+		Session session = getSession();
+		session.save(entity);
 	}
 
 	@Override
 	public void actualizar(T entity) {
-		// TODO Auto-generated method stub
-		
+		Session session = getSession();
+		session.update(entity);
+	}
+
+	@Override
+	public void eliminar(T entity) {
+		Session session = getSession();
+		session.delete(entity);
 	}
 }

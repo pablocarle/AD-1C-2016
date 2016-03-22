@@ -24,10 +24,10 @@ public class Server {
 			System.out.println("Jugador Manager: " + "//localhost/" + JugadorService.SERVICENAME);
 			System.out.println("Juego Manager: " + "//localhost/" + JuegoService.SERVICENAME);
 		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 	}
