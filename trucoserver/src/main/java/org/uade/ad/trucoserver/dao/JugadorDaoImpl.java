@@ -13,5 +13,4 @@ public class JugadorDaoImpl extends GenericDaoImpl<Jugador, Integer> implements 
 		query.setParameter("apodo", apodo);
 		return getUnico(query);
 	}
-
 }
