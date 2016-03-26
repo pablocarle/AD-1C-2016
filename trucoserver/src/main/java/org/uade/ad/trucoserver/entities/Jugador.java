@@ -12,6 +12,8 @@ public class Jugador {
 	private String apodo;
 	private String password;
 	
+	private Categoria categoria;
+	
 	public Jugador() {
 		super();
 	}
