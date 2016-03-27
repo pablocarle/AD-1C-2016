@@ -6,6 +6,7 @@ public class GrupoDetalle {
 	private Grupo grupo;
 	private Jugador jugador;
 	private boolean admin;
+	private int parejaNum;
 	
 	public GrupoDetalle() {
 		super();
@@ -78,5 +79,13 @@ public class GrupoDetalle {
 
 	public void setAdmin(boolean admin) {
 		this.admin = admin;
+	}
+
+	public int getParejaNum() {
+		return parejaNum;
+	}
+
+	public void setParejaNum(int parejaNum) {
+		this.parejaNum = parejaNum;
 	}
 }

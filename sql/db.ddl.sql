@@ -55,10 +55,13 @@ create table grupos (
 
 create unique index grupos_idx_u on grupos ( nombre );
 
+-- drop table grupos_detail;
+
 create table grupos_detail (
 	idGrupoDetail int not null auto_increment,
 	idGrupo int not null,
     idJugador int not null,
+    parejaNum int not null,
     admin boolean not null,
     constraint grupos_detail_pk primary key ( idGrupoDetail ),
     constraint grupos_detail_grupo_fk foreign key ( idGrupo ) references grupos ( idGrupo ),
