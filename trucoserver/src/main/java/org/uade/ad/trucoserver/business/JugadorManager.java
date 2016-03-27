@@ -1,13 +1,14 @@
 package org.uade.ad.trucoserver.business;
 
 import org.uade.ad.trucoserver.dao.JugadorDao;
+import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.entities.Jugador;
 
 public class JugadorManager {
 
 	private static JugadorManager instancia = null;
 	
-	private JugadorDao dao;
+	private JugadorDao dao = JugadorDaoImpl.getDAO();
 	
 	private JugadorManager() {
 		super();
@@ -33,5 +34,13 @@ public class JugadorManager {
 			return nuevo;
 		}
 	}
-	
+
+	public boolean isValidLogin(String apodo, String password) {
+		
+		return false;
+	}
+
+	public Jugador getJugador(String apodo) {
+		return dao.getPorApodo(apodo);
+	}
 }

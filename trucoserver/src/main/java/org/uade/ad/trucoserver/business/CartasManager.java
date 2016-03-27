@@ -40,7 +40,7 @@ public class CartasManager {
 	 * Obtener numSets de cartas tomadas de a HAND_SIZE
 	 * 
 	 * @param numSets Cantidad de sets de cartas deseadas
-	 * @return
+	 * @return Mapa K: Numero de set V: Set de cartas random
 	 */
 	public Map<Integer, Set<Carta>> getRandomSets(int numSets) {
 		Map<Integer, Set<Carta>> cartas = new HashMap<>(numSets);

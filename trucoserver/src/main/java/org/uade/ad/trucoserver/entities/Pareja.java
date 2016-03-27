@@ -10,5 +10,9 @@ public class Pareja extends Jugador {
 		this.jugador1 = jugador1;
 		this.jugador2 = jugador2;
 	}
+
+	public boolean contieneJugador(Jugador jugador) {
+		return jugador1.equals(jugador) || jugador2.equals(jugador);
+	}
 	
 }

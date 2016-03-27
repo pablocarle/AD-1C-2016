@@ -6,6 +6,18 @@ import org.uade.ad.trucoserver.entities.Jugador;
 
 public class JugadorDaoImpl extends GenericDaoImpl<Jugador, Integer> implements JugadorDao {
 
+	private static JugadorDao instancia = null;
+	
+	public static JugadorDao getDAO() {
+		if (instancia == null)
+			instancia = new JugadorDaoImpl();
+		return instancia;
+	}
+	
+	private JugadorDaoImpl() {
+		super();
+	}
+	
 	@Override
 	public Jugador getPorApodo(String apodo) {
 		Session session = getSession();
@@ -13,4 +25,5 @@ public class JugadorDaoImpl extends GenericDaoImpl<Jugador, Integer> implements 
 		query.setParameter("apodo", apodo);
 		return getUnico(query);
 	}
+
 }
