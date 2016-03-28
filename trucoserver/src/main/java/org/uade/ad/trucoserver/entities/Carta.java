@@ -129,7 +129,7 @@ public class Carta implements Comparable<Carta> {
 	 * @author Grupo9
 	 *
 	 */
-	public static class ValorTrucoComparador implements Comparator<Carta> {
+	public static final class ValorTrucoComparador implements Comparator<Carta> {
 
 		public int compare(Carta o1, Carta o2) {
 			if (o1.getPesoTruco() < o2.getPesoTruco())

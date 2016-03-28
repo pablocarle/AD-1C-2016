@@ -1,6 +1,9 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.List;
+
 import org.uade.ad.trucoserver.entities.Jugador;
+import org.uade.ad.trucoserver.entities.Mano;
 import org.uade.ad.trucoserver.entities.Pareja;
 
 /**
@@ -18,6 +21,11 @@ public abstract class JuegoStrategy {
 	protected Pareja pareja1;
 	protected Pareja pareja2;
 	
+	//Variables para acceso rapido
+	protected int pareja1Score = 0;
+	protected int pareja2Score = 0;
+	
+	protected List<Mano> manos;
 	
 	public JuegoStrategy(Pareja pareja1, Pareja pareja2) {
 		super();
