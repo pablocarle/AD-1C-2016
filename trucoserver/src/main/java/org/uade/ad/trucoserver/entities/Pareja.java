@@ -17,6 +17,18 @@ public class Pareja extends Jugador {
 	}
 
 	@Override
+	public Categoria getCategoria() {
+		int compare = jugador1.getCategoria().compareTo(jugador2.getCategoria());
+		if (compare == 0)
+			return jugador1.getCategoria();
+		else if (compare < 0) {
+			return jugador2.getCategoria();
+		} else {
+			return jugador1.getCategoria();
+		}
+	}
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();

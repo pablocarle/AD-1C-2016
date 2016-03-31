@@ -3,6 +3,7 @@ package org.uade.ad.trucoserver.entities;
 public class Categoria implements Comparable<Categoria> {
 	
 	private int idCategoria;
+	private int ordenCategoria;
 	private String nombre;
 	
 	public Categoria() {
@@ -63,12 +64,20 @@ public class Categoria implements Comparable<Categoria> {
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
+	
+	public int getOrdenCategoria() {
+		return ordenCategoria;
+	}
+
+	public void setOrdenCategoria(int ordenCategoria) {
+		this.ordenCategoria = ordenCategoria;
+	}
 
 	@Override
 	public int compareTo(Categoria o) {
-		if (this.idCategoria < o.idCategoria) {
+		if (this.ordenCategoria < o.ordenCategoria) {
 			return -1;
-		} else if (this.idCategoria > o.idCategoria)
+		} else if (this.ordenCategoria > o.ordenCategoria)
 			return 1;
 		return 0;
 	}

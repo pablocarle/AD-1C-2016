@@ -103,4 +103,8 @@ public class Jugador {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+	public Categoria getCategoria() {
+		return categoria;
+	}
 }
