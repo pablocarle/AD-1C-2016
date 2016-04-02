@@ -12,9 +12,6 @@ import org.uade.ad.trucoserver.entities.Pareja;
 
 public abstract class Context extends UnicastRemoteObject {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	private static List<JuegoStrategy> juegos;
 	private static List<Jugador> jugadoresDisponibles;
@@ -24,6 +21,8 @@ public abstract class Context extends UnicastRemoteObject {
 	static {
 		juegos = new Vector<>();
 		jugadoresDisponibles = new Vector<>();
+		libreParejasPending = new Vector<>();
+		grupos = new Vector<>();
 	}
 	
 	protected Context() throws RemoteException {
@@ -35,6 +34,16 @@ public abstract class Context extends UnicastRemoteObject {
 			synchronized (jugadoresDisponibles) {
 				if (!jugadoresDisponibles.contains(jugador)) {
 					jugadoresDisponibles.add(jugador);
+				}
+			}
+		}
+	}
+	
+	protected static void agregarParejaModoLibre(Pareja pareja) {
+		if (!libreParejasPending.contains(pareja)) {
+			synchronized(libreParejasPending) {
+				if (!libreParejasPending.contains(pareja)) {
+					libreParejasPending.add(pareja);
 				}
 			}
 		}

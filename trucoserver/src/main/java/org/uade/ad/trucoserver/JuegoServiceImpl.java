@@ -26,7 +26,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	private static final long serialVersionUID = 1L;
 
-	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas() throws RemoteException {
+	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException {
 		
 		// TODO Auto-generated method stub
 		return null;

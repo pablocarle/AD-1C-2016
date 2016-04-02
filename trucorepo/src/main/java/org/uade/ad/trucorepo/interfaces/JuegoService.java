@@ -13,7 +13,7 @@ public interface JuegoService extends Remote {
 	
 	public static final String SERVICENAME = "juegoService"; //TODO El nombre del servicio (Para el Naming.lookup)
 	
-	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas() throws RemoteException;
+	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException;
 	
 	public void cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException;
 	

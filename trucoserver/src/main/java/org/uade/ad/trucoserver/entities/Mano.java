@@ -64,10 +64,11 @@ public class Mano {
 			boolean todasCompletas = true;
 			BazaResultado resultado = null;
 			for (Baza baza : bazas) {
-				if (baza.esCompleta() && !(resultado = baza.getResultado()).isParda()) {
-					if (pareja1.contieneJugador(resultado.getJugadores().get(0))) {
+				resultado = baza.getResultado();
+				if (baza.esCompleta()) {
+					if (pareja1.contieneJugador(resultado.getJugador())) {
 						countPareja1++;
-					} else  if (pareja2.contieneJugador(resultado.getJugadores().get(1))) {
+					} else  if (pareja2.contieneJugador(resultado.getJugador())) {
 						countPareja2++;
 					}
 				} else {
