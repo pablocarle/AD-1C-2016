@@ -1,6 +1,6 @@
 package org.uade.ad.trucoserver.entities;
 
-public class Pareja extends Jugador {
+public class Pareja {
 
 	public static final Pareja Null = new Pareja(null, null);
 	private Jugador jugador1;
@@ -16,7 +16,6 @@ public class Pareja extends Jugador {
 		return jugador != null && (jugador.equals(jugador1) || jugador.equals(jugador2));
 	}
 
-	@Override
 	public Categoria getCategoria() {
 		int compare = jugador1.getCategoria().compareTo(jugador2.getCategoria());
 		if (compare == 0)
@@ -36,7 +35,7 @@ public class Pareja extends Jugador {
 		result = prime * result + ((jugador2 == null) ? 0 : jugador2.hashCode());
 		return result;
 	}
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -47,13 +46,23 @@ public class Pareja extends Jugador {
 		if (jugador1 == null) {
 			if (other.jugador1 != null)
 				return false;
-		} else if (!jugador1.equals(other.jugador1))
-			return false;
+		} 
 		if (jugador2 == null) {
 			if (other.jugador2 != null)
 				return false;
-		} else if (!jugador2.equals(other.jugador2))
-			return false;
-		return true;
+		}
+		if ((jugador1.equals(other.jugador1) && jugador2.equals(other.jugador2))
+				|| (jugador1.equals(other.jugador2) && jugador2.equals(other.jugador1))
+				)
+			return true;
+		return false;
+	}
+	
+	public Jugador getJugador1() {
+		return jugador1;
+	}
+	
+	public Jugador getJugador2() {
+		return jugador2;
 	}
 }

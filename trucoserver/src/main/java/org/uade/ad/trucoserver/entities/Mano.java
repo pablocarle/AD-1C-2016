@@ -12,12 +12,18 @@ public class Mano {
 	
 	private Pareja pareja1;
 	private Pareja pareja2;
+	private List<Envite> envites;
+	{
+		envites = new ArrayList<>();
+	}
 	private List<Baza> bazas;
+	private List<Jugador> ordenJuego;
 	
-	public Mano(Pareja pareja1, Pareja pareja2) {
+	public Mano(Pareja pareja1, Pareja pareja2, List<Jugador> ordenJuego) {
 		super();
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
+		this.ordenJuego = ordenJuego;
 	}
 	
 	public List<Baza> getBazas() {
@@ -32,13 +38,13 @@ public class Mano {
 		}
 		Baza bazaActual = null;
 		if (bazas.isEmpty()) {
-			bazaActual = new Baza(NUM_JUGADORES);
+			bazaActual = new Baza(NUM_JUGADORES, ordenJuego);
 			bazas.add(bazaActual);
 			bazaActual.jugarCarta(jugador, carta);
 		} else {
 			bazaActual = bazas.get(bazas.size() - 1);
 			if (bazaActual.esCompleta() && getGanador() != Pareja.Null) {
-				bazaActual = new Baza(NUM_JUGADORES);
+				bazaActual = new Baza(NUM_JUGADORES, ordenJuego);
 				bazaActual.jugarCarta(jugador, carta);
 			} else if (!bazaActual.esCompleta()) {
 				bazaActual.jugarCarta(jugador, carta);
@@ -78,5 +84,12 @@ public class Mano {
 			}
 		}
 		return Pareja.Null;
+	}
+
+	public void cantar(Jugador jugador, Envite envite) {
+		// TODO Gestionar envites en la mano
+		
+		envites.add(envite);
+		
 	}
 }

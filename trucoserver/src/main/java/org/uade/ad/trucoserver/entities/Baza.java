@@ -13,12 +13,15 @@ public class Baza {
 		Parda, NoParda, Incompleta
 	}
 	
-	private Map<Jugador, Carta> cartasJugadas;
+	private Map<Jugador, Carta> cartasJugadas; //TODO Cambiar, no puede ser mapa porque pierde registro de a quien le toca jugar
 	private int numJugadores;
+	private List<Jugador> ordenJuego;
 	
-	public Baza(int numJugadores) {
+	public Baza(int numJugadores, List<Jugador> ordenJuego) {
 		super();
+		assert(numJugadores == ordenJuego.size());
 		this.numJugadores = numJugadores;
+		this.ordenJuego = ordenJuego;
 	}
 	
 	void jugarCarta(Jugador jugador, Carta carta) {

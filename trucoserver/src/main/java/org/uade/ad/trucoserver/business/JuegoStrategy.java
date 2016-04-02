@@ -1,7 +1,9 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.uade.ad.trucoserver.entities.Envite;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Mano;
 import org.uade.ad.trucoserver.entities.Pareja;
@@ -16,6 +18,8 @@ import org.uade.ad.trucoserver.entities.Pareja;
  *
  */
 public abstract class JuegoStrategy {
+	
+	protected int idJuego;
 
 	//Las parejas que participan del juego
 	protected Pareja pareja1;
@@ -26,13 +30,47 @@ public abstract class JuegoStrategy {
 	protected int pareja2Score = 0;
 	
 	protected List<Mano> manos;
+
+	private List<Jugador> primerOrdenJuego;
 	
-	public JuegoStrategy(Pareja pareja1, Pareja pareja2) {
+	public JuegoStrategy(Pareja pareja1, Pareja pareja2, List<Jugador> primerOrdenJuego) {
 		super();
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
+		this.primerOrdenJuego = primerOrdenJuego;
 	}
 	
+	public void cantar(String apodo, Envite envite) {
+		Mano manoActual = getManoActual();
+		Jugador jugador = getJugador(apodo);
+		manoActual.cantar(jugador, envite);
+	}
+	
+	private Jugador getJugador(String apodo) {
+		if (pareja1.getJugador1().getApodo().equals(apodo))
+			return pareja1.getJugador1();
+		if (pareja1.getJugador2().getApodo().equals(apodo))
+			return pareja1.getJugador2();
+		if (pareja2.getJugador1().getApodo().equals(apodo))
+			return pareja2.getJugador1();
+		if (pareja2.getJugador2().getApodo().equals(apodo))
+			return pareja2.getJugador2();
+		return null;
+	}
+
+	private Mano getManoActual() {
+		if (manos != null && !manos.isEmpty()) {
+			return manos.get(manos.size() - 1);
+		} else if (manos == null) {
+			manos = new ArrayList<>();
+		}
+		if (manos.isEmpty()) {
+			manos.add(new Mano(pareja1, pareja2, primerOrdenJuego));
+			return manos.get(0);
+		}
+		return null; //Dead
+	}
+
 	/**
 	 * Obtener puntos obtenidos por jugador en el juego
 	 * 

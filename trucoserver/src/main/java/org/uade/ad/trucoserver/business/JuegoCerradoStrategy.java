@@ -1,5 +1,7 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.List;
+
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 
@@ -10,8 +12,8 @@ public class JuegoCerradoStrategy extends JuegoStrategy {
 	//Guarda por si hace falta por alguna razon algo que solo nos da el grupo y no las parejas
 	private Grupo grupo;
 	
-	public JuegoCerradoStrategy(Grupo grupo) throws Exception {
-		super(grupo.getParejaNum(0), grupo.getParejaNum(1));
+	public JuegoCerradoStrategy(Grupo grupo, List<Jugador> primerOrdenJuego) throws Exception {
+		super(grupo.getParejaNum(0), grupo.getParejaNum(1), primerOrdenJuego);
 		this.grupo = grupo;
 	}
 

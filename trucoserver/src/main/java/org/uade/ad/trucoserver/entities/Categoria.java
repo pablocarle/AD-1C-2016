@@ -5,20 +5,30 @@ public class Categoria implements Comparable<Categoria> {
 	private int idCategoria;
 	private int ordenCategoria;
 	private String nombre;
+	private int puntajeMin;
+	private int partidosMin;
+	private int promedioVictoriasMin;
 	
 	public Categoria() {
 		super();
 	}
 	
-	public Categoria(int idCategoria, String nombre) {
+	public Categoria(int idCategoria, int ordenCategoria, String nombre, int puntajeMin, int partidosMin,
+			int promedioVictoriasMin) {
 		super();
 		this.idCategoria = idCategoria;
+		this.ordenCategoria = ordenCategoria;
 		this.nombre = nombre;
+		this.puntajeMin = puntajeMin;
+		this.partidosMin = partidosMin;
+		this.promedioVictoriasMin = promedioVictoriasMin;
 	}
 
 	@Override
 	public String toString() {
-		return "Categoria [idCategoria=" + idCategoria + ", nombre=" + nombre + "]";
+		return "Categoria [idCategoria=" + idCategoria + ", ordenCategoria=" + ordenCategoria + ", nombre=" + nombre
+				+ ", puntajeMin=" + puntajeMin + ", partidosMin=" + partidosMin + ", promedioVictoriasMin="
+				+ promedioVictoriasMin + "]";
 	}
 
 	@Override

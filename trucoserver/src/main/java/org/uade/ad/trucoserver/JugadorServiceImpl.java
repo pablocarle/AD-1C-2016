@@ -10,7 +10,7 @@ import org.uade.ad.trucorepo.interfaces.JugadorService;
 import org.uade.ad.trucoserver.business.JugadorManager;
 import org.uade.ad.trucoserver.entities.Jugador;
 
-public class JugadorServiceImpl extends UnicastRemoteObject implements JugadorService {
+public class JugadorServiceImpl extends Context implements JugadorService {
 
 	private JugadorManager manager = JugadorManager.getManager();
 	

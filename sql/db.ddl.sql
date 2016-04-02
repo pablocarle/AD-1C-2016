@@ -1,3 +1,5 @@
+-- drop database trucodb;
+
 create database trucodb;
 
 use trucodb;
@@ -15,24 +17,17 @@ create table cartas(
 
 create unique index cartas_idx_u on cartas ( numero, palo );
 
--- Tabla de ranking. En realidad registra log de partidas ganadas / perdidas
--- Armar vista para obtener los datos reales del ranking ?
-
--- drop table juego_log;
-
-create table juego_log (
-	idLog int not null auto_increment,
-    fecha date not null,
-    victoria boolean not null,
-    puntos int not null,
-    constraint juego_log primary key ( idLog )
-);
-
 create table categorias (
 	idCategoria int not null auto_increment,
+    ordenCategoria int not null,
     nombre varchar(50) not null,
+    puntajeMin int not null,
+    partidosMin int not null,
+    promedioVictoriasMin int not null,
     constraint categorias_pk primary key ( idCategoria )
 );
+
+create unique index categorias_idx_u on categorias ( ordenCategoria );
 
 create table jugadores (
 	idJugador int not null auto_increment,
@@ -46,6 +41,21 @@ create table jugadores (
 
 -- Revisar logica de unicidad de jugador
 create unique index jugadores_idx_u on jugadores ( apodo, email );
+
+-- Tabla de ranking. En realidad registra log de partidas ganadas / perdidas
+-- Armar vista para obtener los datos reales del ranking ?
+
+-- drop table juego_log;
+
+create table juego_log (
+	idLog int not null auto_increment,
+    idJugador int not null,
+    fecha date not null,
+    victoria boolean not null,
+    puntos int not null,
+    constraint juego_log primary key ( idLog ),
+    constraint juego_log_jugador_fk foreign key ( idJugador ) references jugadores ( idJugador )
+);
 
 create table grupos (
 	idGrupo int not null auto_increment,
