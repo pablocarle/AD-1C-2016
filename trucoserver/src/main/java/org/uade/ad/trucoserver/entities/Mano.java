@@ -44,7 +44,8 @@ public class Mano {
 		} else {
 			bazaActual = bazas.get(bazas.size() - 1);
 			if (bazaActual.esCompleta() && getGanador() != Pareja.Null) {
-				bazaActual = new Baza(NUM_JUGADORES, ordenJuego);
+				Jugador ganadorAnterior = bazaActual.getResultado().getJugador();
+				bazaActual = new Baza(NUM_JUGADORES, getNuevoOrdenJuego(ganadorAnterior, ordenJuego)); //TODO Orden de juego actualizado segun quien gano la ultima baja
 				bazaActual.jugarCarta(jugador, carta);
 			} else if (!bazaActual.esCompleta()) {
 				bazaActual.jugarCarta(jugador, carta);
@@ -52,6 +53,25 @@ public class Mano {
 		}
 	}
 	
+	private List<Jugador> getNuevoOrdenJuego(Jugador ganadorAnterior, List<Jugador> ordenJuegoOriginal) {
+		List<Jugador> retList = new ArrayList<>(ordenJuegoOriginal.size());
+		retList.add(ganadorAnterior);
+		int index = ordenJuegoOriginal.indexOf(ganadorAnterior);
+		if (index == ordenJuegoOriginal.size() - 1) {
+			for (int i = 0; i < ordenJuegoOriginal.size() - 1; i++) {
+				retList.add(ordenJuegoOriginal.get(i));
+			}
+		} else {
+			for (int i = index + 1; i < ordenJuegoOriginal.size(); i++) {
+				retList.add(ordenJuegoOriginal.get(i));
+			}
+			for (int i = 0; i < ordenJuegoOriginal.size() && i < index; i++) {
+				retList.add(ordenJuegoOriginal.get(i));
+			}
+		}
+		return retList;
+	}
+
 	/**
 	 * Obtener pareja ganadora de la mano o Pareja.Null si no lo hay aun
 	 * 
@@ -92,5 +112,9 @@ public class Mano {
 		
 		envites.add(envite);
 		
+	}
+
+	public boolean terminada() {
+		return getGanador() != Pareja.Null;
 	}
 }

@@ -1,8 +1,10 @@
 package org.uade.ad.trucoserver.business;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
+import org.uade.ad.trucoserver.entities.Carta;
 import org.uade.ad.trucoserver.entities.Envite;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Mano;
@@ -31,7 +33,8 @@ public abstract class JuegoStrategy {
 	
 	protected List<Mano> manos;
 
-	private List<Jugador> primerOrdenJuego;
+	private final List<Jugador> primerOrdenJuego;
+	private List<Jugador> ordenJuegoActual;
 	
 	public JuegoStrategy(Pareja pareja1, Pareja pareja2, List<Jugador> primerOrdenJuego) {
 		super();
@@ -69,6 +72,25 @@ public abstract class JuegoStrategy {
 			return manos.get(0);
 		}
 		return null; //Dead
+	}
+	
+	public void jugarCarta(Jugador jugador, Carta carta) {
+		Mano manoActual = getManoActual();
+		if (manoActual.terminada()) {
+			circularOrdenJuego();
+			manoActual = new Mano(pareja1, pareja2, ordenJuegoActual);
+			manos.add(manoActual);
+			manoActual.jugar(jugador, carta);
+		} else {
+			manoActual.jugar(jugador, carta);
+		}
+	}
+
+	private void circularOrdenJuego() {
+		if (ordenJuegoActual == null) {
+			ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
+		}
+		Collections.rotate(ordenJuegoActual, 1);
 	}
 
 	/**
