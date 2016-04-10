@@ -3,16 +3,46 @@ package org.uade.ad.trucoserver.entities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Access(AccessType.FIELD)
+@Table(name="bazas")
 public class Baza {
 	
 	public enum Resultado {
 		Parda, NoParda, Incompleta
 	}
-	
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int idBaza;
+	@ManyToOne
+	private Mano mano;
+	@Column
+	private int rondaBaza;
+	@Column
+	private Date fechaInicio;
+	@Column
+	private Date fechaFin;
+	@OneToMany
 	private List<CartaJugada> cartasJugadas;
+	@Transient
 	private List<Jugador> ordenJuego;
+	@Transient
 	private int numJugadores;
 	
 	public Baza(int numJugadores, List<Jugador> ordenJuego) {
@@ -113,26 +143,6 @@ public class Baza {
 		
 		public boolean isParda() {
 			return resultado.equals(Resultado.Parda);
-		}
-	}
-	
-	private static class CartaJugada {
-		
-		private Jugador jugador;
-		private Carta carta;
-		
-		private CartaJugada(Jugador jugador, Carta carta) {
-			super();
-			this.jugador = jugador;
-			this.carta = carta;
-		}
-
-		public Jugador getJugador() {
-			return jugador;
-		}
-
-		public Carta getCarta() {
-			return carta;
 		}
 	}
 }

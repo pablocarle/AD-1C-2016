@@ -6,9 +6,6 @@ import java.util.List;
 
 public class RankingDTO implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private List<RankingItemDTO> items;

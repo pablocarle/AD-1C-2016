@@ -1,11 +1,26 @@
 package org.uade.ad.trucoserver.entities;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="grupos_detail")
 public class GrupoDetalle {
-	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idGrupoDetail;
+	@ManyToOne
 	private Grupo grupo;
+	@ManyToOne
 	private Jugador jugador;
+	@Column
 	private boolean admin;
+	@Column
 	private int parejaNum;
 	
 	public GrupoDetalle() {

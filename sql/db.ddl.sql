@@ -34,6 +34,7 @@ create table jugadores (
     nombre varchar(50) not null,
     apodo varchar(50) not null,
     email varchar(100) not null,
+    password varchar(50) not null,
     idCategoria int not null,
     constraint jugadores_pk primary key ( idJugador ),
     constraint jugadores_cat_fk foreign key ( idCategoria ) references categorias ( idCategoria )
@@ -77,3 +78,56 @@ create table grupos_detail (
     constraint grupos_detail_grupo_fk foreign key ( idGrupo ) references grupos ( idGrupo ),
     constraint grupos_detail_j_fk foreign key ( idJugador ) references jugadores ( idJugador )
 );
+
+create table partidas (
+	idPartida int not null,
+    idTipoPartida int not null,
+    fechaInicio date not null,
+    fechaFin date null,
+    constraint partidas_pk primary key ( idPartida )
+);
+
+create table partidas_jugadores (
+	idPartida int not null,
+    idJugador int not null,
+    constraint partidas_jugadores_fk1 foreign key ( idPartida ) references partidas ( idPartida ),
+    constraint partidas_jugadores_fk2 foreign key ( idJugador ) references jugadores ( idJugador )
+);
+
+create table manos (
+	idMano int not null,
+    idPartida int not null,
+    fechaInicio date not null,
+    fechaFin date null,
+    constraint manos_pk primary key ( idMano ),
+    constraint manos_partida_fk foreign key ( idPartida ) references partidas ( idPartida )
+);
+
+create table envites (
+	idEnvite int not null,
+    idMano int not null,
+    constraint envites_pk primary key ( idEnvite ),
+    constraint envites_manos_fk foreign key ( idMano ) references manos ( idMano )
+);
+
+create table bazas (
+	idBaza int not null,
+    idMano int not null,
+    rondaBaza int not null,
+    fechaInicio date not null,
+    fechaFin date null,
+    constraint bazas_pk primary key ( idBaza ),
+    constraint bazas_mano_fk foreign key ( idMano ) references manos ( idMano )
+);
+
+create table bazas_cartas (
+	idBazasCartas int not null,
+    idBaza int not null,
+    idJugador int not null,
+    idCarta int not null,
+    constraint bazas_cartas_pk primary key ( idBazasCartas ),
+    constraint bazas_cartas_baz_fk foreign key ( idBaza ) references bazas ( idBaza ),
+    constraint bazas_cartas_jug_fk foreign key ( idJugador ) references jugadores ( idJugador )
+);
+
+create unique index bazas_cartas_idx_u on bazas_cartas ( idBaza, idJugador );

@@ -1,17 +1,32 @@
 package org.uade.ad.trucoserver.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 
-@Entity(name="jugador")
+@Entity
+@Table(name="jugadores")
 public class Jugador {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idJugador;
+	@Column(length=50)
+	private String nombre;
+	@Column(length=100)
 	private String email;
+	@Column(length=50)
 	private String apodo;
+	@Column(length=50)
 	private String password;
 	
+	@OneToOne(mappedBy="idCategoria")
 	private Categoria categoria;
 	
 	public Jugador() {
@@ -106,5 +121,17 @@ public class Jugador {
 	
 	public Categoria getCategoria() {
 		return categoria;
+	}
+
+	public String getNombre() {
+		return nombre;
+	}
+
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
 	}
 }

@@ -36,4 +36,10 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public void cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException {
 		
 	}
+
+	@Override
+	public void jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -17,4 +17,6 @@ public interface JuegoService extends Remote {
 	
 	public void cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException;
 	
+	public void jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException;
+	
 }

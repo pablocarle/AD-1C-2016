@@ -2,16 +2,32 @@ package org.uade.ad.trucoserver.entities;
 
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="juego_log")
 public class LogJuego {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idLog;
+	@Column
 	private Date fecha;
+	@ManyToOne
 	private Jugador jugador;
+	@Column
 	private boolean victoria;
+	@Column
 	private int puntos;
 	
 	public LogJuego() {
-		// TODO Auto-generated constructor stub
+		super();
 	}
 
 	@Override
