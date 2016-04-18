@@ -120,6 +120,8 @@ create table bazas (
     constraint bazas_mano_fk foreign key ( idMano ) references manos ( idMano )
 );
 
+create unique index bazas_idx_u on bazas ( iMano, rondaBaza );
+
 create table bazas_cartas (
 	idBazasCartas int not null,
     idBaza int not null,

@@ -6,10 +6,11 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.uade.ad.trucoserver.HibernateUtil;
 
 public class GenericDaoImpl<T, ID extends Serializable> implements GenericDao<T, ID> {
 
-	private SessionFactory factory;
+	private SessionFactory factory = HibernateUtil.getSessionFactory();
 	
 	@Override
 	public Session getSession() {

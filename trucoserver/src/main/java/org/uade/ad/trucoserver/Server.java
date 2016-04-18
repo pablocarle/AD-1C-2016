@@ -27,6 +27,8 @@ public class Server {
 			System.out.println("Jugador Manager: " + "//localhost/" + JugadorService.SERVICENAME);
 			System.out.println("Juego Manager: " + "//localhost/" + JuegoService.SERVICENAME);
 			System.out.println("Sesion Manager: " + "//localhost/" + SesionService.SERVICENAME);
+			
+			HibernateUtil.getSessionFactory();
 		} catch (RemoteException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
