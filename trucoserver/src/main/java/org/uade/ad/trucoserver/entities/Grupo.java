@@ -2,14 +2,14 @@ package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -20,8 +20,12 @@ public class Grupo {
 	private int idGrupo;
 	@Column
 	private String nombre;
-	@OneToMany
-	private List<GrupoDetalle> detalle;
+	@ManyToOne
+	@JoinColumn(name="idPareja1")
+	private Pareja pareja1;
+	@ManyToOne
+	@JoinColumn(name="idPareja2")
+	private Pareja pareja2;
 	
 	public Grupo() {
 		super();
@@ -29,44 +33,25 @@ public class Grupo {
 	
 	public List<Pareja> getParejas() {
 		List<Pareja> parejas = new ArrayList<>(2);
-		if (detalle != null && !detalle.isEmpty()) {
-			//TODO Completar
-		}
+		parejas.add(pareja1);
+		parejas.add(pareja2);
 		return parejas;
 	}
 	
 	public Pareja getParejaNum(int parejaNum) throws Exception {
-		Pareja pareja = null;
-		if (detalle != null && !detalle.isEmpty()) {
-			List<Jugador> jugadores = detalle.stream()
-											 .filter(x -> x.getParejaNum() == parejaNum)
-										     .map(y -> y.getJugador())
-										     .collect(Collectors.toList());
-			//Otra forma, en vez de lambdas: List<Jugador> jugadores = getJugadores(parejaNum);
-			if (jugadores.size() == 2) {
-				pareja = new Pareja(jugadores.get(0), jugadores.get(1));
-				return pareja;
-			} else {
-				throw new Exception("Pareja numero " + parejaNum + " no contiene 2 jugadores en grupo " + this);
-			}
+		switch (parejaNum) {
+		case 1:
+			return pareja1;
+		case 2:
+			return pareja2;
+			default:
+				throw new RuntimeException("");
 		}
-		throw new Exception("No se encontro pareja numero " + parejaNum + " en el grupo " + this);
 	}
 	
-	@SuppressWarnings("unused")
-	private List<Jugador> getJugadores(int parejaNum) {
-		List<Jugador> jugadores = new ArrayList<>();
-		for (GrupoDetalle detalle : this.detalle) {
-			if (detalle.getParejaNum() == parejaNum) {
-				jugadores.add(detalle.getJugador());
-			}
-		}
-		return jugadores;
-	}
-
 	@Override
 	public String toString() {
-		return "Grupo [idGrupo=" + idGrupo + ", nombre=" + nombre + ", detalle=" + detalle + "]";
+		return "Grupo [idGrupo=" + idGrupo + ", nombre=" + nombre + "]";
 	}
 
 	@Override
@@ -108,13 +93,5 @@ public class Grupo {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
-	}
-
-	public List<GrupoDetalle> getDetalle() {
-		return detalle;
-	}
-
-	public void setDetalle(List<GrupoDetalle> detalle) {
-		this.detalle = detalle;
 	}
 }

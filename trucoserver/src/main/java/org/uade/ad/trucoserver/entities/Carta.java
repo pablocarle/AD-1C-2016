@@ -4,6 +4,7 @@ import java.util.Comparator;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
@@ -13,15 +14,19 @@ import javax.persistence.Id;
  * @author Grupo9
  *
  */
-@Entity(name="carta")
+@Entity(name="cartas")
 @Access(value=AccessType.FIELD)
 public class Carta implements Comparable<Carta> {
 
 	@Id
 	private int idCarta;
+	@Column
 	private String palo;
+	@Column
 	private int pesoEnvido;
+	@Column
 	private int pesoTruco;
+	@Column
 	private int numero;
 
 	//Hibernate requiere un constructor que no tome argumentos

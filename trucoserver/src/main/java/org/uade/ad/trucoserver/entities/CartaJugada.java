@@ -17,7 +17,7 @@ public class CartaJugada {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private int idCartaJugada;
+	private int idBazasCartas;
 	@ManyToOne
 	@JoinColumn(name="idBaza")
 	private Baza baza;
@@ -42,12 +42,12 @@ public class CartaJugada {
 		return carta;
 	}
 
-	public int getIdCartaJugada() {
-		return idCartaJugada;
+	public int getIdBazasCartas() {
+		return idBazasCartas;
 	}
 
-	public void setIdCartaJugada(int idCartaJugada) {
-		this.idCartaJugada = idCartaJugada;
+	public void setIdCartaJugada(int idBazasCartas) {
+		this.idBazasCartas = idBazasCartas;
 	}
 
 	public Baza getBaza() {
@@ -65,6 +65,4 @@ public class CartaJugada {
 	public void setCarta(Carta carta) {
 		this.carta = carta;
 	}
-	
-	
 }

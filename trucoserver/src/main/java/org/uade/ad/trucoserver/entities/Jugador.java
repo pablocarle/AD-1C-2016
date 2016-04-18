@@ -5,7 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
@@ -26,7 +27,8 @@ public class Jugador {
 	@Column(length=50)
 	private String password;
 	
-	@OneToOne(mappedBy="idCategoria")
+	@ManyToOne
+	@JoinColumn(name="idCategoria")
 	private Categoria categoria;
 	
 	public Jugador() {

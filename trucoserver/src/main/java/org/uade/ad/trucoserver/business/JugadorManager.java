@@ -35,6 +35,10 @@ public class JugadorManager {
 		}
 	}
 
+	public boolean login(String apodo, String password) {
+		return false;
+	}
+	
 	public boolean isValidLogin(String apodo, String password) {
 		
 		return false;

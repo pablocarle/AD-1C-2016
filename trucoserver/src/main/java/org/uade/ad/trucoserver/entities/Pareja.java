@@ -1,11 +1,33 @@
 package org.uade.ad.trucoserver.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="parejas")
 public class Pareja {
 
 	public static final Pareja Null = new Pareja(null, null);
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int idPareja;
+	@ManyToOne
+	@JoinColumn(name="idJugador1")
 	private Jugador jugador1;
+	@ManyToOne
+	@JoinColumn(name="idJugador2")
 	private Jugador jugador2;
 
+	public Pareja() {
+		super();
+	}
+	
 	public Pareja(Jugador jugador1, Jugador jugador2) {
 		super();
 		this.jugador1 = jugador1;

@@ -27,7 +27,7 @@ public class Mano {
 	private Pareja pareja1;
 	@Transient
 	private Pareja pareja2;
-	@OneToMany
+	@Transient
 	private List<Envite> envites;
 	{
 		envites = new ArrayList<>();

@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import org.hibernate.Transaction;
 import org.uade.ad.trucoserver.dao.CartaDao;
 import org.uade.ad.trucoserver.dao.CartaDaoImpl;
 import org.uade.ad.trucoserver.entities.Carta;
@@ -29,7 +30,9 @@ public class CartasManager {
 	//Lista para facilitar el "reparto" de cartas
 	private List<Carta> cartas;
 	{
+		Transaction tr = dao.getSession().beginTransaction();
 		cartas = dao.getTodos(Carta.class);
+		tr.commit();
 	}
 	
 	private CartasManager() {
