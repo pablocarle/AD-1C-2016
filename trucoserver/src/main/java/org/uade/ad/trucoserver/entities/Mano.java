@@ -32,7 +32,7 @@ public class Mano {
 	{
 		envites = new ArrayList<>();
 	}
-	@OneToMany
+	@OneToMany(mappedBy="mano")
 	private List<Baza> bazas;
 	@Transient
 	private List<Jugador> ordenJuego;

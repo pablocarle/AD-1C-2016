@@ -43,6 +43,15 @@ create table jugadores (
 -- Revisar logica de unicidad de jugador
 create unique index jugadores_idx_u on jugadores ( apodo, email );
 
+create table parejas (
+	idPareja int not null auto_increment,
+    idJugador1 int not null,
+    idJugador2 int not null,
+    constraint parejas_pk primary key ( idPareja ),
+    constraint parejas_jugador1_fk foreign key ( idJugador1 ) references jugadores ( idJugador ),
+    constraint parejas_jugador2_fk foreign key ( idJugador2 ) references jugadores ( idJugador )
+);
+
 -- Tabla de ranking. En realidad registra log de partidas ganadas / perdidas
 -- Armar vista para obtener los datos reales del ranking ?
 
@@ -61,41 +70,32 @@ create table juego_log (
 create table grupos (
 	idGrupo int not null auto_increment,
     nombre varchar(100) not null,
-    constraint grupos_pk primary key ( idGrupo )
+    idPareja1 int not null,
+    idPareja2 int not null,
+    constraint grupos_pk primary key ( idGrupo ),
+    constraint grupos_pareja1_fk foreign key ( idPareja1 ) references parejas ( idPareja ),
+    constraint grupos_pareja2_fk foreign key ( idPareja2 ) references parejas ( idPareja )
 );
 
 create unique index grupos_idx_u on grupos ( nombre );
 
--- drop table grupos_detail;
-
-create table grupos_detail (
-	idGrupoDetail int not null auto_increment,
-	idGrupo int not null,
-    idJugador int not null,
-    parejaNum int not null,
-    admin boolean not null,
-    constraint grupos_detail_pk primary key ( idGrupoDetail ),
-    constraint grupos_detail_grupo_fk foreign key ( idGrupo ) references grupos ( idGrupo ),
-    constraint grupos_detail_j_fk foreign key ( idJugador ) references jugadores ( idJugador )
-);
-
 create table partidas (
-	idPartida int not null,
+	idPartida int not null auto_increment,
     idTipoPartida int not null,
     fechaInicio date not null,
     fechaFin date null,
     constraint partidas_pk primary key ( idPartida )
 );
 
-create table partidas_jugadores (
+create table partidas_parejas (
 	idPartida int not null,
-    idJugador int not null,
-    constraint partidas_jugadores_fk1 foreign key ( idPartida ) references partidas ( idPartida ),
-    constraint partidas_jugadores_fk2 foreign key ( idJugador ) references jugadores ( idJugador )
+    idPareja int not null,
+    constraint partidas_parejas_fk1 foreign key ( idPartida ) references partidas ( idPartida ),
+    constraint partidas_parejas_fk2 foreign key ( idPareja ) references parejas ( idPareja )
 );
 
 create table manos (
-	idMano int not null,
+	idMano int not null auto_increment,
     idPartida int not null,
     fechaInicio date not null,
     fechaFin date null,
@@ -120,7 +120,7 @@ create table bazas (
     constraint bazas_mano_fk foreign key ( idMano ) references manos ( idMano )
 );
 
-create unique index bazas_idx_u on bazas ( iMano, rondaBaza );
+create unique index bazas_idx_u on bazas ( idMano, rondaBaza );
 
 create table bazas_cartas (
 	idBazasCartas int not null,

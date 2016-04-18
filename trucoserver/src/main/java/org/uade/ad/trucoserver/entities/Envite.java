@@ -1,9 +1,20 @@
 package org.uade.ad.trucoserver.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+@Entity
+@Table(name="envites")
 public abstract class Envite {
 
-	protected int puntosJuego;
-	protected int puntosNoAceptado;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int idEnvite;
+	protected transient int puntosJuego;
+	protected transient int puntosNoAceptado;
 	
 	public Envite(int puntosJuego, int puntosNoAceptado) {
 		super();

@@ -13,6 +13,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -31,6 +32,7 @@ public class Baza {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idBaza;
 	@ManyToOne
+	@JoinColumn(name="idMano")
 	private Mano mano;
 	@Column
 	private int rondaBaza;
@@ -38,7 +40,7 @@ public class Baza {
 	private Date fechaInicio;
 	@Column
 	private Date fechaFin;
-	@OneToMany
+	@OneToMany(mappedBy="baza")
 	private List<CartaJugada> cartasJugadas;
 	@Transient
 	private List<Jugador> ordenJuego;
