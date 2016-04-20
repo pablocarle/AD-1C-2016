@@ -61,7 +61,7 @@ public class Baza {
 		if (ordenJuego.get(cartasJugadas.size()).equals(jugador)) {
 			cartasJugadas.add(new CartaJugada(jugador, carta));
 		} else {
-			throw new RuntimeException("No es el turno del jugador");
+			throw new RuntimeException("No es el turno del jugador " + jugador);
 		}
 	}
 	
@@ -72,7 +72,7 @@ public class Baza {
 	 */
 	public BazaResultado getResultado() {
 		if (cartasJugadas != null && cartasJugadas.size() == numJugadores) {
-			Comparator<Carta> valorTrucoComparator = new Carta.ValorTrucoComparador();
+			Comparator<Carta> valorTrucoComparator = new Carta.ValorTrucoComparador(false);
 			List<Carta> cartas = getCartasJugadas();
 			Collections.sort(cartas, valorTrucoComparator);
 			switch (valorTrucoComparator.compare(cartas.get(0), cartas.get(1))) {
@@ -89,9 +89,9 @@ public class Baza {
 					}
 				}
 				case 1:
-					return new BazaResultado(Resultado.NoParda, getJugadorPorCartaJugada(cartas.get(0)));
-				default:
 					return new BazaResultado(Resultado.NoParda, getJugadorPorCartaJugada(cartas.get(1)));
+				default:
+					return new BazaResultado(Resultado.NoParda, getJugadorPorCartaJugada(cartas.get(0)));
 			}
 			
 		}

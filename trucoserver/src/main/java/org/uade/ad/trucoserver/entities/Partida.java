@@ -63,8 +63,6 @@ public abstract class Partida {
 	private List<Jugador> primerOrdenJuego = new ArrayList<>();
 	@Transient
 	private List<Jugador> ordenJuegoActual;
-	@Transient
-	private int turnoActualIdx = 0;
 	
 	/**
 	 * Constructor vacio para hibernate (en v5 todavia necesita del constructor vacio sin argumentos?)
@@ -130,9 +128,6 @@ public abstract class Partida {
 			throw new Exception("Mano terminada");
 		} else {
 			manoActual.jugar(jugador, carta);
-			if (++turnoActualIdx >= ordenJuegoActual.size()) {
-				turnoActualIdx = 0; //El proximo genera rotacion del turno
-			}
 		}
 	}
 
@@ -146,8 +141,7 @@ public abstract class Partida {
 		}
 		Mano manoActual = getManoActual();
 		if (manoActual != null && manoActual.terminada()) {
-			Collections.rotate(ordenJuegoActual, 1);
-			turnoActualIdx = 0;
+			Collections.rotate(ordenJuegoActual, -1);
 		} else if (manoActual != null) {
 			throw new Exception("La mano actual no ha terminado. No se puede modificar el orden de juego"); //TODO Definir excepcion
 		}
@@ -217,7 +211,12 @@ public abstract class Partida {
 		if (ordenJuegoActual == null) {
 			return false;
 		} else {
-			return ordenJuegoActual.get(turnoActualIdx).equals(jugador);
+			Mano manoActual = getManoActual();
+			if (manoActual == null) {
+				return ordenJuegoActual.get(0).equals(jugador);
+			} else {
+				return manoActual.esTurno(jugador);
+			}
 		}
 	}
 

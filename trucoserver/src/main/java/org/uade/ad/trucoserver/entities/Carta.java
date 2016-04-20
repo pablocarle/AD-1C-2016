@@ -45,8 +45,7 @@ public class Carta implements Comparable<Carta> {
 
 	@Override
 	public String toString() {
-		return "Carta [idCarta=" + idCarta + ", palo=" + palo + ", pesoEnvido=" + pesoEnvido + ", pesoTruco="
-				+ pesoTruco + ", numero=" + numero + "]";
+		return numero + " de " + palo;
 	}
 	
 	@Override
@@ -136,11 +135,18 @@ public class Carta implements Comparable<Carta> {
 	 */
 	public static final class ValorTrucoComparador implements Comparator<Carta> {
 
+		private boolean ascending;
+		
+		public ValorTrucoComparador(boolean ascending) {
+			super();
+			this.ascending = ascending;
+		}
+		
 		public int compare(Carta o1, Carta o2) {
 			if (o1.getPesoTruco() < o2.getPesoTruco())
-				return -1;
+				return ascending ? -1 : 1;
 			else if (o1.getPesoTruco() > o2.getPesoTruco())
-				return 1;
+				return ascending ? 1 : -1;
 			return 0;
 		}
 	}

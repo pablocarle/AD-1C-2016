@@ -76,6 +76,9 @@ public class JuegoTest {
 					j4It = null;
 				}
 				for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
+					if (partidaCerrada.manoTerminada()) {
+						break;
+					}
 					if (j1.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j1)) {
 						if (j1It == null) {
 							j1It = jugadorCartas.getValue().iterator();

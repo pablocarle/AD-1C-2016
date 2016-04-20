@@ -38,7 +38,11 @@ public class Mano {
 	@OneToMany(mappedBy="mano")
 	private List<Baza> bazas;
 	@Transient
-	private List<Jugador> ordenJuego;
+	private List<Jugador> ordenJuegoInicial;
+	@Transient
+	private List<Jugador> ordenJuegoActual;
+	@Transient
+	private int turnoActualIdx = 0;
 	@Transient
 	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
 	
@@ -46,11 +50,12 @@ public class Mano {
 		super();
 	}
 	
-	public Mano(Pareja pareja1, Pareja pareja2, Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuego) {
+	public Mano(Pareja pareja1, Pareja pareja2, Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuegoInicial) {
 		super();
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
-		this.ordenJuego = ordenJuego;
+		this.ordenJuegoInicial = ordenJuegoInicial;
+		this.ordenJuegoActual = ordenJuegoInicial;
 		this.cartasAsignadas = cartasAsignadas;
 	}
 	
@@ -67,17 +72,26 @@ public class Mano {
 		}
 		Baza bazaActual = null;
 		if (bazas.isEmpty()) {
-			bazaActual = new Baza(NUM_JUGADORES, ordenJuego);
+			bazaActual = new Baza(NUM_JUGADORES, ordenJuegoInicial);
 			bazas.add(bazaActual);
 			bazaActual.jugarCarta(jugador, carta);
+			turnoActualIdx = 1;
 		} else {
+			Jugador ganadorAnterior = null;
 			bazaActual = bazas.get(bazas.size() - 1);
-			if (bazaActual.esCompleta() && getGanador() != Pareja.Null) {
-				Jugador ganadorAnterior = bazaActual.getResultado().getJugador();
-				bazaActual = new Baza(NUM_JUGADORES, getNuevoOrdenJuego(ganadorAnterior, ordenJuego)); //TODO Orden de juego actualizado segun quien gano la ultima baja
+			if (bazaActual.esCompleta() && getGanador() == Pareja.Null) {
+				bazaActual = new Baza(NUM_JUGADORES, ordenJuegoActual); //TODO Orden de juego actualizado segun quien gano la ultima baja
 				bazaActual.jugarCarta(jugador, carta);
+				bazas.add(bazaActual);
+				turnoActualIdx++;
 			} else if (!bazaActual.esCompleta()) {
 				bazaActual.jugarCarta(jugador, carta);
+				turnoActualIdx++;
+				if (bazaActual.esCompleta()) {
+					ganadorAnterior = bazaActual.getResultado().getJugador(); 
+					ordenJuegoActual = getNuevoOrdenJuego(ganadorAnterior, ordenJuegoInicial);
+					turnoActualIdx = 0;
+				}
 			}
 		}
 	}
@@ -169,5 +183,18 @@ public class Mano {
 	 */
 	public boolean tieneMovimientos() {
 		return bazas == null || bazas.isEmpty();
+	}
+
+	/**
+	 * Determina si es el turno del jugador
+	 * 
+	 * @param jugador
+	 * @return
+	 */
+	public boolean esTurno(Jugador jugador) {
+		if (turnoActualIdx >= ordenJuegoActual.size()) {
+			turnoActualIdx = 0;
+		}
+		return ordenJuegoActual.get(turnoActualIdx).equals(jugador);
 	}
 }
