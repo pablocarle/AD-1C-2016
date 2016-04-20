@@ -63,11 +63,23 @@ public abstract class Partida {
 	private List<Jugador> primerOrdenJuego = new ArrayList<>();
 	@Transient
 	private List<Jugador> ordenJuegoActual;
+	@Transient
+	private int turnoActualIdx = 0;
 	
+	/**
+	 * Constructor vacio para hibernate (en v5 todavia necesita del constructor vacio sin argumentos?)
+	 */
 	public Partida() {
 		super();
 	}
 	
+	/**
+	 * Constructor para nuevo juego
+	 * 
+	 * @param pareja1
+	 * @param pareja2
+	 * @param primerOrdenJuego Primer orden del juego, luego se va rotando
+	 */
 	public Partida(Pareja pareja1, Pareja pareja2, List<Jugador> primerOrdenJuego) {
 		super();
 		this.parejas = new ArrayList<>(2);
@@ -102,7 +114,7 @@ public abstract class Partida {
 	 * @return
 	 * @throws Exception 
 	 */
-	private Mano getManoActual() throws Exception {
+	private Mano getManoActual() {
 		if (manos != null && !manos.isEmpty()) {
 			return manos.get(manos.size() - 1);
 		} else if (manos == null) {
@@ -118,14 +130,27 @@ public abstract class Partida {
 			throw new Exception("Mano terminada");
 		} else {
 			manoActual.jugar(jugador, carta);
+			if (++turnoActualIdx >= ordenJuegoActual.size()) {
+				turnoActualIdx = 0; //El proximo genera rotacion del turno
+			}
 		}
 	}
 
-	private void circularOrdenJuego() {
+	/**
+	 * Modifica el orden de juego por cambio de mano
+	 * @throws Exception 
+	 */
+	private void circularOrdenJuego() throws Exception {
 		if (ordenJuegoActual == null) {
 			ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 		}
-		Collections.rotate(ordenJuegoActual, 1);
+		Mano manoActual = getManoActual();
+		if (manoActual != null && manoActual.terminada()) {
+			Collections.rotate(ordenJuegoActual, 1);
+			turnoActualIdx = 0;
+		} else if (manoActual != null) {
+			throw new Exception("La mano actual no ha terminado. No se puede modificar el orden de juego"); //TODO Definir excepcion
+		}
 	}
 
 	/**
@@ -150,6 +175,7 @@ public abstract class Partida {
 		Map<Jugador, Set<Carta>> cartas = null;
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada() || !manoActual.tieneMovimientos()) {
+			circularOrdenJuego();
 			Map<Integer, Set<Carta>> r = cartasManager.getRandomSets(parejas.size()*2);
 			cartas = new HashMap<>(parejas.size()*2);
 			Jugador jugador = null;
@@ -170,6 +196,45 @@ public abstract class Partida {
 		}
 		
 		return cartas == null ? getManoActual().getCartasAsignadas() : cartas;
+	}
+
+	/**
+	 * Determina si la partida esta en curso
+	 * 
+	 * @return
+	 */
+	public boolean enCurso() {
+		return true; //TODO Definir cuando la partida termino
+	}
+
+	/**
+	 * Determina si es el turno actual del jugador
+	 * 
+	 * @param jugador el jugador a consultar
+	 * @return
+	 */
+	public boolean esTurno(Jugador jugador) {
+		if (ordenJuegoActual == null) {
+			return false;
+		} else {
+			return ordenJuegoActual.get(turnoActualIdx).equals(jugador);
+		}
+	}
+
+	/**
+	 * Determina si la mano actual finalizo. Sirve para determinar si se debe repartir
+	 * cartas nuevamente
+	 * 
+	 * @return
+	 * @throws Exception 
+	 */
+	public boolean manoTerminada() {
+		Mano manoActual = getManoActual();
+		if (manoActual == null) {
+			return false;
+		} else {
+			return manoActual.terminada();
+		}
 	}
 	
 }

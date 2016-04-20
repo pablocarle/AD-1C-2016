@@ -65,34 +65,53 @@ public class JuegoTest {
 			Iterator<Carta> j2It = null;
 			Iterator<Carta> j3It = null;
 			Iterator<Carta> j4It = null;
-			for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
-				if (j1.equals(jugadorCartas.getKey())) {
-					if (j1It == null) {
-						j1It = jugadorCartas.getValue().iterator();
-					}
-					if (j1It.hasNext()) {
-						partidaCerrada.jugarCarta(j1, j1It.next());
-					}
-				} else if (j2.equals(jugadorCartas.getKey())) {
-					if (j2It == null) {
-						j2It = jugadorCartas.getValue().iterator();
-					}
-					if (j2It.hasNext()) {
-						partidaCerrada.jugarCarta(j2, j2It.next());
-					}
-				} else if (j3.equals(jugadorCartas.getKey())) {
-					if (j3It == null) {
-						j3It = jugadorCartas.getValue().iterator();
-					}
-					if (j3It.hasNext()) {
-						partidaCerrada.jugarCarta(j3, j3It.next());
-					}
-				} else {
-					if (j4It == null) {
-						j4It = jugadorCartas.getValue().iterator();
-					}
-					if (j4It.hasNext()) {
-						partidaCerrada.jugarCarta(j4, j4It.next());
+			Carta cartaJuego = null;
+			while (partidaCerrada.enCurso()) {
+				if (partidaCerrada.manoTerminada()) {
+					System.out.println("Mano terminada");
+					cartas = partidaCerrada.repartirCartas();
+					j1It = null;
+					j2It = null;
+					j3It = null;
+					j4It = null;
+				}
+				for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
+					if (j1.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j1)) {
+						if (j1It == null) {
+							j1It = jugadorCartas.getValue().iterator();
+						}
+						if (j1It.hasNext()) {
+							cartaJuego = j1It.next();
+							System.out.println("Jugador: " + j1.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
+							partidaCerrada.jugarCarta(j1, cartaJuego);
+						}
+					} else if (j2.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j2)) {
+						if (j2It == null) {
+							j2It = jugadorCartas.getValue().iterator();
+						}
+						if (j2It.hasNext()) {
+							cartaJuego = j2It.next();
+							System.out.println("Jugador: " + j2.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
+							partidaCerrada.jugarCarta(j2, cartaJuego);
+						}
+					} else if (j3.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j3)) {
+						if (j3It == null) {
+							j3It = jugadorCartas.getValue().iterator();
+						}
+						if (j3It.hasNext()) {
+							cartaJuego = j3It.next();
+							System.out.println("Jugador: " + j3.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
+							partidaCerrada.jugarCarta(j3, cartaJuego);
+						}
+					} else if (j4.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j4)) {
+						if (j4It == null) {
+							j4It = jugadorCartas.getValue().iterator();
+						}
+						if (j4It.hasNext()) {
+							cartaJuego = j4It.next();
+							System.out.println("Jugador: " + j4.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
+							partidaCerrada.jugarCarta(j4, cartaJuego);
+						}
 					}
 				}
 			}

@@ -65,6 +65,11 @@ public class Baza {
 		}
 	}
 	
+	/**
+	 * Obtener el resultado de esta baza. Incluye estado de baza en curso
+	 * 
+	 * @return
+	 */
 	public BazaResultado getResultado() {
 		if (cartasJugadas != null && cartasJugadas.size() == numJugadores) {
 			Comparator<Carta> valorTrucoComparator = new Carta.ValorTrucoComparador();
