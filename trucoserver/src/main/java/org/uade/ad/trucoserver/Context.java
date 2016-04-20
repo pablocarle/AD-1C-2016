@@ -5,15 +5,15 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.List;
 import java.util.Vector;
 
-import org.uade.ad.trucoserver.business.JuegoStrategy;
 import org.uade.ad.trucoserver.entities.Grupo;
+import org.uade.ad.trucoserver.entities.Partida;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
 
 public abstract class Context extends UnicastRemoteObject {
 	
 	private static final long serialVersionUID = 1L;
-	private static List<JuegoStrategy> juegos;
+	private static List<Partida> juegos;
 	private static List<Jugador> jugadoresDisponibles;
 	private static List<Pareja> libreParejasPending;
 	private static List<Grupo> grupos;
@@ -53,7 +53,7 @@ public abstract class Context extends UnicastRemoteObject {
 		jugadoresDisponibles.remove(jugador);
 	}
 	
-	protected static void agregarJuego(JuegoStrategy juego) {
+	protected static void agregarJuego(Partida juego) {
 		juegos.add(juego);
 	}
 }

@@ -1,14 +1,21 @@
-package org.uade.ad.trucoserver.business;
+package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.uade.ad.trucoserver.entities.Carta;
-import org.uade.ad.trucoserver.entities.Envite;
-import org.uade.ad.trucoserver.entities.Jugador;
-import org.uade.ad.trucoserver.entities.Mano;
-import org.uade.ad.trucoserver.entities.Pareja;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.DiscriminatorType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.MappedSuperclass;
+import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * Implementaciones de esta clase son las formas de juego disponibles.
@@ -19,27 +26,45 @@ import org.uade.ad.trucoserver.entities.Pareja;
  * @author Grupo9
  *
  */
-public abstract class JuegoStrategy {
+@MappedSuperclass
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(discriminatorType=DiscriminatorType.INTEGER, name="idTipoPartida")
+public abstract class Partida {
 	
-	protected int idJuego;
-
-	//Las parejas que participan del juego
-	protected Pareja pareja1;
-	protected Pareja pareja2;
-	
-	//Variables para acceso rapido
-	protected int pareja1Score = 0;
-	protected int pareja2Score = 0;
-	
+	@Id
+	protected int idPartida;
+	@ManyToOne
+	@JoinColumn(name="idTipoPartida")
+	protected TipoPartida tipoPartida;
+	@OneToMany(mappedBy="partida")
 	protected List<Mano> manos;
 
-	private final List<Jugador> primerOrdenJuego;
+	//Las parejas que participan del juego
+	//XXX: Se asume que por BBDD son maximo 2 parejas
+	@ManyToMany
+	@JoinTable(name="partidas_parejas")
+	protected List<Pareja> parejas;
+	
+	//Variables para acceso rapido
+	@Transient
+	protected int pareja1Score = 0;
+	@Transient
+	protected int pareja2Score = 0;
+	
+	@Transient
+	private List<Jugador> primerOrdenJuego = new ArrayList<>();
+	@Transient
 	private List<Jugador> ordenJuegoActual;
 	
-	public JuegoStrategy(Pareja pareja1, Pareja pareja2, List<Jugador> primerOrdenJuego) {
+	public Partida() {
 		super();
-		this.pareja1 = pareja1;
-		this.pareja2 = pareja2;
+	}
+	
+	public Partida(Pareja pareja1, Pareja pareja2, List<Jugador> primerOrdenJuego) {
+		super();
+		this.parejas = new ArrayList<>(2);
+		this.parejas.add(pareja1);
+		this.parejas.add(pareja2);
 		this.primerOrdenJuego = primerOrdenJuego;
 	}
 	
@@ -50,6 +75,8 @@ public abstract class JuegoStrategy {
 	}
 	
 	private Jugador getJugador(String apodo) {
+		Pareja pareja1 = parejas.get(0);
+		Pareja pareja2 = parejas.get(1);
 		if (pareja1.getJugador1().getApodo().equals(apodo))
 			return pareja1.getJugador1();
 		if (pareja1.getJugador2().getApodo().equals(apodo))
@@ -68,7 +95,7 @@ public abstract class JuegoStrategy {
 			manos = new ArrayList<>();
 		}
 		if (manos.isEmpty()) {
-			manos.add(new Mano(pareja1, pareja2, primerOrdenJuego));
+			manos.add(new Mano(parejas.get(0), parejas.get(1), primerOrdenJuego));
 			return manos.get(0);
 		}
 		return null; //Dead
@@ -78,7 +105,7 @@ public abstract class JuegoStrategy {
 		Mano manoActual = getManoActual();
 		if (manoActual.terminada()) {
 			circularOrdenJuego();
-			manoActual = new Mano(pareja1, pareja2, ordenJuegoActual);
+			manoActual = new Mano(parejas.get(0), parejas.get(1), ordenJuegoActual);
 			manos.add(manoActual);
 			manoActual.jugar(jugador, carta);
 		} else {

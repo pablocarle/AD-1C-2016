@@ -31,6 +31,13 @@ public class Grupo {
 		super();
 	}
 	
+	public Grupo(Pareja pareja1, Pareja pareja2) {
+		super();
+		assert(!pareja1.equals(pareja2));
+		this.pareja1 = pareja1;
+		this.pareja2 = pareja2;
+	}
+	
 	public List<Pareja> getParejas() {
 		List<Pareja> parejas = new ArrayList<>(2);
 		parejas.add(pareja1);
@@ -40,12 +47,12 @@ public class Grupo {
 	
 	public Pareja getParejaNum(int parejaNum) throws Exception {
 		switch (parejaNum) {
-		case 1:
+		case 0:
 			return pareja1;
-		case 2:
+		case 1:
 			return pareja2;
 			default:
-				throw new RuntimeException("");
+				throw new RuntimeException("No se identifico pareja numero: " + parejaNum);
 		}
 	}
 	
