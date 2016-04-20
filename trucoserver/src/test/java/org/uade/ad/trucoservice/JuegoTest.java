@@ -3,20 +3,26 @@ package org.uade.ad.trucoservice;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.uade.ad.trucoserver.entities.Carta;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
 import org.uade.ad.trucoserver.entities.Partida;
 import org.uade.ad.trucoserver.entities.PartidaCerrada;
 
+/**
+ * TODO Poder asignar cartas y crear juegos mas controlados
+ */
 public class JuegoTest {
 
 	private Partida partidaCerrada;
-	private Partida partidaAbierta;
 	
 	private Jugador j1;
 	private Jugador j2;
@@ -53,7 +59,48 @@ public class JuegoTest {
 
 	@Test
 	public void testJugarCarta() {
-		fail("Not yet implemented");
+		try {
+			Map<Jugador, Set<Carta>> cartas = partidaCerrada.repartirCartas();
+			Iterator<Carta> j1It = null;
+			Iterator<Carta> j2It = null;
+			Iterator<Carta> j3It = null;
+			Iterator<Carta> j4It = null;
+			for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
+				if (j1.equals(jugadorCartas.getKey())) {
+					if (j1It == null) {
+						j1It = jugadorCartas.getValue().iterator();
+					}
+					if (j1It.hasNext()) {
+						partidaCerrada.jugarCarta(j1, j1It.next());
+					}
+				} else if (j2.equals(jugadorCartas.getKey())) {
+					if (j2It == null) {
+						j2It = jugadorCartas.getValue().iterator();
+					}
+					if (j2It.hasNext()) {
+						partidaCerrada.jugarCarta(j2, j2It.next());
+					}
+				} else if (j3.equals(jugadorCartas.getKey())) {
+					if (j3It == null) {
+						j3It = jugadorCartas.getValue().iterator();
+					}
+					if (j3It.hasNext()) {
+						partidaCerrada.jugarCarta(j3, j3It.next());
+					}
+				} else {
+					if (j4It == null) {
+						j4It = jugadorCartas.getValue().iterator();
+					}
+					if (j4It.hasNext()) {
+						partidaCerrada.jugarCarta(j4, j4It.next());
+					}
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+		}
 	}
 
 	@Test

@@ -9,7 +9,7 @@ import org.uade.ad.trucorepo.interfaces.JuegoService;
 import org.uade.ad.trucorepo.interfaces.JugadorService;
 import org.uade.ad.trucorepo.interfaces.SesionService;
 
-public class Server {
+public final class Server {
 
 	public static void main(String[] args) {
 		new Server().init();

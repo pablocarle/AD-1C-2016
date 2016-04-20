@@ -1,7 +1,10 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -36,12 +39,19 @@ public class Mano {
 	private List<Baza> bazas;
 	@Transient
 	private List<Jugador> ordenJuego;
+	@Transient
+	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
 	
-	public Mano(Pareja pareja1, Pareja pareja2, List<Jugador> ordenJuego) {
+	public Mano() {
+		super();
+	}
+	
+	public Mano(Pareja pareja1, Pareja pareja2, Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuego) {
 		super();
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
 		this.ordenJuego = ordenJuego;
+		this.cartasAsignadas = cartasAsignadas;
 	}
 	
 	public List<Baza> getBazas() {
@@ -49,6 +59,7 @@ public class Mano {
 	}
 	
 	public void jugar(Jugador jugador, Carta carta) {
+		assertCartaValida(jugador, carta);
 		if (bazas == null) {
 			bazas = new ArrayList<>(BAZAS_MAX_SIZE);
 		} else if (bazas.size() == BAZAS_MAX_SIZE && bazas.get(bazas.size() - 1).esCompleta()) {
@@ -96,7 +107,7 @@ public class Mano {
 	 * @return
 	 */
 	public Pareja getGanador() {
-		if (bazas.size() >= 2) {
+		if (bazas != null && bazas.size() >= 2) {
 			int countPareja1 = 0;
 			int countPareja2 = 0;
 			boolean todasCompletas = true;
@@ -125,6 +136,17 @@ public class Mano {
 		return Pareja.Null;
 	}
 
+	private void assertCartaValida(Jugador jugador, Carta carta) {
+		if (cartasAsignadas.containsKey(jugador)) {
+			if (!cartasAsignadas.get(jugador).contains(carta)) {
+				throw new RuntimeException(""); //TODO Definir excepcion
+			} else {
+				return;
+			}
+		}
+		throw new RuntimeException(""); //TODO Definir excepcion
+	}
+	
 	public void cantar(Jugador jugador, Envite envite) {
 		// TODO Gestionar envites en la mano
 		
@@ -134,5 +156,18 @@ public class Mano {
 
 	public boolean terminada() {
 		return getGanador() != Pareja.Null;
+	}
+
+	Map<Jugador, Set<Carta>> getCartasAsignadas() {
+		return new HashMap<>(cartasAsignadas);
+	}
+
+	/**
+	 * Determina si en la mano se ha jugado alguna carta
+	 * 
+	 * @return
+	 */
+	public boolean tieneMovimientos() {
+		return bazas == null || bazas.isEmpty();
 	}
 }
