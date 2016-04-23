@@ -8,6 +8,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import org.uade.ad.trucorepo.dtos.CartaDTO;
+
 /**
  * El orden natural es por numero de carta?
  * 
@@ -16,7 +18,7 @@ import javax.persistence.Id;
  */
 @Entity(name="cartas")
 @Access(value=AccessType.FIELD)
-public class Carta implements Comparable<Carta> {
+public class Carta implements Comparable<Carta>, HasDTO<CartaDTO> {
 
 	@Id
 	private int idCarta;
@@ -149,5 +151,10 @@ public class Carta implements Comparable<Carta> {
 				return ascending ? 1 : -1;
 			return 0;
 		}
+	}
+
+	@Override
+	public CartaDTO getDTO() {
+		return new CartaDTO();
 	}
 }

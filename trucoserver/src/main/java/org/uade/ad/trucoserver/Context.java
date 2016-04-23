@@ -56,4 +56,17 @@ public abstract class Context extends UnicastRemoteObject {
 	protected static void agregarJuego(Partida juego) {
 		juegos.add(juego);
 	}
+	
+	protected static Partida getPartida(int idPartida) {
+		if (juegos == null) {
+			return null;
+		} else {
+			for (Partida partida : juegos) {
+				if (partida.getIdPartida() == idPartida) {
+					return partida;
+				}
+			}
+		}
+		return null;
+	}
 }

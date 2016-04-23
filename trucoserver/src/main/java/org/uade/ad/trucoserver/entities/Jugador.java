@@ -13,7 +13,7 @@ import org.uade.ad.trucorepo.dtos.JugadorDTO;
 
 @Entity
 @Table(name="jugadores")
-public class Jugador {
+public class Jugador implements HasDTO<JugadorDTO> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -42,11 +42,6 @@ public class Jugador {
 		this.password = password;
 	}
 
-	public JugadorDTO getDTO() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 	@Override
 	public String toString() {
 		return "Jugador [idJugador=" + idJugador + ", email=" + email + ", apodo=" + apodo + "]";
@@ -135,5 +130,11 @@ public class Jugador {
 
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
+	}
+
+	@Override
+	public JugadorDTO getDTO() {
+		//TODO Asignar datos al DTO
+		return new JugadorDTO();
 	}
 }

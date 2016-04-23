@@ -125,7 +125,7 @@ public abstract class Partida {
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada()) {
 			circularOrdenJuego();
-			throw new Exception("Mano terminada");
+			throw new Exception("Mano terminada. Debe repartir cartas.");
 		} else {
 			manoActual.jugar(jugador, carta);
 		}
@@ -158,9 +158,7 @@ public abstract class Partida {
 
 	/**
 	 * Repartir las cartas para la mano actual. Verifica el estado correcto del juego
-	 * No se pueden repartir cartas si hay una mano en progreso
-	 * 
-	 * TODO
+	 * No se pueden repartir cartas si hay una mano en progreso.
 	 * 
 	 * @return Mapa K: Jugador V: Set de cartas asignadas
 	 * @throws Exception Si no se pueden repartir las cartas por tener mano en progreso
@@ -235,5 +233,8 @@ public abstract class Partida {
 			return manoActual.terminada();
 		}
 	}
-	
+
+	public int getIdPartida() {
+		return idPartida;
+	}
 }
