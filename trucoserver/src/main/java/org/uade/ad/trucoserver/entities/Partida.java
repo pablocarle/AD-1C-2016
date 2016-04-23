@@ -237,4 +237,15 @@ public abstract class Partida {
 	public int getIdPartida() {
 		return idPartida;
 	}
+
+	/** Agregue  la verificacion de la pareja ganadora para la mano actual*/
+	@SuppressWarnings("null")
+	public Pareja getParejaGanadora(){
+		Mano manoActual = getManoActual();
+		if (manoActual != null) {
+			return manoActual.getGanador();
+		} else {
+			return null;
+		}
+	}
 }
