@@ -246,4 +246,5 @@ public abstract class Partida {
 		}
 	}
 	
+	
 }
