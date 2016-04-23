@@ -77,6 +77,7 @@ public class JuegoTest {
 				}
 				for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
 					if (partidaCerrada.manoTerminada()) {
+						System.out.println("Ganadores:" + partidaCerrada.getParejaGanadora().getJugador1().getApodo() + "y" + partidaCerrada.getParejaGanadora().getJugador2().getApodo() );
 						break;
 					}
 					if (j1.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j1)) {

@@ -239,7 +239,7 @@ public abstract class Partida {
 	@SuppressWarnings("null")
 	public Pareja getParejaGanadora(){
 		Mano manoActual = getManoActual();
-		if (manoActual == null) {
+		if (manoActual != null) {
 			return manoActual.getGanador();
 		} else {
 			return null;
