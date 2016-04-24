@@ -44,8 +44,21 @@ public class GenericDaoImpl<T, ID extends Serializable> implements GenericDao<T,
 
 	@Override
 	public void guardar(T entity) {
-		Session session = getSession();
-		session.save(entity);
+		//Session session = getSession();
+		//session.save(entity);
+		
+		
+		
+		Session session = factory.openSession();
+		session.beginTransaction();
+		//for(Usuario usuario:usuarios){
+			session.persist(entity);
+		//}
+		session.flush();
+		session.getTransaction().commit();
+		session.close();
+		
+		
 	}
 
 	@Override

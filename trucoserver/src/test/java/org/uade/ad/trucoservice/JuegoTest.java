@@ -10,6 +10,9 @@ import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.uade.ad.trucoserver.business.JuegoLogManager;
+import org.uade.ad.trucoserver.business.JugadorManager;
+import org.uade.ad.trucoserver.dao.Juego_LogDaoImpl;
 import org.uade.ad.trucoserver.entities.Carta;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -38,6 +41,13 @@ public class JuegoTest {
 		j2 = new Jugador("2", "j2", "");
 		j3 = new Jugador("3", "j3", "");
 		j4 = new Jugador("4", "j4", "");
+		
+		//Leandro: Necesito un jugador que este en la base:
+		System.out.println("Se lee el jugador 1 de la base de datos");
+		j1=JugadorManager.getManager().getJugador("Pablo");
+		System.out.println("Se leyó el jugador 1 de la base de datos");
+		
+		
 		p1 = new Pareja(j1, j2);
 		p2 = new Pareja(j3, j4);
 		Grupo grupo = new Grupo(p1, p2);
@@ -66,7 +76,10 @@ public class JuegoTest {
 			Iterator<Carta> j3It = null;
 			Iterator<Carta> j4It = null;
 			Carta cartaJuego = null;
+			
+			
 			while (partidaCerrada.enCurso()) {
+				
 				if (partidaCerrada.manoTerminada()) {
 					System.out.println("Mano terminada");
 					cartas = partidaCerrada.repartirCartas();
@@ -75,9 +88,20 @@ public class JuegoTest {
 					j3It = null;
 					j4It = null;
 				}
+				
 				for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
+
+					
 					if (partidaCerrada.manoTerminada()) {
-						System.out.println("Ganadores:" + partidaCerrada.getParejaGanadora().getJugador1().getApodo() + "y" + partidaCerrada.getParejaGanadora().getJugador2().getApodo() );
+						System.out.println("Ganadores:" + partidaCerrada.getParejaGanadora().getJugador1().getApodo() + " y " + partidaCerrada.getParejaGanadora().getJugador2().getApodo() );
+						
+						
+						//REVISAR:
+						Jugador j = partidaCerrada.getParejaGanadora().getJugador1();
+						JuegoLogManager a = JuegoLogManager.getManager();
+						System.out.println("id del jugador a grabar en el log: "+j.getIdJugador());
+						a.registrarJuego_Log(j,"prueba", "prueba", true, 1);
+						
 						break;
 					}
 					if (j1.equals(jugadorCartas.getKey()) && partidaCerrada.esTurno(j1)) {

@@ -4,6 +4,7 @@ import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.entities.Jugador;
 
+
 public class JugadorManager {
 
 	private static JugadorManager instancia = null;
@@ -45,6 +46,9 @@ public class JugadorManager {
 	}
 
 	public Jugador getJugador(String apodo) {
-		return dao.getPorApodo(apodo);
+		System.out.println("A punto de buscar el jugador por apodo en la base de datos.");
+		Jugador j=dao.getPorApodo(apodo);
+		System.out.println("Apodo del jugador leido en la bd: "+j.getApodo());
+		return j; 
 	}
 }
