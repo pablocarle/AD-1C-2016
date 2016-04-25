@@ -196,7 +196,13 @@ public abstract class Partida {
 	 * @return
 	 */
 	public boolean enCurso() {
-		return true; //TODO Definir cuando la partida termino
+		if (pareja1Score<30 && pareja1Score<30)
+			return true;
+		else{
+			System.out.println("pareja1Score: " + pareja1Score + "         pareja2Score: " + pareja2Score);
+			return false;
+		}
+		 //TODO Definir cuando la partida termino
 	}
 
 	/**
@@ -243,7 +249,13 @@ public abstract class Partida {
 	public Pareja getParejaGanadora(){
 		Mano manoActual = getManoActual();
 		if (manoActual != null) {
-			return manoActual.getGanador();
+			Pareja ParejaGanadora = manoActual.getGanador();
+			if (parejas.get(1).equals(ParejaGanadora)){
+				pareja1Score=pareja1Score+2;
+			}else{
+				pareja2Score=pareja2Score+2;
+			}
+			return manoActual.getGanador();	
 		} else {
 			return null;
 		}
