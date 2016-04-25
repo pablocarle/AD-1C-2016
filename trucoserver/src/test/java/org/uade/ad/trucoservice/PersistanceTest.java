@@ -2,6 +2,7 @@ package org.uade.ad.trucoservice;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -199,7 +200,7 @@ public class PersistanceTest {
 			assertTrue(j3.getIdJugador() > 0);
 			jDao.guardar(j4);
 			assertTrue(j4.getIdJugador() > 0);
-			
+
 			parejaDao.guardar(p1);
 			assertTrue(p1.getIdPareja() > 0);
 			parejaDao.guardar(p2);
