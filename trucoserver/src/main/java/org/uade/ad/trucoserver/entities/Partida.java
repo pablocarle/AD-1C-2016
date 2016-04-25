@@ -196,7 +196,7 @@ public abstract class Partida {
 	 * @return
 	 */
 	public boolean enCurso() {
-		if (pareja1Score<30 && pareja1Score<30)
+		if (pareja1Score < 30 && pareja1Score < 30)
 			return true;
 		else{
 			System.out.println("pareja1Score: " + pareja1Score + "         pareja2Score: " + pareja2Score);
@@ -245,17 +245,18 @@ public abstract class Partida {
 	}
 
 	/** Agregue  la verificacion de la pareja ganadora para la mano actual*/
-	@SuppressWarnings("null")
 	public Pareja getParejaGanadora(){
 		Mano manoActual = getManoActual();
 		if (manoActual != null) {
-			Pareja ParejaGanadora = manoActual.getGanador();
-			if (parejas.get(1).equals(ParejaGanadora)){
-				pareja1Score=pareja1Score+2;
-			}else{
-				pareja2Score=pareja2Score+2;
+			Pareja parejaGanadora = manoActual.getGanador();
+			if (parejas.get(1).equals(parejaGanadora)){
+				//XXX: El score deberia actualizarse a medida que se van dando los eventos (fin de envite) o ante falta de envites, el fin de la mano
+				//XXX: por esta razon, getParejaGanadora() deberia devolver ParejaGanadora de manoActual
+				pareja1Score = pareja1Score + 2;
+			} else {
+				pareja2Score = pareja2Score + 2;
 			}
-			return manoActual.getGanador();	
+			return parejaGanadora;
 		} else {
 			return null;
 		}

@@ -1,13 +1,10 @@
 package org.uade.ad.trucoserver.business;
 
-import org.uade.ad.trucoserver.dao.JugadorDao;
-import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
-import org.uade.ad.trucoserver.entities.Jugador;
-
 import java.util.Date;
 
 import org.uade.ad.trucoserver.dao.Juego_LogDao;
 import org.uade.ad.trucoserver.dao.Juego_LogDaoImpl;
+import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.LogJuego;
 
 public class JuegoLogManager {

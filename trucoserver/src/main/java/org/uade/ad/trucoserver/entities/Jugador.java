@@ -39,6 +39,7 @@ public class Jugador implements HasDTO<JugadorDTO> {
 		super();
 		this.email = email;
 		this.apodo = apodo;
+		this.nombre = apodo;
 		this.password = password;
 	}
 
