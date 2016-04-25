@@ -87,4 +87,8 @@ public class Pareja {
 	public Jugador getJugador2() {
 		return jugador2;
 	}
+	
+	public int getIdPareja() {
+		return idPareja;
+	}
 }

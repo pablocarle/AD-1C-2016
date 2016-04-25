@@ -31,9 +31,10 @@ public class Grupo {
 		super();
 	}
 	
-	public Grupo(Pareja pareja1, Pareja pareja2) {
+	public Grupo(String nombre, Pareja pareja1, Pareja pareja2) {
 		super();
 		assert(!pareja1.equals(pareja2));
+		this.nombre = nombre;
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
 	}

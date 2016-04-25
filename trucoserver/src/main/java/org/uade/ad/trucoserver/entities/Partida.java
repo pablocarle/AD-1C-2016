@@ -128,6 +128,14 @@ public abstract class Partida {
 			throw new Exception("Mano terminada. Debe repartir cartas.");
 		} else {
 			manoActual.jugar(jugador, carta);
+			if (manoActual.terminada() && !manoActual.tieneEnvites()) {
+				Pareja ganador = manoActual.getGanador();
+				if (parejas.get(1).equals(ganador)){
+					pareja1Score += 1;
+				} else {
+					pareja2Score += 1;
+				}
+			}
 		}
 	}
 
@@ -248,15 +256,7 @@ public abstract class Partida {
 	public Pareja getParejaGanadora(){
 		Mano manoActual = getManoActual();
 		if (manoActual != null) {
-			Pareja parejaGanadora = manoActual.getGanador();
-			if (parejas.get(1).equals(parejaGanadora)){
-				//XXX: El score deberia actualizarse a medida que se van dando los eventos (fin de envite) o ante falta de envites, el fin de la mano
-				//XXX: por esta razon, getParejaGanadora() deberia devolver ParejaGanadora de manoActual
-				pareja1Score = pareja1Score + 2;
-			} else {
-				pareja2Score = pareja2Score + 2;
-			}
-			return parejaGanadora;
+			return manoActual.getGanador();
 		} else {
 			return null;
 		}

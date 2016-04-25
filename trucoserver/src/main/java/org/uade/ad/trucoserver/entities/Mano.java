@@ -197,4 +197,8 @@ public class Mano {
 		}
 		return ordenJuegoActual.get(turnoActualIdx).equals(jugador);
 	}
+
+	public boolean tieneEnvites() {
+		return envites != null && !envites.isEmpty();
+	}
 }

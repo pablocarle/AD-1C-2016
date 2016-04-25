@@ -81,7 +81,10 @@ public class PersistanceTest {
 		j3.setCategoria(categorias.get(0));
 		j4.setCategoria(categorias.get(0));
 		
-		grupo = new Grupo(p1, p2);
+		p1 = new Pareja(j1, j2);
+		p2 = new Pareja(j3, j4);
+		
+		grupo = new Grupo("grupoTest", p1, p2);
 		List<Jugador> ordenJuego = new ArrayList<>();
 		ordenJuego.add(j1);
 		ordenJuego.add(j3);
@@ -108,8 +111,9 @@ public class PersistanceTest {
 
 	@Test
 	public void testPersistJugador() {
+		Transaction tr = null;
 		try {
-			Transaction tr = jDao.getSession().beginTransaction();
+			tr = jDao.getSession().beginTransaction();
 			jDao.guardar(j1);
 			assertTrue(j1.getIdJugador() > 0);
 			jDao.guardar(j2);
@@ -122,17 +126,111 @@ public class PersistanceTest {
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage());
+			tr.rollback();
+		}
+		
+		//Damos la baja
+		try {
+			tr = jDao.getSession().beginTransaction();
+			jDao.eliminar(j1);
+			jDao.eliminar(j2);
+			jDao.eliminar(j3);
+			jDao.eliminar(j4);
+			tr.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			tr.rollback();
+		}
+	}
+	
+	@Test
+	public void testPersistParejas() {
+		Transaction tr = null;
+		try {
+			tr = parejaDao.getSession().beginTransaction();
+			jDao.guardar(j1);
+			assertTrue(j1.getIdJugador() > 0);
+			jDao.guardar(j2);
+			assertTrue(j2.getIdJugador() > 0);
+			jDao.guardar(j3);
+			assertTrue(j3.getIdJugador() > 0);
+			jDao.guardar(j4);
+			assertTrue(j4.getIdJugador() > 0);
+			
+			parejaDao.guardar(p1);
+			assertTrue(p1.getIdPareja() > 0);
+			parejaDao.guardar(p2);
+			assertTrue(p2.getIdPareja() > 0);
+			tr.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			tr.rollback();
+		}
+		
+		try {
+			tr = parejaDao.getSession().beginTransaction();
+			parejaDao.eliminar(p1);
+			parejaDao.eliminar(p2);
+			
+			jDao.eliminar(j1);
+			jDao.eliminar(j2);
+			jDao.eliminar(j3);
+			jDao.eliminar(j4);
+			tr.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			tr.rollback();
 		}
 	}
 	
 	@Test
 	public void testPersistGrupo() {
+		Transaction tr = null;
+		try {
+			tr = parejaDao.getSession().beginTransaction();
+			jDao.guardar(j1);
+			assertTrue(j1.getIdJugador() > 0);
+			jDao.guardar(j2);
+			assertTrue(j2.getIdJugador() > 0);
+			jDao.guardar(j3);
+			assertTrue(j3.getIdJugador() > 0);
+			jDao.guardar(j4);
+			assertTrue(j4.getIdJugador() > 0);
+			
+			parejaDao.guardar(p1);
+			assertTrue(p1.getIdPareja() > 0);
+			parejaDao.guardar(p2);
+			assertTrue(p2.getIdPareja() > 0);
+			
+			grupoDao.guardar(grupo);
+			assertTrue(grupo.getIdGrupo() > 0);
+			tr.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			tr.rollback();
+		}
 		
+		try {
+			tr = parejaDao.getSession().beginTransaction();
+			grupoDao.eliminar(grupo);
+			
+			parejaDao.eliminar(p1);
+			parejaDao.eliminar(p2);
+			
+			jDao.eliminar(j1);
+			jDao.eliminar(j2);
+			jDao.eliminar(j3);
+			jDao.eliminar(j4);
+			
+			tr.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail(e.getMessage());
+			tr.rollback();
+		}
 	}
-	
-	@Test
-	public void testPersistPartida() {
-		fail("Not yet implemented");
-	}
-
 }

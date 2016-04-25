@@ -33,5 +33,4 @@ public class JugadorDaoImpl extends GenericDaoImpl<Jugador, Integer> implements 
 	
 		return getUnico(query);
 	}
-
 }
