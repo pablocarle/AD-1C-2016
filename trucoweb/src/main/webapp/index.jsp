@@ -40,6 +40,9 @@
 					<td><input type="reset" value="Reset" /></td>
 				</tr>
 				<tr>
+					<td id="message"></td>
+				</tr>
+				<tr>
 					<td colspan="2">No tengo usuario! <a href="reg.jsp">Nuevo Usuario</a></td>
 				</tr>
 			</tbody>
