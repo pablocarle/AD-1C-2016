@@ -35,7 +35,7 @@ import org.uade.ad.trucoserver.business.CartasManager;
 @MappedSuperclass
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType=DiscriminatorType.INTEGER, name="idTipoPartida")
-public abstract class Partida {
+public abstract class Partida implements PartidaTerminadaObservable {
 	
 	private static CartasManager cartasManager = CartasManager.getManager();
 	
@@ -204,13 +204,12 @@ public abstract class Partida {
 	 * @return
 	 */
 	public boolean enCurso() {
-		if (pareja1Score < 30 && pareja1Score < 30)
+		if (pareja1Score < 30 && pareja2Score < 30)
 			return true;
-		else{
+		else {
 			System.out.println("pareja1Score: " + pareja1Score + "         pareja2Score: " + pareja2Score);
 			return false;
 		}
-		 //TODO Definir cuando la partida termino
 	}
 
 	/**
@@ -260,5 +259,11 @@ public abstract class Partida {
 		} else {
 			return null;
 		}
+	}
+	
+	@Override
+	public void agregarObserver(PartidaTerminadaObserver observer) {
+		// TODO Auto-generated method stub
+		
 	}
 }

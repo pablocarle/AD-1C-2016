@@ -11,6 +11,7 @@
 		var apodo = document.getElementById("apodoField").value;
 		var password = document.getElementById("passField").value;
 		if (!apodo || !password) {
+			//TODO Modificar el alert por algo mejor para el usuario. Preferentemente css.
 			alert("Usuario y password son requeridos");
 			return false;
 		}
@@ -19,6 +20,7 @@
 </script>
 </head>
 <body>
+	<!-- Estamos usando el submit del form como viene. Se podria reemplazar por llamada ajax (ECMA o jquery) -->
 	<form method="post" action="LoginServlet" onsubmit="return validarApodoPass();" >
 		<table border="1" >
 			<thead>

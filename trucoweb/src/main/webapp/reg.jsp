@@ -7,12 +7,21 @@
 <title>Registro de nuevo usuario</title>
 <script type="text/javascript">
 	function validaForm() {
-		return false;
+		var apodoField = document.getElementById("apodoField").value;
+		var passField = document.getElementById("passField").value;
+		var emailField = document.getElementById("emailField").value;
+
+		if (!apodoField || !passField || !emailField) {
+			//TODO Modificar el alert por algo mejor para avisar al usuario (preferentemente css)
+			alert("Faltan campos obligatorios");
+			return false;
+		}
+		return true;
 	}
 </script>
 </head>
 <body>
-	<form method="post" action="MainServlet" onsubmit="return validaForm();">
+	<form method="post" action="RegisterServlet" onsubmit="return validaForm();">
 		<table border="1">
 			<thead>
 				<tr>
@@ -22,15 +31,15 @@
 			<tbody>
 				<tr>
 					<td>Apodo</td>
-					<td><input type="text" name="apodo" value="" /></td>
+					<td><input type="text" id="apodoField" name="apodo" value="" /></td>
 				</tr>
 				<tr>
 					<td>Email</td>
-					<td><input type="text" name="email" value="" /></td>
+					<td><input type="text" id="emailField" name="email" value="" /></td>
 				</tr>
 				<tr>
 					<td>Password</td>
-					<td><input type="password" name="pass" value="" /></td>
+					<td><input type="password" id="passField" name="pass" value="" /></td>
 				</tr>
 				<tr>
 					<td><input type="submit" value="Registrar" /></td>

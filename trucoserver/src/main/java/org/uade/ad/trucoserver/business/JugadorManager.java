@@ -1,7 +1,14 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.Collections;
+import java.util.List;
+
+import org.hibernate.Transaction;
+import org.uade.ad.trucoserver.dao.CategoriaDao;
+import org.uade.ad.trucoserver.dao.CategoriaDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
+import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Jugador;
 
 
@@ -9,12 +16,23 @@ public class JugadorManager {
 
 	private static JugadorManager instancia = null;
 	
+	private static final List<Categoria> categorias = leerCategorias();
+	
 	private JugadorDao dao = JugadorDaoImpl.getDAO();
 	
 	private JugadorManager() {
 		super();
 	}
 	
+	private static List<Categoria> leerCategorias() {
+		CategoriaDao dao = CategoriaDaoImpl.getDAO();
+		List<Categoria> categorias = dao.getTodos(Categoria.class);
+		if (categorias == null || categorias.isEmpty()) {
+		}
+		Collections.sort(categorias);
+		return categorias;
+	}
+
 	public static JugadorManager getManager() {
 		if (instancia == null) {
 			instancia = new JugadorManager();
@@ -22,6 +40,15 @@ public class JugadorManager {
 		return instancia;
 	}
 	
+	/**
+	 * Registrar un nuevo usuario (jugador) en el sistema
+	 * 
+	 * @param apodo el apodo del usuario
+	 * @param email email del usuario
+	 * @param password password del nuevo usuario
+	 * @return
+	 * @throws Exception Si ya existe un jugador con el apodo proporcionado
+	 */
 	public Jugador registrarJugador(String apodo, String email, String password) throws Exception {
 		Jugador existe = dao.getPorApodo(apodo);
 		if (existe == null) {
@@ -31,7 +58,10 @@ public class JugadorManager {
 			nuevo.setApodo(apodo);
 			nuevo.setEmail(email);
 			nuevo.setPassword(password);
+			nuevo.setCategoria(categorias.get(0));
+			Transaction tr = dao.getSession().beginTransaction();
 			dao.guardar(nuevo);
+			tr.commit();
 			return nuevo;
 		}
 	}
