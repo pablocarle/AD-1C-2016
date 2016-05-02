@@ -192,7 +192,14 @@ public abstract class Partida implements PartidaTerminadaObservable {
 				}
 				cartas.put(jugador, new HashSet<>(r.get(i)));
 			}
-			manos.add(new Mano(parejas.get(0), parejas.get(1), cartas, (ordenJuegoActual == null || ordenJuegoActual.isEmpty()) ? primerOrdenJuego : ordenJuegoActual));
+			
+			List<Jugador> ordenJuego = null;
+			if ((ordenJuegoActual == null || ordenJuegoActual.isEmpty())){
+				ordenJuego = primerOrdenJuego;
+			} else {
+				ordenJuego = ordenJuegoActual;
+			}
+			manos.add(new Mano(parejas.get(0), parejas.get(1), cartas, ordenJuego));
 		}
 		
 		return cartas == null ? getManoActual().getCartasAsignadas() : cartas;

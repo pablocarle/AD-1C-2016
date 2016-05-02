@@ -134,4 +134,23 @@ public class JuegoTest {
 	public void testGetPuntosObtenidos() {
 		fail("Not yet implemented");
 	}
+	
+	private void seeIterator(){
+		List<String> cartas = new ArrayList<>();
+		
+		for (int i = 0; i < cartas.size(); i++) {
+			String c = cartas.get(i);
+			System.out.println(c);
+		}
+		
+		for (String s : cartas) {
+			System.out.println(s);
+		}
+		
+		for (Iterator<String> iterator = cartas.iterator(); iterator.hasNext();) {
+			String string = iterator.next();
+			System.out.println();
+		}
+		
+	}
 }
