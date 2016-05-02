@@ -6,7 +6,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 
 	<properties>
-		<jdk>1.8</jdk>
+		<jdk>1.7</jdk>
 	</properties>
 
 	<build>

@@ -8,7 +8,7 @@
 	<name>trucoweb Maven Webapp</name>
 	<url>http://maven.apache.org</url>
 	<properties>
-		<jdk>1.8</jdk>
+		<jdk>1.7</jdk>
 	</properties>
 	<dependencies>
 		<dependency>
