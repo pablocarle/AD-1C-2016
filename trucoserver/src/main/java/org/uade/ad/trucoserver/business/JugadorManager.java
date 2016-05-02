@@ -9,6 +9,7 @@ import org.uade.ad.trucoserver.dao.CategoriaDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.entities.Categoria;
+import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 
 
@@ -26,10 +27,12 @@ public class JugadorManager {
 	
 	private static List<Categoria> leerCategorias() {
 		CategoriaDao dao = CategoriaDaoImpl.getDAO();
+		Transaction tr = dao.getSession().beginTransaction();
 		List<Categoria> categorias = dao.getTodos(Categoria.class);
 		if (categorias == null || categorias.isEmpty()) {
 		}
 		Collections.sort(categorias);
+		tr.commit();
 		return categorias;
 	}
 
@@ -64,6 +67,20 @@ public class JugadorManager {
 			tr.commit();
 			return nuevo;
 		}
+	}
+	
+	/**
+	 * TODO definir argumentos. Parejas?
+	 * 
+	 * @param nombre
+	 * @param idJugadores
+	 * @return
+	 * @throws Exception
+	 */
+	public Grupo crearGrupo(String nombre, int[] idJugadores) throws Exception {
+		//Debo obtener todos los jugadores con esos ids
+		
+		return null;
 	}
 
 	public boolean login(String apodo, String password) {

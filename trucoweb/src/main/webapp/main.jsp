@@ -24,6 +24,11 @@ mostrarNotificaciones = function(xml) {
 </script>
 </head>
 <body>
-
+<!-- Agregar links a acciones -->
+<!-- Nueva partida abierta individual -->
+<!-- Nueva partida abierta en pareja -->
+<!-- Nueva partida cerrada -->
+<!-- Nuevo grupo -->
+<!-- Area de notificaciones -->
 </body>
 </html>

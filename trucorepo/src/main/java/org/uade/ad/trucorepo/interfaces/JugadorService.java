@@ -2,6 +2,7 @@ package org.uade.ad.trucorepo.interfaces;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
@@ -14,4 +15,6 @@ public interface JugadorService extends Remote {
 	public JugadorDTO registrarJugador(String email, String apodo, String password) throws RemoteException;
 	
 	public GrupoDTO crearGrupo(String nombreGrupo, Set<JugadorDTO> integrantes) throws RemoteException;
+	
+	public List<JugadorDTO> getJugadoresOnlineDisponibles() throws RemoteException;
 }

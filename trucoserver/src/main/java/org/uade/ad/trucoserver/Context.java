@@ -2,6 +2,7 @@ package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -68,5 +69,14 @@ public abstract class Context extends UnicastRemoteObject {
 			}
 		}
 		return null;
+	}
+	
+	/**
+	 * Obtener una copia de los jugadores disponibles para jugar en el sistema
+	 * 
+	 * @return
+	 */
+	protected static List<Jugador> getJugadoresDisponibles() {
+		return new ArrayList<>(jugadoresDisponibles);
 	}
 }

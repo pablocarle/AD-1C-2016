@@ -13,11 +13,14 @@ public abstract class BusinessDelegate {
 		InputStream is = null;
 		try {
 			is = BusinessDelegate.class.getClassLoader().getResourceAsStream("server.properties");
+			webServerProperties = new Properties();
+			webServerProperties.load(is);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
 		} finally {
 			try {
 				is.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}

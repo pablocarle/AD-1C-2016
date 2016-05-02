@@ -18,8 +18,8 @@ public class JugadoresDelegate extends BusinessDelegate {
 	public JugadoresDelegate() throws JugadorException {
 		super();
 		try {
-			service = (JugadorService) Naming.lookup(webServerProperties.getProperty("server.url") + JugadorService.SERVICENAME);
-			sessionService = (SesionService) Naming.lookup(webServerProperties.getProperty("server.url") + SesionService.SERVICENAME);
+			service = (JugadorService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + JugadorService.SERVICENAME);
+			sessionService = (SesionService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + SesionService.SERVICENAME);
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new JugadorException("No se pudo obtener servicio remoto", e);
 		}

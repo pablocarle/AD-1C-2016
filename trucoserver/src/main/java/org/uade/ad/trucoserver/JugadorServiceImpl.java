@@ -2,6 +2,8 @@ package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
@@ -16,7 +18,6 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 	
 	protected JugadorServiceImpl() throws RemoteException {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -38,5 +39,15 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 	public GrupoDTO crearGrupo(String nombreGrupo, Set<JugadorDTO> integrantes) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<JugadorDTO> getJugadoresOnlineDisponibles() throws RemoteException {
+		List<Jugador> jugadoresDisponibles = getJugadoresDisponibles();
+		List<JugadorDTO> jugadores = new ArrayList<>(jugadoresDisponibles.size());
+		for (Jugador j : jugadoresDisponibles) {
+			jugadores.add(j.getDTO());
+		}
+		return jugadores;
 	}
 }

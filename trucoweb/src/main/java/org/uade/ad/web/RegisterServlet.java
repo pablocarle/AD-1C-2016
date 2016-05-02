@@ -7,6 +7,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.bind.JAXBContext;
 
 import org.uade.ad.trucorepo.delegates.JugadoresDelegate;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
@@ -74,6 +75,8 @@ public class RegisterServlet extends HttpServlet {
 		} else {
 			try {
 				JugadorDTO dto = jugadoresDelegate.registrarJugador(apodo, email, password);
+				response.setStatus(200);
+				PrintWriter writer = response.getWriter();
 				//TODO Respuesta a usuario con success de creacion de jugador
 			} catch (JugadorException e) {
 				PrintWriter writer = response.getWriter();
