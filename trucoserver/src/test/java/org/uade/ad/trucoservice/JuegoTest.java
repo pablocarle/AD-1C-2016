@@ -67,6 +67,7 @@ public class JuegoTest {
 			Iterator<Carta> j3It = null;
 			Iterator<Carta> j4It = null;
 			Carta cartaJuego = null;
+			boolean trucoCantado = false;
 			
 			while (partidaCerrada.enCurso()) {
 				
@@ -77,6 +78,7 @@ public class JuegoTest {
 					j2It = null;
 					j3It = null;
 					j4It = null;
+					trucoCantado = false;
 				}
 				
 				for (Map.Entry<Jugador, Set<Carta>> jugadorCartas : cartas.entrySet()) {
@@ -90,6 +92,10 @@ public class JuegoTest {
 						}
 						if (j1It.hasNext()) {
 							cartaJuego = j1It.next();
+							
+							if (trucoCantado == false)
+								trucoCantado = this.truco(cartaJuego, j1);
+							
 							System.out.println("Jugador: " + j1.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
 							partidaCerrada.jugarCarta(j1, cartaJuego);
 						}
@@ -99,6 +105,10 @@ public class JuegoTest {
 						}
 						if (j2It.hasNext()) {
 							cartaJuego = j2It.next();
+							
+							if (trucoCantado == false)
+								trucoCantado = this.truco(cartaJuego, j2);
+							
 							System.out.println("Jugador: " + j2.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
 							partidaCerrada.jugarCarta(j2, cartaJuego);
 						}
@@ -108,6 +118,10 @@ public class JuegoTest {
 						}
 						if (j3It.hasNext()) {
 							cartaJuego = j3It.next();
+							
+							if (trucoCantado == false)
+								trucoCantado = this.truco(cartaJuego, j3);
+							
 							System.out.println("Jugador: " + j3.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
 							partidaCerrada.jugarCarta(j3, cartaJuego);
 						}
@@ -117,6 +131,10 @@ public class JuegoTest {
 						}
 						if (j4It.hasNext()) {
 							cartaJuego = j4It.next();
+							
+							if (trucoCantado == false)
+								trucoCantado = this.truco(cartaJuego, j4);
+							
 							System.out.println("Jugador: " + j4.getApodo() + " juega carta: " + cartaJuego.getNumero() + " de " + cartaJuego.getPalo());
 							partidaCerrada.jugarCarta(j4, cartaJuego);
 						}
@@ -135,22 +153,50 @@ public class JuegoTest {
 		fail("Not yet implemented");
 	}
 	
-	private void seeIterator(){
-		List<String> cartas = new ArrayList<>();
-		
-		for (int i = 0; i < cartas.size(); i++) {
-			String c = cartas.get(i);
-			System.out.println(c);
+	public boolean truco(Carta cartaJuego, Jugador j){
+		if (cartaJuego.getPalo().equalsIgnoreCase("espada")) {
+			if (cartaJuego.getNumero() == 1 || cartaJuego.getNumero() == 2 || cartaJuego.getNumero() == 3 || cartaJuego.getNumero() == 7) {
+				System.out.println(j.getApodo() + " Canta: TRUCO");
+				return true;
+			}
 		}
-		
-		for (String s : cartas) {
-			System.out.println(s);
+		else if (cartaJuego.getPalo().equalsIgnoreCase("basto")) {
+			if (cartaJuego.getNumero() == 1 || cartaJuego.getNumero() == 2 || cartaJuego.getNumero() == 3) {
+				System.out.println(j.getApodo() + " Canta: TRUCO");
+				return true;
+			}
 		}
-		
-		for (Iterator<String> iterator = cartas.iterator(); iterator.hasNext();) {
-			String string = iterator.next();
-			System.out.println();
+		else if (cartaJuego.getPalo().equalsIgnoreCase("oro")) {
+			if (cartaJuego.getNumero() == 2 || cartaJuego.getNumero() == 3 || cartaJuego.getNumero() == 7) {
+				System.out.println(j.getApodo() + " Canta: TRUCO");
+				return true;
+			}
 		}
-		
+		else if (cartaJuego.getPalo().equalsIgnoreCase("copa")) {
+			if (cartaJuego.getNumero() == 2 || cartaJuego.getNumero() == 3) {
+				System.out.println(j.getApodo() + " Canta: TRUCO");
+				return true;
+			}
+		}
+		return false;
 	}
+	
+//	private void seeIterator(){
+//		List<String> cartas = new ArrayList<>();
+//		
+//		for (int i = 0; i < cartas.size(); i++) {
+//			String c = cartas.get(i);
+//			System.out.println(c);
+//		}
+//		
+//		for (String s : cartas) {
+//			System.out.println(s);
+//		}
+//		
+//		for (Iterator<String> iterator = cartas.iterator(); iterator.hasNext();) {
+//			String string = iterator.next();
+//			System.out.println();
+//		}
+//		
+//	}
 }
