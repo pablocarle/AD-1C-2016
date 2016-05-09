@@ -135,8 +135,8 @@ public class Jugador implements HasDTO<JugadorDTO> {
 
 	@Override
 	public JugadorDTO getDTO() {
-		//TODO Asignar datos al DTO
 		JugadorDTO jugadorDTO = new JugadorDTO();
+		jugadorDTO.setEmail(this.email);
 		jugadorDTO.setApodo(this.apodo);
 		return jugadorDTO;
 	}

@@ -10,34 +10,36 @@
 		var apodoField = document.getElementById("apodoField").value;
 		var passField = document.getElementById("passField").value;
 		var emailField = document.getElementById("emailField").value;
-
+		var messageRow = document.getElementById("messageRow");
+		messageRow.style.display = "none";
+		
 		if (!apodoField || !passField || !emailField) {
-			//TODO Modificar el alert por algo mejor para avisar al usuario (preferentemente css)
-			alert("Faltan campos obligatorios");
+			//alert("Faltan campos obligatorios");
+			messageRow.style.display = null;
 			return false;
 		}
 		return true;
 	};
 
-	submitForm = function() {
-		if (validaForm()) {
-			var form = document.getElementById("regForm");
-			var apodoField = document.getElementById("apodoField").value;
-			var passField = document.getElementById("passField").value;
-			var emailField = document.getElementById("emailField").value;
-			var xhttp = new XMLHttpRequest();
-			xhttp.onreadystatechange = function() {
-				if (xhttp.readyState == 4 && xhttp.status == 200) {
-					
-				} else if (xhttp.readyState == 4) {
-					//Error HTTP
-				}
-			};
-			xhttp.open(form.method, form.action, true);
-			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-			xhttp.send("apodo=" + encodeURIComponent(apodoField) + "&pass=" + encodeURIComponent(passField) + "&email=" + encodeURIComponent(emailField));
-		}
-	};
+// 	submitForm = function() {
+// 		if (validaForm()) {
+// 			var form = document.getElementById("regForm");
+// 			var apodoField = document.getElementById("apodoField").value;
+// 			var passField = document.getElementById("passField").value;
+// 			var emailField = document.getElementById("emailField").value;
+// 			var xhttp = new XMLHttpRequest();
+// 			xhttp.onreadystatechange = function() {
+// 				if (xhttp.readyState == 4 && xhttp.status == 200) {
+// 					//Dar OK
+// 				} else if (xhttp.readyState == 4) {
+// 					//Error HTTP
+// 				}
+// 			};
+// 			xhttp.open(form.method, form.action, true);
+// 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+// 			xhttp.send("apodo=" + encodeURIComponent(apodoField) + "&pass=" + encodeURIComponent(passField) + "&email=" + encodeURIComponent(emailField));
+// 		}
+// 	};
 </script>
 </head>
 <body>
@@ -62,8 +64,30 @@
 					<td><input type="password" id="passField" name="pass" value="" /></td>
 				</tr>
 				<tr>
-					<td><input type="button" onclick="submitForm();" value="Registrar" /></td>
+					<td><input type="submit" value="Registrar" /></td>
 				</tr>
+				<%
+					String regResult = "Falta completar campos"; //Malisimo: Por default falta algun campo
+					boolean showMessage = false;
+					if (session != null) {
+						boolean missingValues = false;
+						if (session.getAttribute("missingRegValues") != null) {
+							missingValues = (Boolean)session.getAttribute("missingRegValues");
+							session.removeAttribute("missingRegValues");
+							showMessage = true;
+						} 
+						if (session.getAttribute("regResult") != null) {
+							regResult = (String)session.getAttribute("regResult");
+							session.removeAttribute("regResult");
+							showMessage = true;
+						}
+				%>
+				<tr id="messageRow" <% if (!showMessage) { %> style="display: none" <% } %>>
+					<td colspan="2"><%= regResult%></td>
+				</tr>
+				<%
+					}				
+				%>
 				<tr>
 					<td colspan="2">Ya tiene usuario? <a href="index.jsp">Ingrese aqu&iacute;</a></td>
 				</tr>

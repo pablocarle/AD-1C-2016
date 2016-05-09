@@ -7,9 +7,13 @@
 <script type="text/javascript">
 	function validarApodoPass() {
 		//var message = document.getElementById("");
-		
+		var messageRow = document.getElementById("messageRow");
 		var apodo = document.getElementById("apodoField").value;
 		var password = document.getElementById("passField").value;
+
+		if (messageRow) {
+			messageRow.style.display = 'none';
+		}
 		if (!apodo || !password) {
 			//TODO Modificar el alert por algo mejor para el usuario. Preferentemente css.
 			alert("Usuario y password son requeridos");
@@ -41,9 +45,16 @@
 					<td><input type="submit" value="Ingresar" /></td>
 					<td><input type="reset" value="Reset" /></td>
 				</tr>
-				<tr>
-					<td id="message"></td>
-				</tr>
+				<%
+					if (session != null && session.getAttribute("loginResult") != null && !((Boolean)session.getAttribute("loginResult"))) {
+						session.removeAttribute("loginResult");
+				%>
+					<tr id="messageRow">
+						<td id="message">Login incorrecto</td>
+					</tr>
+				<%
+					}
+				%>
 				<tr>
 					<td colspan="2">No tengo usuario! <a href="reg.jsp">Nuevo Usuario</a></td>
 				</tr>

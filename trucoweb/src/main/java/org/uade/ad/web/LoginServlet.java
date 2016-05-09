@@ -1,7 +1,6 @@
 package org.uade.ad.web;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -52,20 +51,21 @@ public class LoginServlet extends HttpServlet {
 		processRequest(request, response);
 	}
 
-	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		String apodo = request.getParameter("apodo");
 		String password = request.getParameter("pass");
 		System.out.println("Solicitud de acceso de " + apodo);
+		HttpSession session = request.getSession(true);
+		session.removeAttribute("loginResult");
 		
 		try {
 			JugadorDTO dto = jugadoresDelegate.validarUsuario(apodo, password);
-			HttpSession session = request.getSession(true);
 			session.setAttribute("user", dto);
+			session.setAttribute("uid", dto.getApodo());
 			response.sendRedirect("main.jsp");
 		} catch (JugadorException e) {
-			PrintWriter writer = response.getWriter();
-			writer.write("<html><body>Login incorrecto</body></html>");
-			writer.close();
+			session.setAttribute("loginResult", false);
+			request.getRequestDispatcher("index.jsp").forward(request, response);
 		}
 	}
 }

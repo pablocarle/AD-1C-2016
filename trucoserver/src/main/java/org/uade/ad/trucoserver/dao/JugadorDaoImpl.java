@@ -21,16 +21,9 @@ public class JugadorDaoImpl extends GenericDaoImpl<Jugador, Integer> implements 
 	
 	@Override
 	public Jugador getPorApodo(String apodo) {
-		
-		
-		System.out.println("clase: JugadorDaoImpl.java - metodo: getPorApodo - parametro: "+apodo);
-		
 		Session session = getSession();
-	
 		Query query = session.createQuery("from Jugador where apodo = :apodo");
 		query.setParameter("apodo", apodo);
-		System.out.println("se armó la query.");
-	
 		return getUnico(query);
 	}
 }

@@ -53,16 +53,19 @@ public class JugadorManager {
 	 * @throws Exception Si ya existe un jugador con el apodo proporcionado
 	 */
 	public Jugador registrarJugador(String apodo, String email, String password) throws Exception {
+		Transaction tr = dao.getSession().beginTransaction();
 		Jugador existe = dao.getPorApodo(apodo);
-		if (existe == null) {
+		tr.commit();
+		if (existe != null) {
 			throw new Exception("Ya existe");
 		} else {
 			Jugador nuevo = new Jugador();
 			nuevo.setApodo(apodo);
+			nuevo.setNombre(apodo);
 			nuevo.setEmail(email);
 			nuevo.setPassword(password);
 			nuevo.setCategoria(categorias.get(0));
-			Transaction tr = dao.getSession().beginTransaction();
+			tr = dao.getSession().beginTransaction();
 			dao.guardar(nuevo);
 			tr.commit();
 			return nuevo;
@@ -83,19 +86,20 @@ public class JugadorManager {
 		return null;
 	}
 
-	public boolean login(String apodo, String password) {
-		return false;
-	}
-	
-	public boolean isValidLogin(String apodo, String password) {
-		
+	public boolean esLoginValido(String apodo, String password) {
+		Transaction tr = dao.getSession().beginTransaction();
+		Jugador j = dao.getPorApodo(apodo);
+		tr.commit();
+		if (j != null && j.getPassword().equals(password)) {
+			return true;
+		}
 		return false;
 	}
 
 	public Jugador getJugador(String apodo) {
-		System.out.println("A punto de buscar el jugador por apodo en la base de datos.");
-		Jugador j=dao.getPorApodo(apodo);
-		System.out.println("Apodo del jugador leido en la bd: "+j.getApodo());
+		Transaction tr = dao.getSession().beginTransaction();
+		Jugador j = dao.getPorApodo(apodo);
+		tr.commit();
 		return j; 
 	}
 }
