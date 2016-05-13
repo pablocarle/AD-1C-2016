@@ -5,7 +5,9 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.exceptions.GrupoException;
 import org.uade.ad.trucorepo.exceptions.JugadorException;
 import org.uade.ad.trucorepo.interfaces.JugadorService;
 import org.uade.ad.trucorepo.interfaces.SesionService;
@@ -15,7 +17,7 @@ public class JugadoresDelegate extends BusinessDelegate {
 	private JugadorService service = null;
 	private SesionService sessionService = null;
 	
-	public JugadoresDelegate() throws JugadorException {
+	public JugadoresDelegate() throws JugadorException, GrupoException {
 		super();
 		try {
 			service = (JugadorService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + JugadorService.SERVICENAME);
@@ -38,6 +40,17 @@ public class JugadoresDelegate extends BusinessDelegate {
 			return service.registrarJugador(email, apodo, password);
 		} catch (RemoteException e) {
 			throw new JugadorException("No se pudo registrar el jugador " + apodo, e);
+		}
+	}
+
+	public GrupoDTO crearGrupo(String nombreGrupo, String apodoJugadorAdmin, String apodoJugador1, String apodoJugador2,
+			String apodoJugador3) throws GrupoException {
+		try {
+			//TODO invocar remoto
+			throw new RemoteException();
+		} catch (RemoteException e) {
+			throw new GrupoException("" ,e); //TODO Mensaje de error por comunicacion
+			//excepcion de grupo remota sube hasta el servlet
 		}
 	}
 }

@@ -35,12 +35,6 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 	}
 
 	@Override
-	public GrupoDTO crearGrupo(String nombreGrupo, Set<JugadorDTO> integrantes) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<JugadorDTO> getJugadoresOnlineDisponibles() throws RemoteException {
 		List<Jugador> jugadoresDisponibles = getJugadoresDisponibles();
 		List<JugadorDTO> jugadores = new ArrayList<>(jugadoresDisponibles.size());
@@ -48,5 +42,11 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 			jugadores.add(j.getDTO());
 		}
 		return jugadores;
+	}
+
+	@Override
+	public GrupoDTO crearGrupo(String nombreGrupo, int idJugadorAdmin, int[] integrantes) throws RemoteException {
+		//TODO 
+		return null;
 	}
 }

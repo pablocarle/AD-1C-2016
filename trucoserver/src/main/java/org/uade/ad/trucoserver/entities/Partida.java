@@ -22,12 +22,16 @@ import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucoserver.business.CartasManager;
+import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
+import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
 /**
  * Implementaciones de esta clase son las formas de juego disponibles.
  * Determinada por eleccion de usuario
  * 
  * XXX: Imagino que todo lo referido a envites iria en esta clase base, delegando si hace falta
+ * 
+ * TODO Invocar observers
  * 
  * @author Grupo9
  *
@@ -122,6 +126,9 @@ public abstract class Partida implements PartidaTerminadaObservable {
 	}
 	
 	public void jugarCarta(Jugador jugador, Carta carta) throws Exception {
+		if (!enCurso()) {
+			throw new Exception("Juego de carta con partida terminada!!");
+		}
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada()) {
 			circularOrdenJuego();
@@ -259,7 +266,8 @@ public abstract class Partida implements PartidaTerminadaObservable {
 	}
 
 	/** Agregue  la verificacion de la pareja ganadora para la mano actual*/
-	public Pareja getParejaGanadora(){
+	public Pareja getParejaGanadora() {
+		//FIXME La pareja ganadora debe ser para la partida
 		Mano manoActual = getManoActual();
 		if (manoActual != null) {
 			return manoActual.getGanador();
@@ -272,5 +280,10 @@ public abstract class Partida implements PartidaTerminadaObservable {
 	public void agregarObserver(PartidaTerminadaObserver observer) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public Pareja getParejaPerdedora() {
+		//TODO Pareja perdedora (de la partida!)
+		return null;
 	}
 }

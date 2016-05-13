@@ -6,8 +6,9 @@ import org.uade.ad.trucoserver.dao.Juego_LogDao;
 import org.uade.ad.trucoserver.dao.Juego_LogDaoImpl;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.LogJuego;
+import org.uade.ad.trucoserver.entities.Partida;
 
-public class JuegoLogManager {
+public class JuegoLogManager implements PartidaTerminadaObserver {
 
 	private static JuegoLogManager instancia = null;
 	
@@ -50,7 +51,9 @@ public class JuegoLogManager {
 		return false;
 	}
 
-	public Jugador getJugador(String apodo) {
-		return dao.getPorApodo(apodo);
+	@Override
+	public void finPartida(Partida partida) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

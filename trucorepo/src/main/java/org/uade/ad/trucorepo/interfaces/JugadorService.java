@@ -14,7 +14,7 @@ public interface JugadorService extends Remote {
 	
 	public JugadorDTO registrarJugador(String email, String apodo, String password) throws RemoteException;
 	
-	public GrupoDTO crearGrupo(String nombreGrupo, Set<JugadorDTO> integrantes) throws RemoteException;
+	public GrupoDTO crearGrupo(String nombreGrupo, int idJugadorAdmin, int[] integrantes) throws RemoteException;
 	
 	public List<JugadorDTO> getJugadoresOnlineDisponibles() throws RemoteException;
 }
