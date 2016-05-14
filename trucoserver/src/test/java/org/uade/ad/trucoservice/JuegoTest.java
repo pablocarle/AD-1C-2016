@@ -41,7 +41,7 @@ public class JuegoTest {
 		
 		p1 = new Pareja(j1, j2);
 		p2 = new Pareja(j3, j4);
-		Grupo grupo = new Grupo("GrupoTest: JuegoTest", p1, p2);
+		Grupo grupo = new Grupo("GrupoTest: JuegoTest", j1, p1, p2);
 		grupo.setIdGrupo(1);
 		grupo.setNombre("testGroup");
 		List<Jugador> ordenJuego = new ArrayList<>();

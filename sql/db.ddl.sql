@@ -71,11 +71,13 @@ create table juego_log (
 create table grupos (
 	idGrupo int not null auto_increment,
     nombre varchar(100) not null,
+    idJugadorAdmin int not null,
     idPareja1 int not null,
     idPareja2 int not null,
     constraint grupos_pk primary key ( idGrupo ),
     constraint grupos_pareja1_fk foreign key ( idPareja1 ) references parejas ( idPareja ),
-    constraint grupos_pareja2_fk foreign key ( idPareja2 ) references parejas ( idPareja )
+    constraint grupos_pareja2_fk foreign key ( idPareja2 ) references parejas ( idPareja ),
+    constraint grupos_jug_adm_fk foreign key ( idJugadorAdmin ) references jugadores ( idJugador )
 );
 
 create unique index grupos_idx_u on grupos ( nombre );
@@ -96,6 +98,8 @@ create table partidas (
     constraint partidas_pk primary key ( idPartida ),
     constraint partidas_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
 );
+
+
 
 create table partidas_parejas (
 	idPartida int not null,

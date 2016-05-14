@@ -8,9 +8,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.ParejaDTO;
+
 @Entity
 @Table(name="parejas")
-public class Pareja {
+public class Pareja implements HasDTO<ParejaDTO> {
 
 	public static final Pareja Null = new Pareja(null, null);
 	
@@ -90,5 +92,13 @@ public class Pareja {
 	
 	public int getIdPareja() {
 		return idPareja;
+	}
+
+	@Override
+	public ParejaDTO getDTO() {
+		ParejaDTO dto = new ParejaDTO();
+		dto.setJugador1(jugador1.getDTO());
+		dto.setJugador2(jugador2.getDTO());
+		return dto;
 	}
 }

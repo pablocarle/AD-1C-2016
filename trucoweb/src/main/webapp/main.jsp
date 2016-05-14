@@ -34,7 +34,7 @@ mostrarNotificaciones = function(xml) {
 	
 	<div>
 		<br><br><br>
-		<a href="">Nuevo Grupo</a>
+		<a href="grupoReg.jsp">Nuevo Grupo</a>
 	</div>
 	<br>
 	<br>

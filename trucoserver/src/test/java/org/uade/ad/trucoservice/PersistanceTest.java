@@ -85,7 +85,7 @@ public class PersistanceTest {
 		p1 = new Pareja(j1, j2);
 		p2 = new Pareja(j3, j4);
 		
-		grupo = new Grupo("grupoTest", p1, p2);
+		grupo = new Grupo("grupoTest", j1, p1, p2);
 		List<Jugador> ordenJuego = new ArrayList<>();
 		ordenJuego.add(j1);
 		ordenJuego.add(j3);

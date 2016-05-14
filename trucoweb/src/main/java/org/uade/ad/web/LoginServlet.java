@@ -10,6 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import org.uade.ad.trucorepo.delegates.JugadoresDelegate;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.exceptions.GrupoException;
 import org.uade.ad.trucorepo.exceptions.JugadorException;
 
 /**
@@ -32,7 +33,7 @@ public class LoginServlet extends HttpServlet {
     	super.init();
     	try {
 			jugadoresDelegate = new JugadoresDelegate();
-		} catch (JugadorException e) {
+		} catch (JugadorException | GrupoException e) {
 			throw new ServletException(e);
 		}
     }

@@ -1,8 +1,12 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.List;
+
+import org.hibernate.Transaction;
+import org.uade.ad.trucoserver.dao.JugadorDao;
+import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
+import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Jugador;
-import org.uade.ad.trucoserver.entities.Pareja;
-import org.uade.ad.trucoserver.entities.Partida;
 
 public class CategoriaPromocionService implements PartidaTerminadaObserver {
 
@@ -14,25 +18,43 @@ public class CategoriaPromocionService implements PartidaTerminadaObserver {
 		return instancia;
 	}
 	
+	private JugadorDao jDao = JugadorDaoImpl.getDAO();
+	private List<Categoria> categorias = JugadorManager.getManager().getCategoriasOrdenadas();
+	
 	private CategoriaPromocionService() {
 		super();
 	}
 
 	@Override
-	public void finPartida(Partida partida) throws Exception {
-		Pareja parejaGanadora = partida.getParejaGanadora();
-		Jugador j1 = parejaGanadora.getJugador1();
-		Jugador j2 = parejaGanadora.getJugador2();
-		RankingItem j1Ranking = RankingService.getService().getItem(j1.getIdJugador());
-		RankingItem j2Ranking = RankingService.getService().getItem(j2.getIdJugador());
-		
-		//XXX Para evitar lio de que haya que garantizar que corra primero RankingService
-		if (j1Ranking == null)
-			j1Ranking = new RankingItem(j1, partida.getPuntosObtenidos(j1), 1, 1);
-		if (j2Ranking == null)
-			j2Ranking = new RankingItem(j2, partida.getPuntosObtenidos(j2), 1, 1);
-		
-		//TODO Cargar las categorias en la instancia y verificar con los nuevos parametros
+	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+		RankingItem rankingItem = null;
+		Categoria categoriaCalculada = null;
+		Transaction tr = jDao.getSession().beginTransaction();
+		for (Jugador ganador : partida.getGanadores()) {
+			rankingItem = RankingService.getService().getItem(ganador.getIdJugador());
+			if (rankingItem == null)
+				rankingItem = new RankingItem(ganador, partida.getPartida().getPuntosObtenidos(ganador), 1, 1);
+			categoriaCalculada = calcularCategoria(rankingItem);
+			if (!ganador.getCategoria().equals(categoriaCalculada)) {
+				//Actualizamos categoria
+				ganador.setCategoria(categoriaCalculada);
+				jDao.actualizar(ganador);
+			}
+		}
+		tr.commit();
+	}
+
+	private Categoria calcularCategoria(RankingItem rankingItem) {
+		Categoria actual = null;
+		for (int i = categorias.size() - 1; i >= 0; i--) {
+			actual = categorias.get(i);
+			if (rankingItem.getPartidasJugadas() >= actual.getPartidosMin()
+					&& rankingItem.getPromedioGanadas() >= actual.getPromedioVictoriasMin()
+					&& rankingItem.getPuntos() >= actual.getPuntajeMin()) {
+				return actual;
+			}
+		}
+		return null;
 	}
 
 }

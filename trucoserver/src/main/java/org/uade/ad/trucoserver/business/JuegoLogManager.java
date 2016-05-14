@@ -1,12 +1,12 @@
 package org.uade.ad.trucoserver.business;
 
-import java.util.Date;
+import java.util.Calendar;
 
+import org.hibernate.Transaction;
 import org.uade.ad.trucoserver.dao.Juego_LogDao;
 import org.uade.ad.trucoserver.dao.Juego_LogDaoImpl;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.LogJuego;
-import org.uade.ad.trucoserver.entities.Partida;
 
 public class JuegoLogManager implements PartidaTerminadaObserver {
 
@@ -26,22 +26,6 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 		return instancia;
 	}
 
-	public LogJuego registrarJuego_Log(Jugador j,String apodo, String email, boolean victoria, int puntos) throws Exception {
-		//JuegoLog existe = dao.getPorApodo(apodo);//No hace falta buscarlo.
-		//if (existe == null) {
-		//	throw new Exception("Ya existe");
-		//} else {
-		
-			LogJuego nuevo = new LogJuego();
-			nuevo.setFecha(new Date());
-			nuevo.setJugador(j);
-			nuevo.setPuntos(puntos);
-			nuevo.setVictoria(victoria);
-			dao.guardar(nuevo);
-			return nuevo;
-		//}
-	}
-
 	public boolean login(String apodo, String password) {
 		return false;
 	}
@@ -52,8 +36,26 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 	}
 
 	@Override
-	public void finPartida(Partida partida) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+		//Actualizar log
+		Transaction tr = dao.getSession().beginTransaction();
+		LogJuego entity = null;
+		for (Jugador ganador : partida.getGanadores()) {
+			entity = new LogJuego();
+			entity.setFecha(Calendar.getInstance().getTime());
+			entity.setJugador(ganador);
+			entity.setPuntos(partida.getPartida().getPuntosObtenidos(ganador));
+			entity.setVictoria(true);
+			dao.guardar(entity);
+		}
+		for (Jugador perdedor : partida.getPerdedores()) {
+			entity = new LogJuego();
+			entity.setFecha(Calendar.getInstance().getTime());
+			entity.setJugador(perdedor);
+			entity.setPuntos(partida.getPartida().getPuntosObtenidos(perdedor));
+			entity.setVictoria(false);
+			dao.guardar(entity);
+		}
+		tr.commit();
 	}
 }

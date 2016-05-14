@@ -3,12 +3,14 @@ package org.uade.ad.trucoserver;
 import java.rmi.RemoteException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
 import org.uade.ad.trucoserver.entities.Carta;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -63,5 +65,11 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public void jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

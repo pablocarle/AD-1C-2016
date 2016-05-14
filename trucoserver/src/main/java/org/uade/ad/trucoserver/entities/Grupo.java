@@ -10,16 +10,23 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.uade.ad.trucorepo.dtos.GrupoDTO;
+import org.uade.ad.trucorepo.exceptions.GrupoException;
 
 @Entity
 @Table(name="grupos")
-public class Grupo {
+public class Grupo implements HasDTO<GrupoDTO> {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idGrupo;
 	@Column
 	private String nombre;
+	@OneToOne
+	@JoinColumn(name="idJugadorAdmin")
+	private Jugador admin;
 	@ManyToOne
 	@JoinColumn(name="idPareja1")
 	private Pareja pareja1;
@@ -31,12 +38,15 @@ public class Grupo {
 		super();
 	}
 	
-	public Grupo(String nombre, Pareja pareja1, Pareja pareja2) {
+	public Grupo(String nombre, Jugador admin, Pareja pareja1, Pareja pareja2) throws GrupoException {
 		super();
 		assert(!pareja1.equals(pareja2));
 		this.nombre = nombre;
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
+		if (!pareja1.contieneJugador(admin) && !pareja2.contieneJugador(admin))
+			throw new GrupoException("Admin " + admin + " no pertenece a ninguna de las parejas del grupo provistas");
+		this.admin = admin;
 	}
 	
 	public List<Pareja> getParejas() {
@@ -101,5 +111,15 @@ public class Grupo {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	@Override
+	public GrupoDTO getDTO() {
+		GrupoDTO dto = new GrupoDTO();
+		dto.setPareja1(pareja1.getDTO());
+		dto.setPareja2(pareja2.getDTO());
+		dto.setAdmin(admin.getDTO());
+		dto.setNombre(nombre);
+		return dto;
 	}
 }

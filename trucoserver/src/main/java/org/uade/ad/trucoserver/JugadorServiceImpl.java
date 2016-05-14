@@ -3,10 +3,10 @@ package org.uade.ad.trucoserver;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.exceptions.GrupoException;
 import org.uade.ad.trucorepo.interfaces.JugadorService;
 import org.uade.ad.trucoserver.business.JugadorManager;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -45,8 +45,8 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 	}
 
 	@Override
-	public GrupoDTO crearGrupo(String nombreGrupo, int idJugadorAdmin, int[] integrantes) throws RemoteException {
-		//TODO 
-		return null;
+	public GrupoDTO crearGrupo(String nombreGrupo, String apodoJugadorAdmin, String[] apodoJugadores)
+			throws RemoteException, GrupoException {
+		return manager.crearGrupo(nombreGrupo, apodoJugadorAdmin, apodoJugadores).getDTO();
 	}
 }

@@ -1,16 +1,21 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Transaction;
+import org.uade.ad.trucorepo.exceptions.GrupoException;
 import org.uade.ad.trucoserver.dao.CategoriaDao;
 import org.uade.ad.trucoserver.dao.CategoriaDaoImpl;
+import org.uade.ad.trucoserver.dao.GrupoDao;
+import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
+import org.uade.ad.trucoserver.entities.Pareja;
 
 
 public class JugadorManager {
@@ -20,6 +25,7 @@ public class JugadorManager {
 	private static final List<Categoria> categorias = leerCategorias();
 	
 	private JugadorDao dao = JugadorDaoImpl.getDAO();
+	private GrupoDao gDao = GrupoDaoImpl.getDAO();
 	
 	private JugadorManager() {
 		super();
@@ -36,6 +42,10 @@ public class JugadorManager {
 		return categorias;
 	}
 
+	public List<Categoria> getCategoriasOrdenadas() {
+		return new ArrayList<>(categorias);
+	}
+	
 	public static JugadorManager getManager() {
 		if (instancia == null) {
 			instancia = new JugadorManager();
@@ -72,20 +82,6 @@ public class JugadorManager {
 		}
 	}
 	
-	/**
-	 * TODO definir argumentos. Parejas?
-	 * 
-	 * @param nombre
-	 * @param idJugadores
-	 * @return
-	 * @throws Exception
-	 */
-	public Grupo crearGrupo(String nombre, int[] idJugadores) throws Exception {
-		//Debo obtener todos los jugadores con esos ids
-		
-		return null;
-	}
-
 	public boolean esLoginValido(String apodo, String password) {
 		Transaction tr = dao.getSession().beginTransaction();
 		Jugador j = dao.getPorApodo(apodo);
@@ -101,5 +97,49 @@ public class JugadorManager {
 		Jugador j = dao.getPorApodo(apodo);
 		tr.commit();
 		return j; 
+	}
+
+	public Grupo crearGrupo(String nombreGrupo, String apodoJugadorAdmin, String[] apodoJugadores) throws GrupoException {
+		Transaction tr = gDao.getSession().beginTransaction();
+		if (existeGrupo(nombreGrupo)) {
+			tr.rollback();
+			throw new GrupoException("Ya existe grupo con nombre " + nombreGrupo);
+		}
+		if (apodoJugadores.length != 3) {
+			tr.rollback();
+			throw new GrupoException("Se deben informar 3 jugadores integrantes ademas de admin");
+		}
+		//Busco todos los jugadores
+		Jugador admin = dao.getPorApodo(apodoJugadorAdmin);
+		Jugador j1 = dao.getPorApodo(apodoJugadores[0]);
+		Jugador j2 = dao.getPorApodo(apodoJugadores[1]);
+		Jugador j3 = dao.getPorApodo(apodoJugadores[2]);
+		StringBuilder message = new StringBuilder();
+		if (admin == null)
+			message.append("No se encontro jugador con apodo " + apodoJugadorAdmin + "\n");
+		if (j1 == null)
+			message.append("No se encontro jugador con apodo " + apodoJugadores[0] + "\n");
+		if (j2 == null)
+			message.append("No se encontro jugador con apodo " + apodoJugadores[1] + "\n");
+		if (j3 == null)
+			message.append("No se encontro jugador con apodo " + apodoJugadores[2] + "\n");
+		
+		if (message.length() == 0) {
+			Pareja pareja1 = new Pareja(admin, j1);
+			Pareja pareja2 = new Pareja(j2, j3);
+			Grupo nuevoGrupo = new Grupo(nombreGrupo, admin, pareja1, pareja2);
+			gDao.guardar(nuevoGrupo);
+			tr.commit();
+			return nuevoGrupo;
+		} else {
+			throw new GrupoException(message.toString());
+		}
+	}
+
+	private boolean existeGrupo(String nombreGrupo) {
+		Grupo g = gDao.getPorNombreGrupo(nombreGrupo);
+		if (g == null)
+			return false;
+		return true;
 	}
 }

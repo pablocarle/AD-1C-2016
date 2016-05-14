@@ -98,6 +98,30 @@ public class Categoria implements Comparable<Categoria> {
 	public void setOrdenCategoria(int ordenCategoria) {
 		this.ordenCategoria = ordenCategoria;
 	}
+	
+	public int getPuntajeMin() {
+		return puntajeMin;
+	}
+
+	public void setPuntajeMin(int puntajeMin) {
+		this.puntajeMin = puntajeMin;
+	}
+
+	public int getPartidosMin() {
+		return partidosMin;
+	}
+
+	public void setPartidosMin(int partidosMin) {
+		this.partidosMin = partidosMin;
+	}
+
+	public int getPromedioVictoriasMin() {
+		return promedioVictoriasMin;
+	}
+
+	public void setPromedioVictoriasMin(int promedioVictoriasMin) {
+		this.promedioVictoriasMin = promedioVictoriasMin;
+	}
 
 	@Override
 	public int compareTo(Categoria o) {

@@ -50,7 +50,7 @@
 						session.removeAttribute("loginResult");
 				%>
 					<tr id="messageRow">
-						<td id="message">Login incorrecto</td>
+						<td colspan="2" id="message">Login incorrecto</td>
 					</tr>
 				<%
 					}

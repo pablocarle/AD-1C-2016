@@ -1,30 +1,20 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
-import java.util.Set;
 
 public class GrupoDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
 	private String nombre;
-	private Set<JugadorDTO> integrantes;
+	private ParejaDTO pareja1;
+	private ParejaDTO pareja2;
+	private JugadorDTO admin;
 	
 	public GrupoDTO() {
 		super();
 	}
 	
-	public GrupoDTO(String nombre, Set<JugadorDTO> integrantes) {
-		super();
-		this.nombre = nombre;
-		this.integrantes = integrantes;
-	}
-
-	@Override
-	public String toString() {
-		return "GrupoDTO [nombre=" + nombre + ", integrantes=" + integrantes + "]";
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -50,19 +40,35 @@ public class GrupoDTO implements Serializable {
 		return true;
 	}
 
-	public Set<JugadorDTO> getIntegrantes() {
-		return integrantes;
-	}
-
-	public void setIntegrantes(Set<JugadorDTO> integrantes) {
-		this.integrantes = integrantes;
-	}
-
 	public String getNombre() {
 		return nombre;
 	}
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public ParejaDTO getPareja1() {
+		return pareja1;
+	}
+
+	public void setPareja1(ParejaDTO pareja1) {
+		this.pareja1 = pareja1;
+	}
+
+	public ParejaDTO getPareja2() {
+		return pareja2;
+	}
+
+	public void setPareja2(ParejaDTO pareja2) {
+		this.pareja2 = pareja2;
+	}
+
+	public JugadorDTO getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(JugadorDTO admin) {
+		this.admin = admin;
 	}
 }

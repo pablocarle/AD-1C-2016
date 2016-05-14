@@ -46,11 +46,9 @@ public class JugadoresDelegate extends BusinessDelegate {
 	public GrupoDTO crearGrupo(String nombreGrupo, String apodoJugadorAdmin, String apodoJugador1, String apodoJugador2,
 			String apodoJugador3) throws GrupoException {
 		try {
-			//TODO invocar remoto
-			throw new RemoteException();
+			return service.crearGrupo(nombreGrupo, apodoJugadorAdmin, new String[]{ apodoJugador1, apodoJugador2, apodoJugador3});
 		} catch (RemoteException e) {
 			throw new GrupoException("" ,e); //TODO Mensaje de error por comunicacion
-			//excepcion de grupo remota sube hasta el servlet
 		}
 	}
 }
