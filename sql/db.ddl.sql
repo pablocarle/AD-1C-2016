@@ -90,16 +90,25 @@ create table tipopartidas (
 
 create unique index tipopartidas_idx_u on tipopartidas ( nombre );
 
-create table partidas (
+create table partidas_abiertas (
 	idPartida int not null auto_increment,
     idTipoPartida int not null,
     fechaInicio date not null,
     fechaFin date null,
-    constraint partidas_pk primary key ( idPartida ),
-    constraint partidas_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
+    constraint partidas_abiertas_pk primary key ( idPartida ),
+    constraint partidas_a_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
 );
 
-
+create table partidas_cerradas (
+	idPartida int not null auto_increment,
+    idTipoPartida int not null,
+    idGrupo int not null,
+    fechaInicio date not null,
+    fechaFin date not null,
+    constraint partidas_cerradas_pk primary key ( idPartida ),
+    constraint partidas_c_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida ),
+    constraint partidas_c_grupos_fk foreign key ( idGrupo ) references grupos ( idGrupo )
+);
 
 create table partidas_parejas (
 	idPartida int not null,

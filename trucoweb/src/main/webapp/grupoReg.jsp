@@ -53,6 +53,9 @@
 				<%
 					}
 				%>
+				<tr>
+					<td colspan="2">Volver al <a href="main.jsp">menu principal</a></td>
+				</tr>
 			</tbody>
 		</table>
 	</form>	

@@ -12,6 +12,8 @@ import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
+import org.uade.ad.trucoserver.dao.ParejaDao;
+import org.uade.ad.trucoserver.dao.ParejaDaoImpl;
 import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -25,6 +27,7 @@ public class JugadorManager {
 	private static final List<Categoria> categorias = leerCategorias();
 	
 	private JugadorDao dao = JugadorDaoImpl.getDAO();
+	private ParejaDao pDao = ParejaDaoImpl.getDAO();
 	private GrupoDao gDao = GrupoDaoImpl.getDAO();
 	
 	private JugadorManager() {
@@ -127,6 +130,9 @@ public class JugadorManager {
 		if (message.length() == 0) {
 			Pareja pareja1 = new Pareja(admin, j1);
 			Pareja pareja2 = new Pareja(j2, j3);
+			
+			pDao.guardar(pareja1);
+			pDao.guardar(pareja2);
 			Grupo nuevoGrupo = new Grupo(nombreGrupo, admin, pareja1, pareja2);
 			gDao.guardar(nuevoGrupo);
 			tr.commit();
