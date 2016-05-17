@@ -79,4 +79,9 @@ public abstract class Context extends UnicastRemoteObject {
 	protected static List<Jugador> getJugadoresDisponibles() {
 		return new ArrayList<>(jugadoresDisponibles);
 	}
+
+	public void agregarInvitaciones(int idPartida, List<Jugador> jugadoresNoAdmin) {
+		// TODO Auto-generated method stub
+		
+	}
 }

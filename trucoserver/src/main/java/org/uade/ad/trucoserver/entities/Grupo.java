@@ -122,4 +122,17 @@ public class Grupo implements HasDTO<GrupoDTO> {
 		dto.setNombre(nombre);
 		return dto;
 	}
+
+	public List<Jugador> getJugadoresNoAdmin() {
+		List<Jugador> retList = new ArrayList<>();
+		if (!admin.equals(pareja1.getJugador1()))
+			retList.add(pareja1.getJugador1());
+		if (!admin.equals(pareja1.getJugador2()))
+			retList.add(pareja1.getJugador2());
+		if (!admin.equals(pareja2.getJugador1()));
+			retList.add(pareja2.getJugador1());
+		if (!admin.equals(pareja2.getJugador2()))
+			retList.add(pareja2.getJugador2());
+		return retList;
+	}
 }

@@ -9,6 +9,7 @@ import java.util.Set;
 import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 
 public interface JuegoService extends Remote {
@@ -22,5 +23,11 @@ public interface JuegoService extends Remote {
 	public void jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException;
 	
 	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException;
+	
+	public PartidaDTO crearPartidaCerrada(String nombreGrupo) throws RemoteException, JuegoException;
+	
+	public PartidaDTO crearPartidaAbiertaIndividual() throws RemoteException, JuegoException;
+	
+	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException;
 	
 }

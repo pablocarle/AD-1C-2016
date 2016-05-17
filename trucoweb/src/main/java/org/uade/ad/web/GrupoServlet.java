@@ -49,7 +49,6 @@ public class GrupoServlet extends HttpServlet {
 	}
 
 	private void processGetRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
 	}
 
 	/**

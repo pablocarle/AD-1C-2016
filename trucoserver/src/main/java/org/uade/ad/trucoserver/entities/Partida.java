@@ -10,6 +10,7 @@ import java.util.Set;
 
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -21,6 +22,7 @@ import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucoserver.business.CartasManager;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
@@ -39,7 +41,7 @@ import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 @MappedSuperclass
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(discriminatorType=DiscriminatorType.INTEGER, name="idTipoPartida")
-public abstract class Partida implements PartidaTerminadaObservable {
+public abstract class Partida implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 	
 	private static CartasManager cartasManager = CartasManager.getManager();
 	
@@ -48,7 +50,7 @@ public abstract class Partida implements PartidaTerminadaObservable {
 	@ManyToOne
 	@JoinColumn(name="idTipoPartida")
 	protected TipoPartida tipoPartida;
-	@OneToMany(mappedBy="partida")
+	@OneToMany(mappedBy="partida", fetch=FetchType.LAZY)
 	protected List<Mano> manos;
 
 	//Las parejas que participan del juego
@@ -284,6 +286,12 @@ public abstract class Partida implements PartidaTerminadaObservable {
 
 	public Pareja getParejaPerdedora() {
 		//TODO Pareja perdedora (de la partida!)
+		return null;
+	}
+	
+	@Override
+	public PartidaDTO getDTO() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 }

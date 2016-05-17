@@ -1,6 +1,7 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class JugadorDTO implements Serializable {
 
@@ -8,6 +9,7 @@ public class JugadorDTO implements Serializable {
 
 	private String email;
 	private String apodo;
+	private List<GrupoDTO> grupos;
 	
 	public JugadorDTO() {
 		super();
@@ -69,5 +71,13 @@ public class JugadorDTO implements Serializable {
 
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public List<GrupoDTO> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<GrupoDTO> grupos) {
+		this.grupos = grupos;
 	}
 }

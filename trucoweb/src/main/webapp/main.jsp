@@ -27,9 +27,9 @@ mostrarNotificaciones = function(xml) {
 <body>
 	<!-- TODO Cambiar la ubicacion por algo basico en css -->
 	<div>
-		<a href="">Nueva partida abierta individual</a><br><br>
-		<a href="">Nueva partida abierta en pareja</a><br><br>
-		<a href="">Nueva partida Cerrada</a>
+		<a href="juego.jsp">Nueva partida abierta individual</a><br><br>
+		<a href="seleccionPareja.jsp">Nueva partida abierta en pareja</a><br><br>
+		<a href="partidaCerrada.jsp">Nueva partida Cerrada</a>
 	</div>
 	
 	<div>

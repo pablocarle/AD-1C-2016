@@ -1,5 +1,8 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -7,8 +10,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 
 @Entity
@@ -30,6 +35,8 @@ public class Jugador implements HasDTO<JugadorDTO> {
 	@ManyToOne
 	@JoinColumn(name="idCategoria")
 	private Categoria categoria;
+	@OneToMany(mappedBy="idJugadorAdmin")
+	private List<Grupo> grupos;
 	
 	public Jugador() {
 		super();
@@ -138,6 +145,15 @@ public class Jugador implements HasDTO<JugadorDTO> {
 		JugadorDTO jugadorDTO = new JugadorDTO();
 		jugadorDTO.setEmail(this.email);
 		jugadorDTO.setApodo(this.apodo);
+		jugadorDTO.setGrupos(getDTOs(grupos));
 		return jugadorDTO;
+	}
+
+	private List<GrupoDTO> getDTOs(List<Grupo> grupos) {
+		List<GrupoDTO> retList = new ArrayList<>(grupos.size());
+		for (Grupo g : grupos) {
+			retList.add(g.getDTO());
+		}
+		return retList;
 	}
 }
