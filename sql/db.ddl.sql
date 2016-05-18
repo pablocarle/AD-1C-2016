@@ -1,5 +1,5 @@
--- use VentaDirecta;
--- drop database trucodb;
+use VentaDirecta;
+drop database trucodb;
 
 create database trucodb;
 
@@ -85,29 +85,38 @@ create unique index grupos_idx_u on grupos ( nombre );
 create table tipopartidas (
 	idTipoPartida int not null,
     nombre varchar(20) not null,
+    puntosVictoria int not null,
     constraint tipopartidas_pk primary key ( idTipoPartida )
 );
 
 create unique index tipopartidas_idx_u on tipopartidas ( nombre );
 
-create table partidas_abiertas (
+create table partidas (
 	idPartida int not null auto_increment,
     idTipoPartida int not null,
     fechaInicio date not null,
-    fechaFin date null,
-    constraint partidas_abiertas_pk primary key ( idPartida ),
-    constraint partidas_a_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
+    fechaFin date not null,
+    constraint partidas_pk primary key ( idPartida ),
+    constraint partidas_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
 );
 
 create table partidas_cerradas (
-	idPartida int not null auto_increment,
-    idTipoPartida int not null,
+	idPartida int not null,
     idGrupo int not null,
-    fechaInicio date not null,
-    fechaFin date not null,
     constraint partidas_cerradas_pk primary key ( idPartida ),
-    constraint partidas_c_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida ),
-    constraint partidas_c_grupos_fk foreign key ( idGrupo ) references grupos ( idGrupo )
+    constraint partidas_cerradas_p_fk foreign key ( idPartida ) references partidas ( idPartida ),
+    constraint partidas_cerradas_g_fk foreign key ( idGrupo ) references grupos ( idGrupo )
+);
+
+-- Crear tabla de partidas cerradas?: Para mantener relacion con grupo
+
+create table chicos (
+	idChico int not null auto_increment,
+	idPartida int not null,
+    fechaInicio date not null,
+    fechaFin date null,
+    constraint chicos_pk primary key ( idChico ),
+    constraint chicos_partidas_fk foreign key ( idPartida ) references partidas ( idPartida )
 );
 
 create table partidas_parejas (
