@@ -2,7 +2,6 @@ package org.uade.ad.trucoservice;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,16 +18,13 @@ import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.dao.ParejaDao;
 import org.uade.ad.trucoserver.dao.ParejaDaoImpl;
-import org.uade.ad.trucoserver.dao.PartidaDao;
-import org.uade.ad.trucoserver.dao.PartidaDaoImpl;
+import org.uade.ad.trucoserver.dao.ChicoDao;
+import org.uade.ad.trucoserver.dao.ChicoDaoImpl;
 import org.uade.ad.trucoserver.entities.Categoria;
+import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
-import org.uade.ad.trucoserver.entities.Partida;
-import org.uade.ad.trucoserver.entities.PartidaCerrada;
-import org.uade.ad.trucoserver.entities.PartidaLibreIndividual;
-import org.uade.ad.trucoserver.entities.PartidaLibrePareja;
 
 /**
  * Pruebas de persistencia
@@ -46,14 +42,14 @@ public class PersistanceTest {
 	private Pareja p1;
 	private Pareja p2;
 	
-	private Partida partidaCerrada;
-	private Partida partidaAbiertaIndividual;
-	private Partida partidaAbiertaPareja;
+	private Chico partidaCerrada;
+	private Chico partidaAbiertaIndividual;
+	private Chico partidaAbiertaPareja;
 	
 	private Grupo grupo;
 	
 	private JugadorDao jDao;
-	private PartidaDao pDao;
+	private ChicoDao pDao;
 	private ParejaDao parejaDao;
 	private GrupoDao grupoDao;
 	
@@ -62,7 +58,7 @@ public class PersistanceTest {
 	@Before
 	public void setUp() throws Exception {
 		jDao = JugadorDaoImpl.getDAO();
-		pDao = PartidaDaoImpl.getDAO();
+		pDao = ChicoDaoImpl.getDAO();
 		parejaDao = ParejaDaoImpl.getDAO();
 		grupoDao = GrupoDaoImpl.getDAO();
 		
@@ -92,9 +88,7 @@ public class PersistanceTest {
 		ordenJuego.add(j2);
 		ordenJuego.add(j4);
 		
-		partidaCerrada = new PartidaCerrada(grupo, ordenJuego);
-		partidaAbiertaIndividual = new PartidaLibreIndividual(p1, p2, ordenJuego);
-		partidaAbiertaPareja = new PartidaLibrePareja(p1, p2, ordenJuego);
+		partidaCerrada = new Chico(grupo.getParejaNum(0), grupo.getParejaNum(1), ordenJuego);
 	}
 
 	@After

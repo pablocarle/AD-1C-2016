@@ -11,18 +11,17 @@ import java.util.Set;
 import org.junit.Before;
 import org.junit.Test;
 import org.uade.ad.trucoserver.entities.Carta;
+import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
-import org.uade.ad.trucoserver.entities.Partida;
-import org.uade.ad.trucoserver.entities.PartidaCerrada;
 
 /**
  * TODO Poder asignar cartas y crear juegos mas controlados
  */
 public class JuegoTest {
 
-	private Partida partidaCerrada;
+	private Chico partidaCerrada;
 	
 	private Jugador j1;
 	private Jugador j2;
@@ -50,7 +49,7 @@ public class JuegoTest {
 		ordenJuego.add(j2);
 		ordenJuego.add(j4);
 		
-		partidaCerrada = new PartidaCerrada(grupo, ordenJuego);
+		partidaCerrada = new Chico(grupo.getParejaNum(0), grupo.getParejaNum(1), ordenJuego);
 	}
 
 	@Test

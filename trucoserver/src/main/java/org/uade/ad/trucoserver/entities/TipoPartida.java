@@ -13,6 +13,8 @@ public class TipoPartida {
 	private int idTipoPartida;
 	@Column
 	private String nombre;
+	@Column
+	private int puntosVictoria;
 	
 	public TipoPartida() {
 		super();
@@ -62,5 +64,13 @@ public class TipoPartida {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public int getPuntosVictoria() {
+		return puntosVictoria;
+	}
+
+	public void setPuntosVictoria(int puntosVictoria) {
+		this.puntosVictoria = puntosVictoria;
 	}
 }

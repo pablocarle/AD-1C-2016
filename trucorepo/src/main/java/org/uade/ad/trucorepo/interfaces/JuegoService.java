@@ -18,9 +18,9 @@ public interface JuegoService extends Remote {
 	
 	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException;
 	
-	public void cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException;
+	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException;
 	
-	public void jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException;
+	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException;
 	
 	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException;
 	

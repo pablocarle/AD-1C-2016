@@ -4,7 +4,7 @@ import org.uade.ad.trucoserver.entities.Partida;
 
 public class PartidaDaoImpl extends GenericDaoImpl<Partida, Integer> implements PartidaDao {
 
-	private static PartidaDao instancia;
+	private static PartidaDao instancia = null;
 	
 	public static PartidaDao getDAO() {
 		if (instancia == null) {
@@ -16,6 +16,4 @@ public class PartidaDaoImpl extends GenericDaoImpl<Partida, Integer> implements 
 	private PartidaDaoImpl() {
 		super();
 	}
-
-
 }

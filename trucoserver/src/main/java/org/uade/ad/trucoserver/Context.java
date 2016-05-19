@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Vector;
 
 import org.uade.ad.trucoserver.entities.Grupo;
-import org.uade.ad.trucoserver.entities.Partida;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
+import org.uade.ad.trucoserver.entities.Partida;
 
 public abstract class Context extends UnicastRemoteObject {
 	

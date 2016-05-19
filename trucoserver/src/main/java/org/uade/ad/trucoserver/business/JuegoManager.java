@@ -44,7 +44,7 @@ public class JuegoManager {
 		//Hay que enviar las notificaciones a los otro usuarios para que acepten ingresar al juego
 		Partida partida = null;
 		try {
-			partida = new PartidaCerrada(grupo, getPrimerOrdenJuego(grupo.getParejaNum(0), grupo.getParejaNum(1)));
+			partida = new PartidaCerrada(grupo);
 			pDao.guardar(partida);
 			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
 			tr.commit();

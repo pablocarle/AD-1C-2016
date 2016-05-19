@@ -15,6 +15,7 @@ import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
 import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.entities.Carta;
+import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Partida;
 
@@ -36,7 +37,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException {
 		try {
-			Partida partida = getPartida(idJuego);
+			Chico partida = getPartida(idJuego).getChicoActual();
 			if (partida == null) {
 				throw new RemoteException("No se encontro la partida con id " + idJuego);
 			}
@@ -58,17 +59,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 			retMap.put(entry.getKey().getDTO(), cartaSet);
 		}
 		return retMap;
-	}
-
-	@Override
-	public void cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException {
-		
-	}
-
-	@Override
-	public void jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -97,6 +87,18 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,21 +1,23 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class PartidaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
+	
 	private int idPartida;
-	private ParejaDTO pareja1;
-	private ParejaDTO pareja2;
-	
-	private int puntosPareja1;
-	private int puntosPareja2;
-	
-	private String estado;
+	private TipoPartidaDTO tipoPartida;
+	private List<ChicoDTO> chicos;
 	
 	public PartidaDTO() {
 		super();
+	}
+	
+	public ChicoDTO getChicoActual() {
+		//TODO Obtener el chico actual
+		return null;
 	}
 
 	public int getIdPartida() {
@@ -26,43 +28,19 @@ public class PartidaDTO implements Serializable {
 		this.idPartida = idPartida;
 	}
 
-	public ParejaDTO getPareja1() {
-		return pareja1;
+	public TipoPartidaDTO getTipoPartida() {
+		return tipoPartida;
 	}
 
-	public void setPareja1(ParejaDTO pareja1) {
-		this.pareja1 = pareja1;
+	public void setTipoPartida(TipoPartidaDTO tipoPartida) {
+		this.tipoPartida = tipoPartida;
 	}
 
-	public ParejaDTO getPareja2() {
-		return pareja2;
+	public List<ChicoDTO> getChicos() {
+		return chicos;
 	}
 
-	public void setPareja2(ParejaDTO pareja2) {
-		this.pareja2 = pareja2;
-	}
-
-	public int getPuntosPareja1() {
-		return puntosPareja1;
-	}
-
-	public void setPuntosPareja1(int puntosPareja1) {
-		this.puntosPareja1 = puntosPareja1;
-	}
-
-	public int getPuntosPareja2() {
-		return puntosPareja2;
-	}
-
-	public void setPuntosPareja2(int puntosPareja2) {
-		this.puntosPareja2 = puntosPareja2;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
+	public void setChicos(List<ChicoDTO> chicos) {
+		this.chicos = chicos;
 	}
 }
