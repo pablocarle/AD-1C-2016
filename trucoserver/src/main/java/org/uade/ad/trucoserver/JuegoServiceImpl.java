@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -101,5 +102,19 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public List<JugadorDTO> getJugadoresDisponibles() throws RemoteException, JuegoException {
+		List<Jugador> jugadoresOnline = getJugadoresOnline();
+		return convertToDTO(jugadoresOnline);
+	}
+
+	private List<JugadorDTO> convertToDTO(List<Jugador> jugadores) {
+		List<JugadorDTO> retList = new ArrayList<JugadorDTO>(jugadores.size());
+		for (Jugador j : jugadores) {
+			retList.add(j.getDTO());
+		}
+		return retList;
 	}
 }

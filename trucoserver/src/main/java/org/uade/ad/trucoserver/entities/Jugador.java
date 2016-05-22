@@ -35,7 +35,7 @@ public class Jugador implements HasDTO<JugadorDTO> {
 	@ManyToOne
 	@JoinColumn(name="idCategoria")
 	private Categoria categoria;
-	@OneToMany(mappedBy="idJugadorAdmin")
+	@OneToMany(mappedBy="admin")
 	private List<Grupo> grupos;
 	
 	public Jugador() {

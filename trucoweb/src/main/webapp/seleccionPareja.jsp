@@ -7,6 +7,11 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Seleccione pareja</title>
+<script type="text/javascript">
+validarForm = function() {
+	
+};
+</script>
 </head>
 <body>
 
@@ -15,7 +20,7 @@ Boolean error = (Boolean)request.getAttribute("error");
 String errorMessage = (String)request.getAttribute("errorMessage");
 List<JugadorDTO> jugadoresDisponibles = (List<JugadorDTO>)request.getAttribute("jugadoresDisponibles");
 %>
-<form id="seleccionJugadoresForm" method="post" action="" onsubmit="" >
+<form id="seleccionJugadoresForm" method="post" action="" onsubmit="return validarForm();" >
 	<table border="1" name="tblJugadores" >
 		<thead>
 			<tr>
@@ -25,7 +30,7 @@ List<JugadorDTO> jugadoresDisponibles = (List<JugadorDTO>)request.getAttribute("
 			</tr>
 		</thead>
 <%
-if (error != null && error) {	
+if (error != null && error) {
 %>
 		<tr>
 			<td colspan="*" >
@@ -33,30 +38,32 @@ if (error != null && error) {
 			</td>
 		</tr>
 <%
-} else {
-%>
-
-<%
+} else if (jugadoresDisponibles != null) {
 for (JugadorDTO jugador : jugadoresDisponibles) {
 %>
 		<tr>
 			<td><%=jugador.getApodo()%></td>
 			<td><%=jugador.getCategoria().getNombre() %></td>
 			<td>
-				<input type="checkbox" name="seleccion" />
+				<input type="checkbox" name=<%= jugador.getApodo() + "Field" %> />
 			</td>
+		</tr>
+<%
+}
+} else {
+%>
+		<tr>
+			<td colspan="3">No hay jugadores online</td>
 		</tr>
 <%
 }
 %>
 	<!-- TODO agregar botones para aceptar, seleccionar todo, desmarcar todo, etc -->
+		<tr>
+			<td colspan="2"><input type="submit" value="Aceptar seleccion" /></td>
+			<td colspan="1"><input type="button" value="Reload" /></td>
+		</tr>
 	</table>
 </form>
-<%
-}
-%>
-
-<!-- Debe seleccionar entre los jugadores que esten online -->
-<!-- Armar tabla con JSP -->
 </body>
 </html>

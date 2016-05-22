@@ -76,7 +76,7 @@ public abstract class Context extends UnicastRemoteObject {
 	 * 
 	 * @return
 	 */
-	protected static List<Jugador> getJugadoresDisponibles() {
+	protected static List<Jugador> getJugadoresOnline() {
 		return new ArrayList<>(jugadoresDisponibles);
 	}
 

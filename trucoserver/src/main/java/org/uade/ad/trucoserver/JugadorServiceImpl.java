@@ -36,7 +36,7 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 
 	@Override
 	public List<JugadorDTO> getJugadoresOnlineDisponibles() throws RemoteException {
-		List<Jugador> jugadoresDisponibles = getJugadoresDisponibles();
+		List<Jugador> jugadoresDisponibles = getJugadoresOnline();
 		List<JugadorDTO> jugadores = new ArrayList<>(jugadoresDisponibles.size());
 		for (Jugador j : jugadoresDisponibles) {
 			jugadores.add(j.getDTO());

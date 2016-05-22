@@ -28,11 +28,11 @@ List<GrupoDTO> grupos = dto.getGrupos();
 				<tr>
 					<td>Seleccione Grupo</td>
 					<td>
-						<select>
+						<select name="grupoField" >
 							<%
 								for (GrupoDTO g : grupos) {
 							%>
-								<option value="" />
+								<option value=<%=g.getNombre() %> />
 							<%
 								}
 							%>
@@ -42,21 +42,7 @@ List<GrupoDTO> grupos = dto.getGrupos();
 					</td>
 				</tr>
 				<tr>
-					<td><input type="submit" value="Ingresar" /></td>
-					<td><input type="reset" value="Reset" /></td>
-				</tr>
-				<%
-					if (session != null && session.getAttribute("loginResult") != null && !((Boolean)session.getAttribute("loginResult"))) {
-						session.removeAttribute("loginResult");
-				%>
-					<tr id="messageRow">
-						<td colspan="2" id="message">Login incorrecto</td>
-					</tr>
-				<%
-					}
-				%>
-				<tr>
-					<td colspan="2">No tengo usuario! <a href="reg.jsp">Nuevo Usuario</a></td>
+					<td colspan="*"><input type="submit" value="Iniciar" /></td>
 				</tr>
 			</tbody>
 		</table>
