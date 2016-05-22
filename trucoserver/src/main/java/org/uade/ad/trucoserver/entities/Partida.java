@@ -44,6 +44,20 @@ public class Partida implements HasDTO<PartidaDTO> {
 		super();
 	}
 
+	public List<Envite> getEnvitesDisponibles() {
+		Chico actual = getChicoActual();
+		/**
+		 * TODO
+		 * 
+		 * Obtener el chico en curso
+		 * Si hay chico en curso, preguntar envites
+		 * 
+		 * Sino, excepcion
+		 * 
+		 */
+		return null;
+	}
+	
 	public int getPuntosObtenidos(Jugador j) {
 		// TODO Obtener los puntos segun que pareja gano la partida (gano 2 chicos)
 		return 0;

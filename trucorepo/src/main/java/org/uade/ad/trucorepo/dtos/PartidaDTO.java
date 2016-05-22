@@ -19,6 +19,9 @@ public class PartidaDTO implements Serializable {
 	private ParejaDTO pareja1;
 	private ParejaDTO pareja2;
 	
+	private JugadorDTO turnoAnterior;
+	private JugadorDTO turnoActual;
+	
 	public PartidaDTO() {
 		super();
 	}
@@ -74,5 +77,21 @@ public class PartidaDTO implements Serializable {
 
 	public void setPareja2(ParejaDTO pareja2) {
 		this.pareja2 = pareja2;
+	}
+
+	public JugadorDTO getTurnoAnterior() {
+		return turnoAnterior;
+	}
+
+	public void setTurnoAnterior(JugadorDTO turnoAnterior) {
+		this.turnoAnterior = turnoAnterior;
+	}
+
+	public JugadorDTO getTurnoActual() {
+		return turnoActual;
+	}
+
+	public void setTurnoActual(JugadorDTO turnoActual) {
+		this.turnoActual = turnoActual;
 	}
 }

@@ -72,12 +72,19 @@ create table grupos (
 	idGrupo int not null auto_increment,
     nombre varchar(100) not null,
     idJugadorAdmin int not null,
-    idPareja1 int not null,
-    idPareja2 int not null,
     constraint grupos_pk primary key ( idGrupo ),
-    constraint grupos_pareja1_fk foreign key ( idPareja1 ) references parejas ( idPareja ),
-    constraint grupos_pareja2_fk foreign key ( idPareja2 ) references parejas ( idPareja ),
     constraint grupos_jug_adm_fk foreign key ( idJugadorAdmin ) references jugadores ( idJugador )
+);
+
+create table grupos_detalle (
+	idPareja int not null,
+    idGrupo int not null,
+    eliminado boolean not null,
+    fechaCreacion date not null,
+    fechaModificacion date not null,
+    constraint grupos_detalle_pk primary key ( idPareja, idGrupo ),
+    constraint grupos_detalle_par_fk foreign key ( idPareja ) references parejas ( idPareja ),
+    constraint grupos_detalle_gru_fk foreign key ( idGrupo ) references grupos ( idGrupo )
 );
 
 create unique index grupos_idx_u on grupos ( nombre );
@@ -161,7 +168,8 @@ create table bazas_cartas (
     idCarta int not null,
     constraint bazas_cartas_pk primary key ( idBazasCartas ),
     constraint bazas_cartas_baz_fk foreign key ( idBaza ) references bazas ( idBaza ),
-    constraint bazas_cartas_jug_fk foreign key ( idJugador ) references jugadores ( idJugador )
+    constraint bazas_cartas_jug_fk foreign key ( idJugador ) references jugadores ( idJugador ),
+    constraint bazas_cartas_car_fk foreign key ( idCarta ) references cartas ( idCarta )
 );
 
 create unique index bazas_cartas_idx_u on bazas_cartas ( idBaza, idJugador );

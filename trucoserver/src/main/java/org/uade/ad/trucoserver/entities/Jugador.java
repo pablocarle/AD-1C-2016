@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,7 +36,7 @@ public class Jugador implements HasDTO<JugadorDTO> {
 	@ManyToOne
 	@JoinColumn(name="idCategoria")
 	private Categoria categoria;
-	@OneToMany(mappedBy="admin")
+	@OneToMany(mappedBy="admin", fetch=FetchType.EAGER)
 	private List<Grupo> grupos;
 	
 	public Jugador() {
@@ -150,10 +151,14 @@ public class Jugador implements HasDTO<JugadorDTO> {
 	}
 
 	private List<GrupoDTO> getDTOs(List<Grupo> grupos) {
-		List<GrupoDTO> retList = new ArrayList<>(grupos.size());
-		for (Grupo g : grupos) {
-			retList.add(g.getDTO());
+		if (grupos != null) {
+			List<GrupoDTO> retList = new ArrayList<>(grupos.size());
+			for (Grupo g : grupos) {
+				retList.add(g.getDTO());
+			}
+			return retList;
+		} else {
+			return null;
 		}
-		return retList;
 	}
 }

@@ -249,6 +249,14 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 		}
 	}
 	
+	public List<Envite> getEnvitesDisponibles() {
+		/**
+		 * 
+		 * 
+		 */
+		return null;
+	}
+	
 	@Override
 	public void agregarObserver(PartidaTerminadaObserver observer) {
 		// TODO Auto-generated method stub

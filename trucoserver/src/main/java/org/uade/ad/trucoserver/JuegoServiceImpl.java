@@ -64,7 +64,15 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
+		/**
+		 * TODO
+		 * 
+		 * Buscar la partida
+		 * Si existe la partida, pregunta envites disponibles.
+		 * Devuelve envites disponibles o lista vacia o excepcion
+		 * 
+		 * Si no existe la partida: Excepcion
+		 */
 		return null;
 	}
 

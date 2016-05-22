@@ -8,7 +8,7 @@
 <script type="text/javascript">
 setInterval(function() {
 	//Buscamos novedades (notificaciones de invitaciones)
-	XMLHttpRequest request = new XMLHttpRequest();
+	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (request.readyState == 4 && request.status == 200) {
 			mostrarNotificaciones(request);

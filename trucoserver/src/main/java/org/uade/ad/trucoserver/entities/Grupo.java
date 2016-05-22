@@ -9,12 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.exceptions.GrupoException;
+import org.uade.ad.trucoserver.entities.GrupoDetalle.GrupoDetallePk;
 
 @Entity
 @Table(name="grupos")
@@ -27,12 +28,9 @@ public class Grupo implements HasDTO<GrupoDTO> {
 	@OneToOne
 	@JoinColumn(name="idJugadorAdmin")
 	private Jugador admin;
-	@ManyToOne
-	@JoinColumn(name="idPareja1")
-	private Pareja pareja1;
-	@ManyToOne
-	@JoinColumn(name="idPareja2")
-	private Pareja pareja2;
+	
+	@OneToMany(mappedBy="pk.grupo")
+	private List<GrupoDetalle> detalle;
 	
 	public Grupo() {
 		super();
@@ -42,26 +40,31 @@ public class Grupo implements HasDTO<GrupoDTO> {
 		super();
 		assert(!pareja1.equals(pareja2));
 		this.nombre = nombre;
-		this.pareja1 = pareja1;
-		this.pareja2 = pareja2;
+		this.detalle = new ArrayList<>();
+		this.detalle.add(new GrupoDetalle(new GrupoDetallePk(pareja1, this)));
+		this.detalle.add(new GrupoDetalle(new GrupoDetallePk(pareja2, this)));
 		if (!pareja1.contieneJugador(admin) && !pareja2.contieneJugador(admin))
 			throw new GrupoException("Admin " + admin + " no pertenece a ninguna de las parejas del grupo provistas");
 		this.admin = admin;
 	}
 	
 	public List<Pareja> getParejas() {
-		List<Pareja> parejas = new ArrayList<>(2);
-		parejas.add(pareja1);
-		parejas.add(pareja2);
+		List<Pareja> parejas = new ArrayList<>();
+		for (GrupoDetalle detalle : this.detalle) {
+			if (!detalle.isEliminado()) {
+				parejas.add(detalle.getPk().getPareja());
+			}
+		}
 		return parejas;
 	}
 	
-	public Pareja getParejaNum(int parejaNum) throws Exception {
+	public Pareja getParejaNum(int parejaNum) {
+		List<Pareja> parejas = getParejas();
 		switch (parejaNum) {
 		case 0:
-			return pareja1;
+			return parejas.get(0);
 		case 1:
-			return pareja2;
+			return parejas.get(1);
 			default:
 				throw new RuntimeException("No se identifico pareja numero: " + parejaNum);
 		}
@@ -116,8 +119,8 @@ public class Grupo implements HasDTO<GrupoDTO> {
 	@Override
 	public GrupoDTO getDTO() {
 		GrupoDTO dto = new GrupoDTO();
-		dto.setPareja1(pareja1.getDTO());
-		dto.setPareja2(pareja2.getDTO());
+		dto.setPareja1(getParejaNum(0).getDTO());
+		dto.setPareja2(getParejaNum(1).getDTO());
 		dto.setAdmin(admin.getDTO());
 		dto.setNombre(nombre);
 		return dto;
@@ -125,14 +128,14 @@ public class Grupo implements HasDTO<GrupoDTO> {
 
 	public List<Jugador> getJugadoresNoAdmin() {
 		List<Jugador> retList = new ArrayList<>();
-		if (!admin.equals(pareja1.getJugador1()))
-			retList.add(pareja1.getJugador1());
-		if (!admin.equals(pareja1.getJugador2()))
-			retList.add(pareja1.getJugador2());
-		if (!admin.equals(pareja2.getJugador1()));
-			retList.add(pareja2.getJugador1());
-		if (!admin.equals(pareja2.getJugador2()))
-			retList.add(pareja2.getJugador2());
+		if (!admin.equals(getParejaNum(0).getJugador1()))
+			retList.add(getParejaNum(0).getJugador1());
+		if (!admin.equals(getParejaNum(0).getJugador2()))
+			retList.add(getParejaNum(0).getJugador2());
+		if (!admin.equals(getParejaNum(1).getJugador1()));
+			retList.add(getParejaNum(1).getJugador1());
+		if (!admin.equals(getParejaNum(1).getJugador2()))
+			retList.add(getParejaNum(1).getJugador2());
 		return retList;
 	}
 }
