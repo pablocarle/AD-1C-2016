@@ -12,8 +12,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -39,22 +37,15 @@ import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 @Table(name="chicos")
 public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 	
-	private static CartasManager cartasManager = CartasManager.getManager();
-	
 	@Id
 	protected int idChico;
-	@ManyToOne
-	@JoinColumn(name="idTipoPartida")
-	protected TipoPartida tipoPartida;
-	@OneToMany(mappedBy="partida", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="chico", fetch=FetchType.LAZY)
 	protected List<Mano> manos;
-
-	//Las parejas que participan del juego
-	//XXX: Se asume que por BBDD son maximo 2 parejas
-	@ManyToMany
-	@JoinTable(name="partidas_parejas")
-	protected List<Pareja> parejas;
 	
+	@ManyToOne
+	@JoinColumn(name="idPartida")
+	protected Partida partida;
+
 	//Variables para acceso rapido
 	@Transient
 	protected int pareja1Score = 0;
@@ -80,11 +71,8 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 	 * @param pareja2
 	 * @param primerOrdenJuego Primer orden del juego, luego se va rotando
 	 */
-	public Chico(Pareja pareja1, Pareja pareja2, List<Jugador> primerOrdenJuego) {
+	public Chico(List<Jugador> primerOrdenJuego) {
 		super();
-		this.parejas = new ArrayList<>(2);
-		this.parejas.add(pareja1);
-		this.parejas.add(pareja2);
 		this.primerOrdenJuego = primerOrdenJuego;
 	}
 	
@@ -95,8 +83,8 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 	}
 	
 	private Jugador getJugador(String apodo) {
-		Pareja pareja1 = parejas.get(0);
-		Pareja pareja2 = parejas.get(1);
+		Pareja pareja1 = partida.getParejas().get(0);
+		Pareja pareja2 = partida.getParejas().get(1);
 		if (pareja1.getJugador1().getApodo().equals(apodo))
 			return pareja1.getJugador1();
 		if (pareja1.getJugador2().getApodo().equals(apodo))
@@ -135,7 +123,7 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 			manoActual.jugar(jugador, carta);
 			if (manoActual.terminada() && !manoActual.tieneEnvites()) {
 				Pareja ganador = manoActual.getGanador();
-				if (parejas.get(1).equals(ganador)){
+				if (partida.getParejas().get(1).equals(ganador)){
 					pareja1Score += 1;
 				} else {
 					pareja2Score += 1;
@@ -172,19 +160,19 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada() || !manoActual.tieneMovimientos()) {
 			circularOrdenJuego();
-			Map<Integer, Set<Carta>> r = cartasManager.getRandomSets(parejas.size()*2);
-			cartas = new HashMap<>(parejas.size()*2);
+			Map<Integer, Set<Carta>> r = CartasManager.getManager().getRandomSets(partida.getParejas().size()*2);
+			cartas = new HashMap<>(partida.getParejas().size()*2);
 			Jugador jugador = null;
 			for (int i = 0; i < r.size(); i++) {
 				//FIXME Cambiar esto:
 				if (i == 0) {
-					jugador = parejas.get(0).getJugador1();
+					jugador = partida.getParejas().get(0).getJugador1();
 				} else if (i == 1) {
-					jugador = parejas.get(0).getJugador2();
+					jugador = partida.getParejas().get(0).getJugador2();
 				} else if (i == 2) {
-					jugador = parejas.get(1).getJugador1();
+					jugador = partida.getParejas().get(1).getJugador1();
 				} else if (i == 3) {
-					jugador = parejas.get(1).getJugador2();
+					jugador = partida.getParejas().get(1).getJugador2();
 				}
 				cartas.put(jugador, new HashSet<>(r.get(i)));
 			}
@@ -195,7 +183,7 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 			} else {
 				ordenJuego = ordenJuegoActual;
 			}
-			manos.add(new Mano(parejas.get(0), parejas.get(1), cartas, ordenJuego));
+			manos.add(new Mano(partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego));
 		}
 		
 		return cartas == null ? getManoActual().getCartasAsignadas() : cartas;

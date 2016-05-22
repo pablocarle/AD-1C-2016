@@ -88,7 +88,7 @@ public class PersistanceTest {
 		ordenJuego.add(j2);
 		ordenJuego.add(j4);
 		
-		partidaCerrada = new Chico(grupo.getParejaNum(0), grupo.getParejaNum(1), ordenJuego);
+		partidaCerrada = new Chico(ordenJuego);
 	}
 
 	@After

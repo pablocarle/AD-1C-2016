@@ -128,11 +128,11 @@ create table partidas_parejas (
 
 create table manos (
 	idMano int not null auto_increment,
-    idPartida int not null,
+    idChico int not null,
     fechaInicio date not null,
     fechaFin date null,
     constraint manos_pk primary key ( idMano ),
-    constraint manos_partida_fk foreign key ( idPartida ) references partidas ( idPartida )
+    constraint manos_chicos_fk foreign key ( idChico ) references chicos ( idChico )
 );
 
 create table envites (
