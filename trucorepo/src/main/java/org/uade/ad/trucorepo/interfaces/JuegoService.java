@@ -29,5 +29,7 @@ public interface JuegoService extends Remote {
 	public PartidaDTO crearPartidaAbiertaIndividual() throws RemoteException, JuegoException;
 	
 	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException;
+
+	public List<JugadorDTO> getJugadoresDisponibles() throws RemoteException, JuegoException;
 	
 }

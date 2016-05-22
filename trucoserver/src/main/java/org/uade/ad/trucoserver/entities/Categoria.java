@@ -7,9 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.CategoriaDTO;
+
 @Entity
 @Table(name="categorias")
-public class Categoria implements Comparable<Categoria> {
+public class Categoria implements Comparable<Categoria>, HasDTO<CategoriaDTO> {
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -130,5 +132,12 @@ public class Categoria implements Comparable<Categoria> {
 		} else if (this.ordenCategoria > o.ordenCategoria)
 			return 1;
 		return 0;
+	}
+
+	@Override
+	public CategoriaDTO getDTO() {
+		CategoriaDTO dto = new CategoriaDTO();
+		dto.setNombre(nombre);
+		return dto;
 	}
 }

@@ -27,7 +27,7 @@ mostrarNotificaciones = function(xml) {
 <body>
 	<!-- TODO Cambiar la ubicacion por algo basico en css -->
 	<div>
-		<a href="juego.jsp">Nueva partida abierta individual</a><br><br>
+		<a href="SeleccionPareja">Nueva partida abierta individual</a><br><br>
 		<a href="seleccionPareja.jsp">Nueva partida abierta en pareja</a><br><br>
 		<a href="partidaCerrada.jsp">Nueva partida Cerrada</a>
 	</div>
@@ -46,11 +46,5 @@ mostrarNotificaciones = function(xml) {
 			</tr>
 		</table>
 	</div>
-<!-- Agregar links a acciones -->
-<!-- Nueva partida abierta individual -->
-<!-- Nueva partida abierta en pareja -->
-<!-- Nueva partida cerrada -->
-<!-- Nuevo grupo -->
-<!-- Area de notificaciones -->
 </body>
 </html>

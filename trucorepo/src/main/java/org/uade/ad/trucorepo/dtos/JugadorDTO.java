@@ -10,6 +10,7 @@ public class JugadorDTO implements Serializable {
 	private String email;
 	private String apodo;
 	private List<GrupoDTO> grupos;
+	private CategoriaDTO categoria;
 	
 	public JugadorDTO() {
 		super();
@@ -79,5 +80,13 @@ public class JugadorDTO implements Serializable {
 
 	public void setGrupos(List<GrupoDTO> grupos) {
 		this.grupos = grupos;
+	}
+
+	public CategoriaDTO getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(CategoriaDTO categoria) {
+		this.categoria = categoria;
 	}
 }
