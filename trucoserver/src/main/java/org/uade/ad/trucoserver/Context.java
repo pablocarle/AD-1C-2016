@@ -3,10 +3,15 @@ package org.uade.ad.trucoserver;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Vector;
 
 import org.uade.ad.trucorepo.dtos.NotificacionDTO;
+import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.PartidaAbiertaIndividualMatcher;
+import org.uade.ad.trucoserver.business.PartidaMatcher;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
@@ -31,6 +36,11 @@ public abstract class Context extends UnicastRemoteObject {
 		super();
 	}
 	
+	/**
+	 * Agregar jugador disponible para partida abierta
+	 * 
+	 * @param jugador El jugador disponible
+	 */
 	protected static void agregarJugadorDisponible(Jugador jugador) {
 		if (!jugadoresDisponibles.contains(jugador)) {
 			synchronized (jugadoresDisponibles) {
@@ -91,5 +101,33 @@ public abstract class Context extends UnicastRemoteObject {
 	
 	public static List<NotificacionDTO> getInvitaciones(String apodoJugador) {
 		return null;
+	}
+
+	public void agregarJugadorAColaPartidaAbierta(Jugador jugador) {
+		Context.agregarJugadorDisponible(jugador);
+	}
+
+	/**
+	 * Busca los jugadores para completar de acuerdo al matcher
+	 * 
+	 * @return
+	 */
+	public Partida matchearPartidaAbierta(Jugador jugador) {
+		PartidaMatcher matcher = new PartidaAbiertaIndividualMatcher(jugador, getJugadoresOnline());
+		Pareja[] parejas = matcher.match();
+		if (parejas.length > 0) {
+			//Elimino estos jugadores de jugadores disponibles
+			eliminarJugadorDisponible(parejas[0].getJugador1());
+			eliminarJugadorDisponible(parejas[0].getJugador2());
+			eliminarJugadorDisponible(parejas[1].getJugador1());
+			eliminarJugadorDisponible(parejas[1].getJugador2());
+			Partida partida = new Partida();
+			partida.setFechaInicio(Calendar.getInstance().getTime());
+			partida.setParejas(Arrays.asList(parejas));
+			partida.setTipoPartida(JuegoManager.getManager().getTipoPartida(JuegoManager.PARTIDA_ABIERTA_INDIVIDUAL));
+			return partida;
+		} else {
+			return null;
+		}
 	}
 }

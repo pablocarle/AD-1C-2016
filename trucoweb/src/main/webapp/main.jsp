@@ -11,7 +11,7 @@ setInterval(function() {
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
 		if (request.readyState == 4 && request.status == 200) {
-			mostrarNotificaciones(request.xml);
+			mostrarNotificaciones(request.responseXML);
 		}
 	};
 	request.open("POST", "NotificationServlet", true);
@@ -20,6 +20,7 @@ setInterval(function() {
 
 mostrarNotificaciones = function(xml) {
 	var notificationElement = document.getElementById("notification");
+	var nl = xml.getElementsByTagName("tagName"); //Obtener notificaciones
 	//Ponemos la url que viene de la notificacion
 	notificacionElement.innerHTML = "";
 };

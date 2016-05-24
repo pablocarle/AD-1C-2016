@@ -1,7 +1,6 @@
 package org.uade.ad.trucoserver.business;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import org.hibernate.Transaction;
@@ -9,6 +8,8 @@ import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.Context;
 import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
+import org.uade.ad.trucoserver.dao.JugadorDao;
+import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.dao.PartidaDao;
 import org.uade.ad.trucoserver.dao.PartidaDaoImpl;
 import org.uade.ad.trucoserver.dao.TipoPartidaDao;
@@ -22,9 +23,9 @@ import org.uade.ad.trucoserver.entities.TipoPartida;
 
 public class JuegoManager {
 
-	private static final String PARTIDA_ABIERTA_INDIVIDUAL = "Abierta Individual";
-	private static final String PARTIDA_ABIERTA_PAREJA = "Abierta en Pareja";
-	private static final String PARTIDA_CERRADA = "Cerrada";
+	public static final String PARTIDA_ABIERTA_INDIVIDUAL = "Abierta Individual";
+	public static final String PARTIDA_ABIERTA_PAREJA = "Abierta en Pareja";
+	public static final String PARTIDA_CERRADA = "Cerrada";
 	
 	private static JuegoManager instance = null;
 	
@@ -37,6 +38,7 @@ public class JuegoManager {
 	
 	private GrupoDao gDao = GrupoDaoImpl.getDAO();
 	private PartidaDao pDao = PartidaDaoImpl.getDAO();
+	private JugadorDao jDao = JugadorDaoImpl.getDAO();
 	
 	private List<TipoPartida> tiposPartidas;
 	{
@@ -81,18 +83,28 @@ public class JuegoManager {
 		return retList;
 	}
 
-	public Partida crearPartidaAbiertaIndividual(String apodo, Context juegoContext) {
-		Partida partida = new Partida();
-		partida.setFechaInicio(Calendar.getInstance().getTime());
-		partida.setTipoPartida(getTipoPartida(PARTIDA_ABIERTA_INDIVIDUAL));
-		Transaction tr = pDao.getSession().beginTransaction();
-		pDao.guardar(partida);
-		tr.commit();
+	public Partida crearPartidaAbiertaIndividual(String apodo, Context juegoContext) throws JuegoException {
 		//Avisa a contexto para que envie las notificaciones
-		return partida;
+		//En realidad en esta etapa no hay creacion de partida
+		Jugador jugador = jDao.getPorApodo(apodo);
+		if (jugador != null) {
+			Partida partida = juegoContext.matchearPartidaAbierta(jugador);
+			if (partida == null) {
+				//No se logro conseguir match. Va a cola.
+				juegoContext.agregarJugadorAColaPartidaAbierta(jugador);
+				return Partida.Null;
+			} else {
+				Transaction tr = pDao.getSession().beginTransaction();
+				pDao.guardar(partida);
+				tr.commit();
+				return partida;
+			}
+		} else {
+			throw new JuegoException("No se encontro el jugador con apodo " + apodo);
+		}
 	}
 
-	private TipoPartida getTipoPartida(String nombreTipoPartida) {
+	public TipoPartida getTipoPartida(String nombreTipoPartida) {
 		if (tiposPartidas != null && !tiposPartidas.isEmpty()) {
 			for (TipoPartida tp : tiposPartidas) {
 				if (tp.getNombre().equals(nombreTipoPartida)) {

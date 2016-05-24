@@ -22,6 +22,7 @@ import org.uade.ad.trucorepo.dtos.PartidaDTO;
 @Inheritance(strategy=InheritanceType.JOINED)
 public class Partida implements HasDTO<PartidaDTO> {
 
+	public static final transient Partida Null = new Partida(-1);
 	@Id
 	protected int idPartida;
 	@Column
@@ -39,7 +40,11 @@ public class Partida implements HasDTO<PartidaDTO> {
 	@JoinColumn(name="idTipoPartida")
 	protected TipoPartida tipoPartida;
 	
-	
+	private Partida(int idPartida) {
+		super();
+		this.idPartida = idPartida;
+	}
+
 	public Partida() {
 		super();
 	}
@@ -119,6 +124,9 @@ public class Partida implements HasDTO<PartidaDTO> {
 	@Override
 	public PartidaDTO getDTO() {
 		// TODO Auto-generated method stub
-		return null;
+		PartidaDTO dto = new PartidaDTO();
+		dto.setIdPartida(idPartida);
+
+		return dto;
 	}
 }

@@ -53,7 +53,7 @@ public class NotificationServlet extends HttpServlet {
 		processRequest(request, response);
 	}
 
-	private void processRequest(HttpServletRequest request, HttpServletResponse response) {
+	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		HttpSession session = request.getSession();
 		if (session == null) {
 			error("No hay sesion", request, response);
@@ -73,8 +73,9 @@ public class NotificationServlet extends HttpServlet {
 		}
 	}
 
-	private void error(String string, HttpServletRequest request, HttpServletResponse response) {
-		// TODO Auto-generated method stub
-		
+	private void error(String mensaje, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("error", true);
+		request.setAttribute("errorMessage", mensaje);
+		request.getRequestDispatcher("error.jsp").forward(request, response);
 	}
 }

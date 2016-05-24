@@ -30,6 +30,10 @@ public class PartidaDTO implements Serializable {
 		
 	}
 	
+	public boolean esNull() {
+		return idPartida == -1;
+	}
+	
 	public ChicoDTO getChicoActual() {
 		//TODO Obtener el chico actual
 		return null;
