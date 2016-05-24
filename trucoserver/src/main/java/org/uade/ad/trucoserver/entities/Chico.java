@@ -273,4 +273,10 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public PartidaDTO irseAlMazo() {
+		// TODO 
+		return null;
+	}
+	
 }

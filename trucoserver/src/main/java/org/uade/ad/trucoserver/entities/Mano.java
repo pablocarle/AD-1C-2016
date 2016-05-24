@@ -51,6 +51,8 @@ public class Mano {
 	private int turnoActualIdx = 0;
 	@Transient
 	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
+	@Transient
+	private List<Jugador> jugadoresEnMazo;
 	
 	public Mano() {
 		super();
@@ -207,4 +209,21 @@ public class Mano {
 	public boolean tieneEnvites() {
 		return envites != null && !envites.isEmpty();
 	}
+	
+	public void irseAlMazo(Jugador jugador) {
+		List<Jugador> j = this.getJugadoresEnMazo();
+		for (int i = 0; i < j.size(); i++) {
+			// Si el jugador no está en la Lista, lo agrego para irse al mazo
+			if (j.get(i).getIdJugador() != jugador.getIdJugador()) {
+				j.add(jugador);
+			} else {
+				// Terminar la mano y dar por ganado al contrario
+			}
+		}
+	}
+
+	public List<Jugador> getJugadoresEnMazo() {
+		return jugadoresEnMazo;
+	}
+	
 }
