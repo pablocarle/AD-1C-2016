@@ -26,6 +26,10 @@ public class PartidaDTO implements Serializable {
 		super();
 	}
 	
+	public void irseAlMazo() {
+		
+	}
+	
 	public ChicoDTO getChicoActual() {
 		//TODO Obtener el chico actual
 		return null;
