@@ -1,4 +1,3 @@
-use VentaDirecta;
 drop database trucodb;
 
 create database trucodb;
@@ -138,16 +137,37 @@ create table manos (
     idChico int not null,
     fechaInicio date not null,
     fechaFin date null,
+    idEnviteTruco int,
+    idEnviteEnvido int,
     constraint manos_pk primary key ( idMano ),
     constraint manos_chicos_fk foreign key ( idChico ) references chicos ( idChico )
 );
 
-create table envites (
-	idEnvite int not null,
-    idMano int not null,
-    constraint envites_pk primary key ( idEnvite ),
-    constraint envites_manos_fk foreign key ( idMano ) references manos ( idMano )
+create table tipo_envites (
+	idTipoEnvite int not null,
+	nombreEnvite varchar(20) not null,
+	tipoEnvite varchar(1) not null,
+    puntajeQuerido int not null,
+    puntajeNoQuerido int not null,
+	enviteAnterior int,
+    constraint tipoEnvites_pk primary key (idTipoEnvite)
 );
+
+
+create table envites_pareja_mano (
+	idEnviteParejaMano int not null auto_increment,
+    idTipoEnvite int not null,
+    idMano int not null,
+    aceptado bit not null,
+    puntosObtenidos int not null,
+    idPareja int not null,
+    constraint envites_pk primary key ( idEnviteParejaMano),
+    constraint envites_manos_fk foreign key ( idMano ) references manos ( idMano ),
+    constraint envites_manos_tipoEnvite foreign key (idTipoEnvite) references tipo_envites (idTipoEnvite)
+   
+);
+
+create unique index envites_parejas_idx on envites_pareja_mano ( idMano, idTipoEnvite );
 
 create table bazas (
 	idBaza int not null,
@@ -173,3 +193,4 @@ create table bazas_cartas (
 );
 
 create unique index bazas_cartas_idx_u on bazas_cartas ( idBaza, idJugador );
+
