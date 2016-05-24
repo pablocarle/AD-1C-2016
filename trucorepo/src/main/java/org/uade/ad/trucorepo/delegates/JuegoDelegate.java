@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.dtos.NotificacionDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
@@ -46,6 +47,15 @@ public class JuegoDelegate extends BusinessDelegate {
 	public PartidaDTO crearNuevaPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws JuegoException {
 		try {
 			return juegoService.crearPartidaCerrada(user, grupo);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public List<NotificacionDTO> getNotificaciones(JugadorDTO jugador) throws JuegoException {
+		try {
+			return juegoService.getNotificaciones(jugador);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			throw new JuegoException(e);
