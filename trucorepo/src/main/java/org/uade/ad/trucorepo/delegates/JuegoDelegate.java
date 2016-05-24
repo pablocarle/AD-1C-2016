@@ -6,7 +6,9 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
 
+import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
 
@@ -32,4 +34,21 @@ public class JuegoDelegate extends BusinessDelegate {
 		}
 	}
 
+	public PartidaDTO crearNuevaPartidaAbierta(JugadorDTO jugador) throws JuegoException {
+		try {
+			return juegoService.crearPartidaAbiertaIndividual(jugador);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public PartidaDTO crearNuevaPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws JuegoException {
+		try {
+			return juegoService.crearPartidaCerrada(user, grupo);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
 }

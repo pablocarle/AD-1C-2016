@@ -7,6 +7,7 @@ public class GrupoDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	private String nombre;
+	private int idGrupo;
 	private ParejaDTO pareja1;
 	private ParejaDTO pareja2;
 	private JugadorDTO admin;
@@ -70,5 +71,13 @@ public class GrupoDTO implements Serializable {
 
 	public void setAdmin(JugadorDTO admin) {
 		this.admin = admin;
+	}
+
+	public int getIdGrupo() {
+		return idGrupo;
+	}
+
+	public void setIdGrupo(int idGrupo) {
+		this.idGrupo = idGrupo;
 	}
 }

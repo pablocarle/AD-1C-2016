@@ -89,4 +89,26 @@ public class JugadorDTO implements Serializable {
 	public void setCategoria(CategoriaDTO categoria) {
 		this.categoria = categoria;
 	}
+
+	public boolean tieneGrupo(int idGrupoInt) {
+		if (grupos != null && !grupos.isEmpty()) {
+			for (GrupoDTO g : grupos) {
+				if (g.getIdGrupo() == idGrupoInt) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+
+	public GrupoDTO getGrupo(int idGrupoInt) {
+		if (grupos != null && !grupos.isEmpty()) {
+			for (GrupoDTO g : grupos) {
+				if (g.getIdGrupo() == idGrupoInt) {
+					return g;
+				}
+			}
+		}
+		return null;
+	}
 }

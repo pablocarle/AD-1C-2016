@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.uade.ad.trucorepo.dtos.NotificacionDTO;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
@@ -79,9 +80,16 @@ public abstract class Context extends UnicastRemoteObject {
 	protected static List<Jugador> getJugadoresOnline() {
 		return new ArrayList<>(jugadoresDisponibles);
 	}
-
+	
+	
+	
 	public void agregarInvitaciones(int idPartida, List<Jugador> jugadoresNoAdmin) {
-		// TODO Auto-generated method stub
+		//Quiero notificar a los usuarios de la invitacion a la partida
 		
+		
+	}
+	
+	public static List<NotificacionDTO> getInvitaciones(String apodoJugador) {
+		return null;
 	}
 }

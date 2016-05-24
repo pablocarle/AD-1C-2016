@@ -10,6 +10,7 @@ import java.util.Set;
 
 import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
+import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
@@ -77,24 +78,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	}
 
 	@Override
-	public PartidaDTO crearPartidaCerrada(String nombreGrupo) throws RemoteException, JuegoException {
-		Partida partida = manager.crearPartidaCerrada(nombreGrupo, this);
-		return partida.getDTO();
-	}
-
-	@Override
-	public PartidaDTO crearPartidaAbiertaIndividual() throws RemoteException, JuegoException {
-		
-		/**
-		 * TODO
-		 * La partida individual se debe crear luego de matchear los jugadores
-		 * dentro de los que esten disponibles para jugar partidas individuales
-		 * 
-		 */
-		return null;
-	}
-
-	@Override
 	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException {
 		// TODO Auto-generated method stub
 		return null;
@@ -124,5 +107,17 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 			retList.add(j.getDTO());
 		}
 		return retList;
+	}
+
+	@Override
+	public PartidaDTO crearPartidaAbiertaIndividual(JugadorDTO jugador) throws RemoteException, JuegoException {
+		Partida partida = manager.crearPartidaAbiertaIndividual(jugador.getApodo(), this);
+		return partida.getDTO();
+	}
+
+	@Override
+	public PartidaDTO crearPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws RemoteException, JuegoException {
+		Partida partida = manager.crearPartidaCerrada(user.getApodo(), grupo.getIdGrupo(), this);
+		return partida.getDTO();
 	}
 }

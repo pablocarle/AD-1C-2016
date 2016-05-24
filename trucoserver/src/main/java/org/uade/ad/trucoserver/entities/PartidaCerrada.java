@@ -20,5 +20,7 @@ public class PartidaCerrada extends Partida {
 	}
 	
 	public PartidaCerrada(Grupo grupo) {
+		super();
+		this.grupo = grupo;
 	}
 }
