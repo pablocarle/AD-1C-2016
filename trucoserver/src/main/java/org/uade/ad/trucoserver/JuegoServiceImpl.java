@@ -65,7 +65,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	}
 
 	@Override
-	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException {
+	public List<EnviteDTO> getEnvitesDisponibles(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
 		/**
 		 * TODO
 		 * 
@@ -75,24 +75,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 		 * 
 		 * Si no existe la partida: Excepcion
 		 */
-		return null;
-	}
-
-	@Override
-	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -124,6 +106,31 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public List<NotificacionDTO> getNotificaciones(JugadorDTO jugador) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, int idEnvite)
+			throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
 		// TODO Auto-generated method stub
 		return null;
 	}

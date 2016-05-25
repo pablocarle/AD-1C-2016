@@ -20,20 +20,22 @@ public interface JuegoService extends Remote {
 	
 	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException;
 	
-	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException;
+	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, int idEnvite) throws RemoteException, JuegoException;
 	
-	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException;
+	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException;
 	
-	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException;
+	public List<EnviteDTO> getEnvitesDisponibles(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException;
 	
 	public PartidaDTO crearPartidaAbiertaIndividual(JugadorDTO jugador) throws RemoteException, JuegoException;
 	
-	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException;
-
 	public List<JugadorDTO> getJugadoresDisponibles() throws RemoteException, JuegoException;
 
 	public PartidaDTO crearPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws RemoteException, JuegoException;
 
 	public List<NotificacionDTO> getNotificaciones(JugadorDTO jugador) throws RemoteException, JuegoException;
+
+	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException;
+
+	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException;
 	
 }
