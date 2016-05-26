@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,8 +37,8 @@ public class Mano {
 	private Pareja pareja1;
 	@Transient
 	private Pareja pareja2;
-	@Transient
-	private List<Envite> envites;
+	@OneToMany(mappedBy="mano")
+	private List<EnvitesManoPareja> envites;
 	{
 		envites = new ArrayList<>();
 	}
@@ -53,6 +54,11 @@ public class Mano {
 	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
 	@Transient
 	private List<Jugador> jugadoresEnMazo;
+	@Column
+	private int idEnviteTruco;
+	@Column
+	private int idEnviteEnvido;
+	
 	
 	public Mano() {
 		super();
@@ -65,6 +71,8 @@ public class Mano {
 		this.ordenJuegoInicial = ordenJuegoInicial;
 		this.ordenJuegoActual = ordenJuegoInicial;
 		this.cartasAsignadas = cartasAsignadas;
+		this.idEnviteEnvido=-1;
+		this.idEnviteTruco=-1;
 	}
 	
 	public List<Baza> getBazas() {
@@ -169,10 +177,32 @@ public class Mano {
 		throw new RuntimeException(""); //TODO Definir excepcion
 	}
 	
+//	public EnvidoEnvite enviteEnvidoDisponible (int idEnviteEnvido, int idEnviteTruco){
+//		List<Envite> envitesDisponibles;
+//		envitesDisponibles.obtenerEnvites(idEnviteEnvido,'E');
+//		if(idEnviteTruco==-1)
+//			return envitesDisponibles;
+//		else
+//			return null;
+//		
+//	}
+//	public TrucoEnvite enviteTrucoDisponible (int idEnviteEnvido, int idEnviteTruco){
+//		List<TrucoEnvite> envitesDisponibles;
+//		envitesDisponibles.obtenerEnvido(-1)
+//			
+//		
+//		
+//		return envitesDisponibles;
+//	}
+	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
-		// TODO Gestionar envites en la mano
-		
-		envites.add(envite);
+		Pareja parejaEnvite;
+	
+		if(pareja1.contieneJugador(jugador))
+			parejaEnvite = pareja1;
+		else if (pareja2.contieneJugador(jugador))
+			parejaEnvite=pareja2;
+
 		
 	}
 
@@ -225,5 +255,7 @@ public class Mano {
 	public List<Jugador> getJugadoresEnMazo() {
 		return jugadoresEnMazo;
 	}
+	
+	
 	
 }
