@@ -6,6 +6,10 @@ import java.util.List;
 import org.hibernate.Transaction;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.Context;
+import org.uade.ad.trucoserver.dao.CartaDao;
+import org.uade.ad.trucoserver.dao.CartaDaoImpl;
+import org.uade.ad.trucoserver.dao.EnviteDao;
+import org.uade.ad.trucoserver.dao.EnviteDaoImpl;
 import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
@@ -14,6 +18,8 @@ import org.uade.ad.trucoserver.dao.PartidaDao;
 import org.uade.ad.trucoserver.dao.PartidaDaoImpl;
 import org.uade.ad.trucoserver.dao.TipoPartidaDao;
 import org.uade.ad.trucoserver.dao.TipoPartidaDaoImpl;
+import org.uade.ad.trucoserver.entities.Carta;
+import org.uade.ad.trucoserver.entities.Envite;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
@@ -118,5 +124,13 @@ public class JuegoManager {
 		} else {
 			throw new RuntimeException("No hay tipos de partidas definidos");
 		}
+	}
+	private EnviteDao dao = EnviteDaoImpl.getDAO();
+	
+	public List<Envite> envites;
+	{
+		Transaction tr = dao.getSession().beginTransaction();
+		envites = dao.getTodos(Envite.class);
+		tr.commit();
 	}
 }

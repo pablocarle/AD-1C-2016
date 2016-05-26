@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
 @Entity
@@ -178,13 +179,14 @@ public class Mano {
 	}
 	
 //	public EnvidoEnvite enviteEnvidoDisponible (int idEnviteEnvido, int idEnviteTruco){
+//		List<Envite> envitetotales = new JuegoManager().envites;
 //		List<Envite> envitesDisponibles;
 //		envitesDisponibles.obtenerEnvites(idEnviteEnvido,'E');
 //		if(idEnviteTruco==-1)
 //			return envitesDisponibles;
 //		else
 //			return null;
-//		
+		
 //	}
 //	public TrucoEnvite enviteTrucoDisponible (int idEnviteEnvido, int idEnviteTruco){
 //		List<TrucoEnvite> envitesDisponibles;
