@@ -75,6 +75,6 @@
   </servlet-mapping>
   <servlet-mapping>
   	<servlet-name>PartidaServlet</servlet-name>
-  	<url-pattern>/PartidaServlet/**</url-pattern>
+  	<url-pattern>/PartidaServlet/*</url-pattern>
   </servlet-mapping>
 </web-app>

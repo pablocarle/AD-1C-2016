@@ -29,7 +29,7 @@ mostrarNotificaciones = function(xml) {
 <body>
 	<!-- TODO Cambiar la ubicacion por algo basico en css -->
 	<div>
-		<a href="PartidaServlet?tipoPartida=abierta">Nueva partida abierta individual</a><br><br>
+		<a href="PartidaServlet/NuevaPartida?tipoPartida=abierta">Nueva partida abierta individual</a><br><br>
 		<a href="SeleccionPareja">Nueva partida abierta en pareja</a><br><br>
 		<a href="partidaCerrada.jsp">Nueva partida Cerrada</a>
 	</div>

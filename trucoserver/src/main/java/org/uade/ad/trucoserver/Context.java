@@ -170,4 +170,20 @@ public abstract class Context extends UnicastRemoteObject {
 	public void agregarPartida(Partida partida) {
 		
 	}
+	
+	/**
+	 * Verificar si un jugador pertenece a una partida
+	 * 
+	 * @param idJugador
+	 * @param idPartida
+	 * @return
+	 */
+	protected boolean assertJugadorPartida(int idJugador, int idPartida) {
+		for (Partida p : juegos) {
+			if (p.contieneJugador(idJugador)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -23,7 +23,7 @@ setInterval(function() {
 	xhttp.send();
 }, 1000);
 
-habilitarTurno = function(partidaDtoXML) {
+habilitarTurno = function(xml) {
 	//Habilitar las funciones que llegan en el response
 };
 
@@ -34,6 +34,6 @@ finTurno = function() {
 </script>
 </head>
 <body>
-
+JUGANDO
 </body>
 </html>

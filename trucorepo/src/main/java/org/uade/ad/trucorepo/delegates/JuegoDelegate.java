@@ -97,4 +97,9 @@ public class JuegoDelegate extends BusinessDelegate {
 			throw new JuegoException(e);
 		}
 	}
+
+	public PartidaDTO repartirCartas(JugadorDTO jugador, int idPartida) throws JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

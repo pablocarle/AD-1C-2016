@@ -34,7 +34,9 @@ public class PartidaServlet extends HttpServlet {
 	private enum AccionTipo {
 		JUEGACARTA,
 		ENVITE,
-		ALMAZO, DESCONOCIDO
+		ALMAZO, 
+		REPARTIR_CARTAS,
+		DESCONOCIDO
 	}
 	
 	private JuegoDelegate delegate;
@@ -65,19 +67,29 @@ public class PartidaServlet extends HttpServlet {
 
 	private void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		if (request.getMethod().equalsIgnoreCase("get")) {
-			String[] path = request.getContextPath().split("/");
-			String tipoPartida = request.getParameter("tipoPartida");
-			if (PARTIDA_ABIERTA.equals(tipoPartida)) {
-				nuevaPartidaAbierta(request, response);
-			} else if (PARTIDA_CERRADA.equals(tipoPartida)) {
-				nuevaPartidaCerrada(request, response);
-			} else if (PARTIDA_ABIERTA_PAREJAS.equals(tipoPartida)) {
-				nuevaPartidaAbiertaParejas(request, response);
-			} else {
-				error("No se identifica el tipo de partida " + tipoPartida, request, response);
+			String[] path = request.getRequestURI().split("/");
+			switch (path[path.length - 1]) {
+				case "EnvitesDisponibles":
+					//Consultar envites disponibles de una partida
+					consultarEnvites(request, response);
+					break;
+				case "NuevaPartida":
+					String tipoPartida = request.getParameter("tipoPartida");
+					if (PARTIDA_ABIERTA.equals(tipoPartida)) {
+						nuevaPartidaAbierta(request, response);
+					} else if (PARTIDA_CERRADA.equals(tipoPartida)) {
+						nuevaPartidaCerrada(request, response);
+					} else if (PARTIDA_ABIERTA_PAREJAS.equals(tipoPartida)) {
+						nuevaPartidaAbiertaParejas(request, response);
+					} else {
+						error("No se identifica el tipo de partida " + tipoPartida, request, response);
+					}
+					break;
+				default: 
+					break;
 			}
 		} else if (request.getMethod().equalsIgnoreCase("post")) {
-			String[] path = request.getContextPath().split("/");
+			String[] path = request.getRequestURI().split("/");
 			switch (path[path.length-1]) {
 			case "Jugar":
 				handleJuego(request, response);
@@ -88,10 +100,28 @@ public class PartidaServlet extends HttpServlet {
 		}
 	}
 
+	private void consultarEnvites(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idPartidaStr = request.getParameter("idPartida");
+		HttpSession session = request.getSession();
+		if (session == null) {
+			error("No hay sesion", request, response);
+			return;
+		} else {
+			JugadorDTO jugador = (JugadorDTO) session.getAttribute("user");
+			if (jugador == null) {
+				error("No hay jugador logueado", request, response);
+				return;
+			} else {
+				//TODO Devuelve todo xml de partida?
+			}
+		}
+	}
+
 	private void handleJuego(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String idCartaStr = request.getParameter("idCarta");
 		String idEnviteStr = request.getParameter("idEnvite");
 		String alMazoStr = request.getParameter("alMazo");
+		String repartirCartas = request.getParameter("repartirCartas");
 		String idPartidaStr = request.getParameter("idPartida");
 		
 		HttpSession session = request.getSession();
@@ -117,7 +147,7 @@ public class PartidaServlet extends HttpServlet {
 		PartidaDTO partida = null; //TODO Obtener la partida de las guardadas en sesion
 		
 		try {
-			switch (getTipoAccion(idCartaStr, idEnviteStr, alMazoStr)) {
+			switch (getTipoAccion(idCartaStr, idEnviteStr, alMazoStr, repartirCartas)) {
 				case ALMAZO:
 					partida = delegate.irAlMazo(jugador, idPartida);
 					xmlResponse(partida, response);
@@ -128,6 +158,10 @@ public class PartidaServlet extends HttpServlet {
 					break;
 				case JUEGACARTA:
 					partida = delegate.jugarCarta(jugador, idPartida, Integer.parseInt(idCartaStr));
+					xmlResponse(partida, response);
+					break;
+				case REPARTIR_CARTAS:
+					partida = delegate.repartirCartas(jugador, idPartida);
 					xmlResponse(partida, response);
 					break;
 				default:
@@ -154,7 +188,7 @@ public class PartidaServlet extends HttpServlet {
 	 * @param alMazoStr
 	 * @return
 	 */
-	private AccionTipo getTipoAccion(String idCartaStr, String idEnviteStr, String alMazoStr) {
+	private AccionTipo getTipoAccion(String idCartaStr, String idEnviteStr, String alMazoStr, String repartirCartas) {
 		if ((idCartaStr == null || idCartaStr.length() == 0) && (idEnviteStr == null || idEnviteStr.length() == 0)
 				&& (alMazoStr == null || alMazoStr.length() == 0)) {
 			return AccionTipo.DESCONOCIDO;
@@ -164,6 +198,8 @@ public class PartidaServlet extends HttpServlet {
 			return AccionTipo.ENVITE;
 		} else if (alMazoStr != null && alMazoStr.length() > 0) {
 			return AccionTipo.ALMAZO;
+		} else if (repartirCartas != null && repartirCartas.length() > 0) {
+			return AccionTipo.REPARTIR_CARTAS;
 		}
 		return AccionTipo.DESCONOCIDO;
 	}
@@ -186,7 +222,7 @@ public class PartidaServlet extends HttpServlet {
 						PartidaDTO partida = delegate.crearNuevaPartidaAbiertaPareja(user, idPareja);
 						agregarPartidaSesion(session, partida);
 						request.setAttribute("partidaId", partida.getIdPartida());
-						request.getRequestDispatcher("juegoMain.jsp").forward(request, response);
+						request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
 					} catch (JuegoException e) {
 						error("Ocurrio un error iniciando la partida: " + e.getMessage(), request, response);
 						e.printStackTrace();
@@ -219,7 +255,7 @@ public class PartidaServlet extends HttpServlet {
 							PartidaDTO partida = delegate.crearNuevaPartidaCerrada(user, grupo);
 							agregarPartidaSesion(session, partida);
 							request.setAttribute("partidaId", partida.getIdPartida());
-							request.getRequestDispatcher("juegoMain.jsp").forward(request, response);
+							request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
 						} catch (JuegoException e) {
 							error("Ocurrio un error al crear la partida cerrada: " + e.getMessage(), request, response);
 							e.printStackTrace();
@@ -246,7 +282,7 @@ public class PartidaServlet extends HttpServlet {
 					PartidaDTO dto = delegate.crearNuevaPartidaAbierta(jugador);
 					agregarPartidaSesion(session, dto);
 					request.setAttribute("partidaId", dto.getIdPartida());
-					request.getRequestDispatcher("juegoMain.jsp").forward(request, response);
+					request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
 				} catch (JuegoException e) {
 					error("Ocurrio un problema en la creacion de partida: " + e.getMessage(), request, response);
 				}
@@ -270,7 +306,7 @@ public class PartidaServlet extends HttpServlet {
 	private void error(String mensaje, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("error", true);
 		request.setAttribute("errorMessage", mensaje);
-		request.getRequestDispatcher("error.jsp").forward(request, response);;
+		request.getRequestDispatcher("/error.jsp").forward(request, response);;
 	}
 
 	/**

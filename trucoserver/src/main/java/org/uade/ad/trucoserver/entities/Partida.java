@@ -129,4 +129,15 @@ public class Partida implements HasDTO<PartidaDTO> {
 
 		return dto;
 	}
+
+	public boolean contieneJugador(int idJugador) {
+		if (parejas != null) {
+			for (Pareja p : parejas) {
+				if (p.contieneJugador(idJugador)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 }

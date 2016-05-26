@@ -39,6 +39,11 @@ public class Pareja implements HasDTO<ParejaDTO> {
 	public boolean contieneJugador(Jugador jugador) {
 		return jugador != null && (jugador.equals(jugador1) || jugador.equals(jugador2));
 	}
+	
+	public boolean contieneJugador(int idJugador) {
+		return (jugador1 != null && jugador1.getIdJugador() == idJugador) ||
+				(jugador2 != null && jugador2.getIdJugador() == idJugador);
+	}
 
 	public Categoria getCategoria() {
 		int compare = jugador1.getCategoria().compareTo(jugador2.getCategoria());
