@@ -61,4 +61,45 @@ public class JuegoDelegate extends BusinessDelegate {
 			throw new JuegoException(e);
 		}
 	}
+
+	public PartidaDTO crearNuevaPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws JuegoException {
+		try {
+			return juegoService.crearPartidaAbiertaPareja(user, idPareja);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public PartidaDTO irAlMazo(JugadorDTO jugador, int idPartida) throws JuegoException {
+		try {
+			return juegoService.irAlMazo(idPartida, jugador);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public PartidaDTO cantar(JugadorDTO jugador, int idPartida, int idEnvite) throws JuegoException {
+		try {
+			return juegoService.cantarEnvite(idPartida, jugador, idEnvite);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public PartidaDTO jugarCarta(JugadorDTO jugador, int idPartida, int idCarta) throws JuegoException {
+		try {
+			return juegoService.jugarCarta(idPartida, jugador, idCarta);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public PartidaDTO repartirCartas(JugadorDTO jugador, int idPartida) throws JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

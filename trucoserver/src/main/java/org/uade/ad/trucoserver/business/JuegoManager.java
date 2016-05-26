@@ -64,6 +64,7 @@ public class JuegoManager {
 		try {
 			partida = new PartidaCerrada(grupo);
 			pDao.guardar(partida);
+			juegoContext.agregarPartida(partida);
 			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
 			tr.commit();
 		} catch (Exception e) {
@@ -86,20 +87,22 @@ public class JuegoManager {
 	public Partida crearPartidaAbiertaIndividual(String apodo, Context juegoContext) throws JuegoException {
 		//Avisa a contexto para que envie las notificaciones
 		//En realidad en esta etapa no hay creacion de partida
+		Transaction tr = pDao.getSession().beginTransaction();
 		Jugador jugador = jDao.getPorApodo(apodo);
 		if (jugador != null) {
 			Partida partida = juegoContext.matchearPartidaAbierta(jugador);
 			if (partida == null) {
+				tr.rollback();
 				//No se logro conseguir match. Va a cola.
 				juegoContext.agregarJugadorAColaPartidaAbierta(jugador);
 				return Partida.Null;
 			} else {
-				Transaction tr = pDao.getSession().beginTransaction();
 				pDao.guardar(partida);
 				tr.commit();
 				return partida;
 			}
 		} else {
+			tr.rollback();
 			throw new JuegoException("No se encontro el jugador con apodo " + apodo);
 		}
 	}

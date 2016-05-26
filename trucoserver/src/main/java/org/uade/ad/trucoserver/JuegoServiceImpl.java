@@ -65,34 +65,11 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	}
 
 	@Override
-	public List<EnviteDTO> getEnvitesDisponibles(int idJuego) throws RemoteException, JuegoException {
+	public List<EnviteDTO> getEnvitesDisponibles(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
 		/**
 		 * TODO
 		 * 
-		 * Buscar la partida
-		 * Si existe la partida, pregunta envites disponibles.
-		 * Devuelve envites disponibles o lista vacia o excepcion
-		 * 
-		 * Si no existe la partida: Excepcion
 		 */
-		return null;
-	}
-
-	@Override
-	public PartidaDTO crearPartidaAbiertaPareja(String parejaApodo) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, EnviteDTO envite) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, CartaDTO carta) throws RemoteException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -117,6 +94,12 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	}
 
 	@Override
+	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
 	public PartidaDTO crearPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws RemoteException, JuegoException {
 		Partida partida = manager.crearPartidaCerrada(user.getApodo(), grupo.getIdGrupo(), this);
 		return partida.getDTO();
@@ -124,6 +107,30 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public List<NotificacionDTO> getNotificaciones(JugadorDTO jugador) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, int idEnvite)
+			throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		/**
+		 * TODO
+		 * Aca debe verificar que la partida exista. Si existe llama al manager que se encarga de las
+		 * demas validaciones
+		 */
+		return null;
+	}
+
+	@Override
+	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
 		// TODO Auto-generated method stub
 		return null;
 	}

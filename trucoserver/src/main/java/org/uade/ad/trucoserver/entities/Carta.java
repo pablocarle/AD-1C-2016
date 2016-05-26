@@ -44,6 +44,10 @@ public class Carta implements Comparable<Carta>, HasDTO<CartaDTO> {
 		this.pesoTruco = pesoTruco;
 		this.numero = numero;
 	}
+	
+	public boolean esFigura() {
+		return pesoEnvido == 0;
+	}
 
 	@Override
 	public String toString() {
