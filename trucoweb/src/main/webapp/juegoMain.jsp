@@ -8,19 +8,27 @@
 <title>Truco!</title>
 <script type="text/javascript">
 
+ultimoIdxNotificacion = 0;
+
 setInterval(function() {
 	//Busca turno
 	var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			//Leer el DOC para saver si es el turno del usuario
-			if (isTurno()) {
-				habilitarTurno(xhttp);
-			}
+			procesarNotificacion(xhttp.responseXML);
 		}
 	};
 	xhttp.open("GET", "NotificationServlet?checkTurno", true);
 	xhttp.send();
+}, 1000);
+
+procesarNotificacion = function(xml) {
+	
+};
+
+setInterval(function() {
+	//Busca novedades de la partida
 }, 1000);
 
 habilitarTurno = function(xml) {

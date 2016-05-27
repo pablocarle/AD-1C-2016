@@ -209,5 +209,7 @@ public abstract class Context extends UnicastRemoteObject {
 
 	public void actualizarPartida(Partida p) {
 		//TODO Actualiza ultimo estado de la partida p (reemplazar en coleccion?)
+		///XXX Considerar en este punto que es clave la sincronizacion porque 
+		///mientras se actualiza el nuevo estado de la partida puede llegar otro preguntando por su turno
 	}
 }
