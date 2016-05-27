@@ -15,15 +15,18 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
+import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
+import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
 @Entity
 @Table(name="partidas")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Partida implements HasDTO<PartidaDTO> {
+public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	public static final transient Partida Null = new Partida(-1);
 	@Id
@@ -42,6 +45,8 @@ public class Partida implements HasDTO<PartidaDTO> {
 	@ManyToOne
 	@JoinColumn(name="idTipoPartida")
 	protected TipoPartida tipoPartida;
+	@Transient
+	private List<PartidaTerminadaObserver> observers = new ArrayList<>();
 	
 	private Partida(int idPartida) {
 		super();
@@ -52,17 +57,7 @@ public class Partida implements HasDTO<PartidaDTO> {
 		super();
 	}
 
-	public List<Envite> getEnvitesDisponibles() throws JuegoException {
-		Chico actual = getChicoActual();
-		/**
-		 * TODO
-		 * 
-		 * Obtener el chico en curso
-		 * Si hay chico en curso, preguntar envites
-		 * 
-		 * Sino, excepcion
-		 * 
-		 */
+	public List<Envite> getEnvitesDisponibles(Jugador jugador) throws JuegoException {
 		return null;
 	}
 	
@@ -208,5 +203,14 @@ public class Partida implements HasDTO<PartidaDTO> {
 
 	public void irAlMazo(Jugador j) throws JuegoException {
 		getChicoActual().irseAlMazo(j);
+	}
+
+	@Override
+	public void agregarObserver(PartidaTerminadaObserver observer) {
+		this.observers.add(observer);
+	}
+
+	public void cantarEnvite(Jugador j, Envite e) throws Exception {
+		getChicoActual().cantar(j, e);
 	}
 }

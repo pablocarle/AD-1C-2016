@@ -90,6 +90,10 @@ public abstract class Context extends UnicastRemoteObject {
 		jugadoresDisponibles.remove(jugador);
 	}
 	
+	protected static void eliminarParejaDisponible(Pareja p) {
+		parejasDisponiblesModoLibre.remove(p);
+	}
+	
 	protected static void agregarJuego(Partida juego) {
 		juegos.add(juego);
 	}
@@ -167,9 +171,20 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 	
 	public Partida matchearPartidaAbiertaPareja(Pareja pareja) {
-		//TODO Invocar matcher
 		PartidaMatcher matcher = new PartidaAbiertaParejaMatcher(pareja, getParejasDisponiblesModoLibre());
-		return null;
+		Pareja[] parejas = matcher.match();
+		if (parejas.length > 0) {
+			//Elimino las parejas de parejas disponibles
+			eliminarParejaDisponible(parejas[0]);
+			eliminarParejaDisponible(parejas[1]);
+			Partida partida = new Partida();
+			partida.setFechaInicio(Calendar.getInstance().getTime());
+			partida.setParejas(Arrays.asList(parejas));
+			partida.setTipoPartida(JuegoManager.getManager().getTipoPartida(JuegoManager.PARTIDA_ABIERTA_PAREJA));
+			return partida;
+		} else {
+			return null;
+		}
 	}
 
 	public void agregarPartida(Partida partida) {
@@ -193,6 +208,6 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 
 	public void actualizarPartida(Partida p) {
-		//TODO Actualiza ultimo estado de la partida p
+		//TODO Actualiza ultimo estado de la partida p (reemplazar en coleccion?)
 	}
 }

@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
 @Entity
@@ -198,6 +197,7 @@ public class Mano {
 //	}
 	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
+		
 		Pareja parejaEnvite;
 	
 		if(pareja1.contieneJugador(jugador))

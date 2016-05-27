@@ -1,10 +1,8 @@
 package org.uade.ad.trucoserver.business;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Transaction;
-import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.Context;
 import org.uade.ad.trucoserver.dao.CartaDao;
@@ -50,6 +48,7 @@ public class JuegoManager {
 	private PartidaDao pDao = PartidaDaoImpl.getDAO();
 	private JugadorDao jDao = JugadorDaoImpl.getDAO();
 	private CartaDao cDao = CartaDaoImpl.getDAO();
+	private EnviteDao eDao = EnviteDaoImpl.getDAO();
 	
 	private List<TipoPartida> tiposPartidas;
 	{
@@ -86,15 +85,6 @@ public class JuegoManager {
 		return partida;
 	}
 	
-	private List<Jugador> getPrimerOrdenJuego(Pareja pareja1, Pareja pareja2) {
-		List<Jugador> retList = new ArrayList<>(4);
-		retList.add(pareja1.getJugador1());
-		retList.add(pareja2.getJugador1());
-		retList.add(pareja1.getJugador2());
-		retList.add(pareja2.getJugador2());
-		return retList;
-	}
-
 	public Partida crearPartidaAbiertaIndividual(String apodo, Context juegoContext) throws JuegoException {
 		//Avisa a contexto para que envie las notificaciones
 		//En realidad en esta etapa no hay creacion de partida
@@ -188,6 +178,24 @@ public class JuegoManager {
 		Transaction tr = jDao.getSession().beginTransaction();
 		Jugador j = jDao.getPorApodo(apodo);
 		p.irAlMazo(j);
+		context.actualizarPartida(p);
+		tr.commit();
+		return p;
+	}
+
+	public Partida cantarEnvite(int idJuego, String apodo, int idEnvite, Context context) throws JuegoException {
+		Partida p = context.getPartida(idJuego);
+		if (p == null) {
+			throw new JuegoException("No existe partida en curso con id " + idJuego);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		Envite e = eDao.getPorId(Envite.class, idEnvite);
+		try {
+			p.cantarEnvite(j, e);
+		} catch (Exception e1) {
+			throw new JuegoException(e1);
+		}
 		context.actualizarPartida(p);
 		tr.commit();
 		return p;

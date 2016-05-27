@@ -9,7 +9,6 @@ public abstract class BusinessDelegate {
 	protected static Properties webServerProperties;
 	
 	static {
-		//TODO Completar lectura de properties
 		InputStream is = null;
 		try {
 			is = BusinessDelegate.class.getClassLoader().getResourceAsStream("server.properties");
