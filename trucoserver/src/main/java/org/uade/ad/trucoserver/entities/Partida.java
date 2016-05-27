@@ -16,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 
@@ -164,8 +165,19 @@ public class Partida implements HasDTO<PartidaDTO> {
 		// TODO Auto-generated method stub
 		PartidaDTO dto = new PartidaDTO();
 		dto.setIdPartida(idPartida);
-
+		dto.setChicos(getChicosDTO());
 		return dto;
+	}
+
+	private List<ChicoDTO> getChicosDTO() {
+		if (chicos != null) {
+			List<ChicoDTO> retList = new ArrayList<>(chicos.size());
+			for (Chico c : chicos) {
+				retList.add(c.getDTO());
+			}
+			return retList;
+		}
+		return null;
 	}
 
 	public boolean contieneJugador(int idJugador) {
@@ -192,5 +204,9 @@ public class Partida implements HasDTO<PartidaDTO> {
 
 	public void jugarCarta(Jugador j, Carta c) throws Exception {
 		getChicoActual().jugarCarta(j, c);
+	}
+
+	public void irAlMazo(Jugador j) throws JuegoException {
+		getChicoActual().irseAlMazo(j);
 	}
 }

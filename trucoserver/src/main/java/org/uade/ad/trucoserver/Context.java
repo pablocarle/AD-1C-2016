@@ -137,6 +137,10 @@ public abstract class Context extends UnicastRemoteObject {
 	public void agregarJugadorAColaPartidaAbierta(Jugador jugador) {
 		Context.agregarJugadorDisponibleModoLibre(jugador);
 	}
+	
+	public void agregarParejaAColaPartidaAbierta(Pareja pareja) {
+		Context.agregarParejaModoLibre(pareja);
+	}
 
 	/**
 	 * Busca los jugadores para completar de acuerdo al matcher

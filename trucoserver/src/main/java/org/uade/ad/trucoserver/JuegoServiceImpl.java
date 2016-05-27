@@ -95,8 +95,8 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+		Partida partida = manager.crearPartidaAbiertaPareja(user.getApodo(), idPareja, this);
+		return partida.getDTO();
 	}
 	
 	@Override
@@ -126,7 +126,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+		assertJugadorPartida(jugador.getApodo(), idPartida);
+		return manager.irAlMazo(idPartida, jugador.getApodo(), this).getDTO();
 	}
 }

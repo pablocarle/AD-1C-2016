@@ -15,6 +15,8 @@ import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
+import org.uade.ad.trucoserver.dao.ParejaDao;
+import org.uade.ad.trucoserver.dao.ParejaDaoImpl;
 import org.uade.ad.trucoserver.dao.PartidaDao;
 import org.uade.ad.trucoserver.dao.PartidaDaoImpl;
 import org.uade.ad.trucoserver.dao.TipoPartidaDao;
@@ -44,6 +46,7 @@ public class JuegoManager {
 	}
 	
 	private GrupoDao gDao = GrupoDaoImpl.getDAO();
+	private ParejaDao parejaDao = ParejaDaoImpl.getDAO();
 	private PartidaDao pDao = PartidaDaoImpl.getDAO();
 	private JugadorDao jDao = JugadorDaoImpl.getDAO();
 	private CartaDao cDao = CartaDaoImpl.getDAO();
@@ -114,6 +117,28 @@ public class JuegoManager {
 			throw new JuegoException("No se encontro el jugador con apodo " + apodo);
 		}
 	}
+	
+	public Partida crearPartidaAbiertaPareja(String apodo, int idPareja, Context juegoContext) throws JuegoException {
+		Transaction tr = pDao.getSession().beginTransaction();
+		Jugador jugador = jDao.getPorApodo(apodo);
+		Pareja pareja = parejaDao.getPorId(Pareja.class, idPareja);
+		if (jugador != null && pareja != null && pareja.contieneJugador(jugador)) {
+			Partida partida = juegoContext.matchearPartidaAbiertaPareja(pareja);
+			if (partida == null) {
+				tr.rollback();
+				//No se logro conseguir match. Va a cola
+				juegoContext.agregarParejaAColaPartidaAbierta(pareja);
+				return Partida.Null;
+			} else {
+				pDao.guardar(partida);
+				tr.commit();
+				return partida;
+			}
+		} else{
+			tr.rollback();
+			throw new JuegoException();
+		}
+	}
 
 	public TipoPartida getTipoPartida(String nombreTipoPartida) {
 		if (tiposPartidas != null && !tiposPartidas.isEmpty()) {
@@ -152,6 +177,19 @@ public class JuegoManager {
 		}
 		tr.commit();
 		context.actualizarPartida(p);
+		return p;
+	}
+
+	public Partida irAlMazo(int idPartida, String apodo, Context context) throws JuegoException {
+		Partida p = context.getPartida(idPartida);
+		if (p == null) {
+			throw new JuegoException("No existe partida en curso con id " + idPartida);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		p.irAlMazo(j);
+		context.actualizarPartida(p);
+		tr.commit();
 		return p;
 	}
 }

@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucoserver.business.CartasManager;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
@@ -35,7 +36,7 @@ import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
  */
 @Entity
 @Table(name="chicos")
-public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
+public class Chico implements PartidaTerminadaObservable, HasDTO<ChicoDTO> {
 	
 	@Id
 	protected int idChico;
@@ -269,12 +270,12 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 	}
 	
 	@Override
-	public PartidaDTO getDTO() {
+	public ChicoDTO getDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public PartidaDTO irseAlMazo() {
+	public PartidaDTO irseAlMazo(Jugador j) {
 		// TODO 
 		return null;
 	}
