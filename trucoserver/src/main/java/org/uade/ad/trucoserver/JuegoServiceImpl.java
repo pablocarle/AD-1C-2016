@@ -120,13 +120,8 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		/**
-		 * TODO
-		 * Aca debe verificar que la partida exista. Si existe llama al manager que se encarga de las
-		 * demas validaciones
-		 */
-		return null;
+		assertJugadorPartida(jugador.getApodo(), idJuego);
+		return manager.jugarCarta(idJuego, jugador.getApodo(), idCarta, this).getDTO();
 	}
 
 	@Override

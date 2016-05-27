@@ -44,6 +44,11 @@ public class Pareja implements HasDTO<ParejaDTO> {
 		return (jugador1 != null && jugador1.getIdJugador() == idJugador) ||
 				(jugador2 != null && jugador2.getIdJugador() == idJugador);
 	}
+	
+	public boolean contieneJugador(String apodoJugador) {
+		return (jugador1 != null && jugador1.getApodo().equals(apodoJugador)) ||
+				(jugador2 != null && jugador2.getApodo().equals(apodoJugador));
+	}
 
 	public Categoria getCategoria() {
 		int compare = jugador1.getCategoria().compareTo(jugador2.getCategoria());
@@ -105,5 +110,9 @@ public class Pareja implements HasDTO<ParejaDTO> {
 		dto.setJugador1(jugador1.getDTO());
 		dto.setJugador2(jugador2.getDTO());
 		return dto;
+	}
+
+	public boolean esNull() {
+		return this.equals(Null);
 	}
 }

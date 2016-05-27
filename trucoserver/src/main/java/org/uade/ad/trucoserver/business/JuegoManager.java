@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Transaction;
+import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.Context;
 import org.uade.ad.trucoserver.dao.CartaDao;
@@ -45,6 +46,7 @@ public class JuegoManager {
 	private GrupoDao gDao = GrupoDaoImpl.getDAO();
 	private PartidaDao pDao = PartidaDaoImpl.getDAO();
 	private JugadorDao jDao = JugadorDaoImpl.getDAO();
+	private CartaDao cDao = CartaDaoImpl.getDAO();
 	
 	private List<TipoPartida> tiposPartidas;
 	{
@@ -132,5 +134,24 @@ public class JuegoManager {
 		Transaction tr = dao.getSession().beginTransaction();
 		envites = dao.getTodos(Envite.class);
 		tr.commit();
+	}
+
+	public Partida jugarCarta(int idJuego, String apodo, int idCarta, Context context) throws JuegoException {
+		Partida p = context.getPartida(idJuego);
+		if (p == null){
+			throw new JuegoException("No existe partida en curso con id " + idJuego);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		Carta c = cDao.getPorId(Carta.class, idCarta);
+		try {
+			p.jugarCarta(j, c);
+		} catch (Exception e) {
+			tr.rollback();
+			throw new JuegoException(e);
+		}
+		tr.commit();
+		context.actualizarPartida(p);
+		return p;
 	}
 }

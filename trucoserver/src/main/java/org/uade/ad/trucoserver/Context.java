@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Vector;
 
 import org.uade.ad.trucorepo.dtos.NotificacionDTO;
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.business.PartidaAbiertaIndividualMatcher;
 import org.uade.ad.trucoserver.business.PartidaAbiertaParejaMatcher;
@@ -93,7 +94,7 @@ public abstract class Context extends UnicastRemoteObject {
 		juegos.add(juego);
 	}
 	
-	protected static Partida getPartida(int idPartida) {
+	public Partida getPartida(int idPartida) {
 		if (juegos == null) {
 			return null;
 		} else {
@@ -178,12 +179,16 @@ public abstract class Context extends UnicastRemoteObject {
 	 * @param idPartida
 	 * @return
 	 */
-	protected boolean assertJugadorPartida(int idJugador, int idPartida) {
+	protected boolean assertJugadorPartida(String apodoJugador, int idPartida) throws JuegoException {
 		for (Partida p : juegos) {
-			if (p.contieneJugador(idJugador)) {
+			if (p.contieneJugador(apodoJugador)) {
 				return true;
 			}
 		}
-		return false;
+		throw new JuegoException("La partida con ID " + idPartida + " no existe o el juegador con id " + apodoJugador + " no pertenece a la partida");
+	}
+
+	public void actualizarPartida(Partida p) {
+		//TODO Actualiza ultimo estado de la partida p
 	}
 }
