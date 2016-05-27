@@ -6,6 +6,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.PartidaDTO;
+
 @Entity
 @Table(name="partidas_cerradas")
 @PrimaryKeyJoinColumn(name="idPartida")
@@ -22,5 +24,12 @@ public class PartidaCerrada extends Partida {
 	public PartidaCerrada(Grupo grupo) {
 		super();
 		this.grupo = grupo;
+	}
+	
+	@Override
+	public PartidaDTO getDTO() {
+		PartidaDTO dto = super.getDTO();
+		dto.setGrupo(grupo == null ? null : grupo.getDTO());
+		return dto;
 	}
 }

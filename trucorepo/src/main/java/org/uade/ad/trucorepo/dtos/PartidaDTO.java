@@ -21,6 +21,7 @@ public class PartidaDTO implements Serializable {
 	private String estado;
 	private ParejaDTO pareja1;
 	private ParejaDTO pareja2;
+	private GrupoDTO grupo;
 	
 	private JugadorDTO turnoAnterior;
 	private JugadorDTO turnoActual;
@@ -104,5 +105,13 @@ public class PartidaDTO implements Serializable {
 
 	public void setTurnoActual(JugadorDTO turnoActual) {
 		this.turnoActual = turnoActual;
+	}
+
+	public void setGrupo(GrupoDTO grupo) {
+		this.grupo = grupo;
+	}
+	
+	public GrupoDTO getGrupo() {
+		return grupo;
 	}
 }

@@ -32,7 +32,6 @@ public abstract class Envite {
 	@Column
 	protected int enviteAnterior;
 	
-	
 	public Envite() {
 		super();
 
