@@ -38,12 +38,12 @@ public class PartidaAbiertaIndividualMatcher extends PartidaMatcher {
 			for (; i < jugadores.length && (i-1) < matcheados.size(); i++) {
 				jugadores[i] = matcheados.get(i-1);
 			}
-			if (i < (jugadores.length - 1)) {
+			if (i < jugadores.length) {
 				return new Pareja[0];
 			}
 		}
 		parejas[0] = new Pareja(jugadores[0], jugadores[1]);
-		parejas[1] = new Pareja(jugadores[2], jugadores[4]);
+		parejas[1] = new Pareja(jugadores[2], jugadores[3]);
 		return parejas;
 	}
 
