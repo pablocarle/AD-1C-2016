@@ -2,7 +2,6 @@ package org.uade.ad.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -13,7 +12,7 @@ import javax.xml.bind.JAXBException;
 
 import org.uade.ad.trucorepo.delegates.JuegoDelegate;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
-import org.uade.ad.trucorepo.dtos.NotificacionDTO;
+import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.web.util.XMLSerialize;
 
@@ -66,8 +65,8 @@ public class NotificationServlet extends HttpServlet {
 				error("No hay jugador en curso", request, response);
 			} else {
 				try {
-					List<NotificacionDTO> dtos = delegate.getNotificaciones(jugador);
-					xmlResponse(dtos, request, response);
+					NotificacionesDTO dto = delegate.getNotificaciones(jugador, null);
+					xmlResponse(dto, request, response);
 				} catch (JuegoException e) {
 					e.printStackTrace();
 					error(e.getLocalizedMessage(), request, response);
@@ -82,17 +81,11 @@ public class NotificationServlet extends HttpServlet {
 		request.getRequestDispatcher("error.jsp").forward(request, response);
 	}
 	
-	private void xmlResponse(List<NotificacionDTO> notificaciones, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	private void xmlResponse(NotificacionesDTO dto, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter writer = response.getWriter();
 		response.setContentType("text/xml");
-		StringBuilder str = new StringBuilder();
 		try {
-			str.append("<Notificaciones>");
-			for (NotificacionDTO n : notificaciones) {
-				str.append(XMLSerialize.serialize(n));
-			}
-			str.append("</Notificaciones>");
-			writer.write(str.toString());
+			writer.write(XMLSerialize.serialize(dto));
 		} catch (JAXBException e) {
 			error("Error en serializacion de notificacion: " + e.getMessage(), request, response);
 			e.printStackTrace();

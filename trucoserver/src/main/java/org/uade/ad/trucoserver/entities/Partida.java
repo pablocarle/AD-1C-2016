@@ -6,6 +6,8 @@ import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -30,10 +32,11 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	public static final transient Partida Null = new Partida(-1);
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected int idPartida;
-	@Column
+	@Column(nullable=false)
 	protected Date fechaInicio;
-	@Column
+	@Column(nullable=true)
 	protected Date fechaFin;
 	@ManyToMany
 	@JoinTable(name="partidas_parejas", 

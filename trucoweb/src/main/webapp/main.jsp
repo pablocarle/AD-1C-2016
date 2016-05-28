@@ -14,15 +14,17 @@ setInterval(function() {
 			mostrarNotificaciones(request.responseXML);
 		}
 	};
-	request.open("POST", "NotificationServlet", true);
+	request.open("POST", "/trucoweb/NotificationServlet", true);
 	request.send();
-}, 1500);
+}, 5000);
 
 mostrarNotificaciones = function(xml) {
 	var notificationElement = document.getElementById("notification");
-	var nl = xml.getElementsByTagName("tagName"); //Obtener notificaciones
-	//Ponemos la url que viene de la notificacion
-	notificacionElement.innerHTML = "";
+	if (notificationElement) {
+		var nl = xml.getElementsByTagName("tagName"); //Obtener notificaciones
+		//Ponemos la url que viene de la notificacion
+		notificacionElement.innerHTML = "";
+	}
 };
 </script>
 </head>

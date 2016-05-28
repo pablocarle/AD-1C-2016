@@ -19,11 +19,13 @@ setInterval(function() {
 			procesarNotificacion(xhttp.responseXML);
 		}
 	};
-	xhttp.open("GET", "NotificationServlet", true);
+	xhttp.open("GET", "/trucoweb/NotificationServlet", true);
 	xhttp.send();
-}, 1000);
+}, 5000);
 
 procesarNotificacion = function(xml) {
+
+	var id = 1+1;
 	
 };
 

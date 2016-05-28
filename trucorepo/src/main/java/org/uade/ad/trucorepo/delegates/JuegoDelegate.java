@@ -4,11 +4,12 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.Date;
 import java.util.List;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
-import org.uade.ad.trucorepo.dtos.NotificacionDTO;
+import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
@@ -53,9 +54,18 @@ public class JuegoDelegate extends BusinessDelegate {
 		}
 	}
 
-	public List<NotificacionDTO> getNotificaciones(JugadorDTO jugador) throws JuegoException {
+	/**
+	 * Obtener notificaciones para el jugador
+	 * 
+	 * @param jugador El jugador referencia de notificaciones
+	 * @param fechaReferencia Fecha de referencia (se obtienen notificaciones posteriores
+	 * ). Puede ser null para todas las notificaciones
+	 * @return Lista de notificaciones o lista vacia
+	 * @throws JuegoException
+	 */
+	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia) throws JuegoException {
 		try {
-			return juegoService.getNotificaciones(jugador);
+			return juegoService.getNotificaciones(jugador, fechaReferencia);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			throw new JuegoException(e);

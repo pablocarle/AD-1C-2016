@@ -98,7 +98,16 @@ public class JuegoManager {
 				juegoContext.agregarJugadorAColaPartidaAbierta(jugador);
 				return Partida.Null;
 			} else {
-				pDao.guardar(partida);
+				guardarPartida(partida);
+				for (Pareja p : partida.getParejas()) {
+					//Agrega para notificar a jugadores de inclusion en la partida nueva
+					if (!p.getJugador1().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador1());
+					}
+					if (!p.getJugador2().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador2());
+					}
+				}
 				tr.commit();
 				return partida;
 			}
@@ -108,6 +117,23 @@ public class JuegoManager {
 		}
 	}
 	
+	private void guardarPartida(Partida partida) {
+		if (!(partida instanceof PartidaCerrada)) {
+			//Si es una partida cerrada las parejas y grupo ya existen
+			List<Pareja> parejas = partida.getParejas();
+			Pareja parejaDb = null;
+			for (Pareja pareja : parejas) {
+				parejaDb = parejaDao.getParejaNoGrupo(pareja.getJugador1().getIdJugador(), pareja.getJugador2().getIdJugador());
+				if (parejaDb == null) {
+					parejaDao.guardar(pareja);
+				} else {
+					pareja.setIdPareja(parejaDb.getIdPareja());
+				}
+			}
+		}
+		pDao.guardar(partida);
+	}
+
 	public Partida crearPartidaAbiertaPareja(String apodo, int idPareja, Context juegoContext) throws JuegoException {
 		Transaction tr = pDao.getSession().beginTransaction();
 		Jugador jugador = jDao.getPorApodo(apodo);
@@ -120,7 +146,15 @@ public class JuegoManager {
 				juegoContext.agregarParejaAColaPartidaAbierta(pareja);
 				return Partida.Null;
 			} else {
-				pDao.guardar(partida);
+				guardarPartida(partida);
+				for (Pareja p : partida.getParejas()) {
+					if (!p.getJugador1().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador1());
+					}
+					if (!p.getJugador2().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador2());
+					}
+				}
 				tr.commit();
 				return partida;
 			}

@@ -1,6 +1,8 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -23,9 +25,12 @@ public class NotificacionDTO implements Serializable {
 	private PartidaDTO partida;
 	@XmlElement
 	private String tipoNotificacion;
+	@XmlElement
+	private Date fechaNotificacion;
 	
 	public NotificacionDTO() {
 		super();
+		this.fechaNotificacion = Calendar.getInstance().getTime();
 	}
 	
 	@Override
@@ -100,5 +105,13 @@ public class NotificacionDTO implements Serializable {
 
 	public void setIdPartida(int idPartida) {
 		this.idPartida = idPartida;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public Date getFechaNotificacion() {
+		return fechaNotificacion;
 	}
 }

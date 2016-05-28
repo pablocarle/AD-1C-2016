@@ -210,22 +210,13 @@ public abstract class Context extends UnicastRemoteObject {
 			partida.setFechaInicio(Calendar.getInstance().getTime());
 			partida.setParejas(Arrays.asList(parejas));
 			partida.setTipoPartida(JuegoManager.getManager().getTipoPartida(JuegoManager.PARTIDA_ABIERTA_INDIVIDUAL));
-			for (Pareja p : parejas) {
-				//Agrega para notificar a jugadores de inclusion en la partida nueva
-				if (!p.getJugador1().equals(jugador)) {
-					agregarInvitacion(partida, p.getJugador1());
-				}
-				if (!p.getJugador2().equals(jugador)) {
-					agregarInvitacion(partida, p.getJugador2());
-				}
-			}
 			return partida;
 		} else {
 			return null;
 		}
 	}
 	
-	private void agregarInvitacion(Partida partida, Jugador j) {
+	public void agregarInvitacion(Partida partida, Jugador j) {
 		Map<Date, NotificacionDTO> jugadorNotificaciones = notificaciones.get(j.getApodo());
 		if (jugadorNotificaciones == null) {
 			jugadorNotificaciones = new HashMap<>();
@@ -251,14 +242,6 @@ public abstract class Context extends UnicastRemoteObject {
 			partida.setFechaInicio(Calendar.getInstance().getTime());
 			partida.setParejas(Arrays.asList(parejas));
 			partida.setTipoPartida(JuegoManager.getManager().getTipoPartida(JuegoManager.PARTIDA_ABIERTA_PAREJA));
-			for (Pareja p : parejas) {
-				if (!p.getJugador1().equals(jugadorCreador)) {
-					agregarInvitacion(partida, p.getJugador1());
-				}
-				if (!p.getJugador2().equals(jugadorCreador)) {
-					agregarInvitacion(partida, p.getJugador2());
-				}
-			}
 			return partida;
 		} else {
 			return null;

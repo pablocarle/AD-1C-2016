@@ -1,3 +1,4 @@
+
 drop database trucodb;
 
 create database trucodb;
@@ -101,7 +102,7 @@ create table partidas (
 	idPartida int not null auto_increment,
     idTipoPartida int not null,
     fechaInicio date not null,
-    fechaFin date not null,
+    fechaFin date null,
     constraint partidas_pk primary key ( idPartida ),
     constraint partidas_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
 );

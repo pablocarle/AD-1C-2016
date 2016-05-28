@@ -103,6 +103,22 @@ public class Pareja implements HasDTO<ParejaDTO> {
 	public int getIdPareja() {
 		return idPareja;
 	}
+	
+	public boolean esNull() {
+		return this.equals(Null);
+	}
+
+	public void setIdPareja(int idPareja) {
+		this.idPareja = idPareja;
+	}
+
+	public void setJugador1(Jugador jugador1) {
+		this.jugador1 = jugador1;
+	}
+
+	public void setJugador2(Jugador jugador2) {
+		this.jugador2 = jugador2;
+	}
 
 	@Override
 	public ParejaDTO getDTO() {
@@ -110,9 +126,5 @@ public class Pareja implements HasDTO<ParejaDTO> {
 		dto.setJugador1(jugador1.getDTO());
 		dto.setJugador2(jugador2.getDTO());
 		return dto;
-	}
-
-	public boolean esNull() {
-		return this.equals(Null);
 	}
 }
