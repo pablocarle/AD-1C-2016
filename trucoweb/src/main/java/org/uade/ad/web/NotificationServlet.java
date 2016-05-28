@@ -1,6 +1,7 @@
 package org.uade.ad.web;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -8,11 +9,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import org.uade.ad.trucorepo.delegates.JuegoDelegate;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 import org.uade.ad.trucorepo.dtos.NotificacionDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
+import org.uade.ad.web.util.XMLSerialize;
 
 /**
  * Servlet implementation class NotificationServlet
@@ -64,11 +67,11 @@ public class NotificationServlet extends HttpServlet {
 			} else {
 				try {
 					List<NotificacionDTO> dtos = delegate.getNotificaciones(jugador);
+					xmlResponse(dtos, request, response);
 				} catch (JuegoException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					error(e.getLocalizedMessage(), request, response);
 				}
-				//TODO Enviar como XML
 			}
 		}
 	}
@@ -77,5 +80,24 @@ public class NotificationServlet extends HttpServlet {
 		request.setAttribute("error", true);
 		request.setAttribute("errorMessage", mensaje);
 		request.getRequestDispatcher("error.jsp").forward(request, response);
+	}
+	
+	private void xmlResponse(List<NotificacionDTO> notificaciones, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		PrintWriter writer = response.getWriter();
+		response.setContentType("text/xml");
+		StringBuilder str = new StringBuilder();
+		try {
+			str.append("<Notificaciones>");
+			for (NotificacionDTO n : notificaciones) {
+				str.append(XMLSerialize.serialize(n));
+			}
+			str.append("</Notificaciones>");
+			writer.write(str.toString());
+		} catch (JAXBException e) {
+			error("Error en serializacion de notificacion: " + e.getMessage(), request, response);
+			e.printStackTrace();
+		} finally {
+			writer.close();
+		}
 	}
 }

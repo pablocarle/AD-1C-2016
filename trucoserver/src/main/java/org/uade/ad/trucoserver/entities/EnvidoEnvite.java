@@ -9,11 +9,10 @@ public class EnvidoEnvite extends Envite {
 
 	public EnvidoEnvite() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public EnvidoEnvite(int idTipoEnvite, String nombreEnvite, String tipoEnvite, int puntajeQuerido,
+	public EnvidoEnvite(int idTipoEnvite, String nombreEnvite, int puntajeQuerido,
 			int puntajeNoQuerido, int enviteAnterior) {
-		super(idTipoEnvite, nombreEnvite, tipoEnvite, puntajeQuerido, puntajeNoQuerido, enviteAnterior);
+		super(idTipoEnvite, nombreEnvite, puntajeQuerido, puntajeNoQuerido, enviteAnterior);
 	}
 }

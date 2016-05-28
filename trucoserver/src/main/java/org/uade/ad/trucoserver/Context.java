@@ -5,7 +5,10 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Vector;
 
 import org.uade.ad.trucorepo.dtos.NotificacionDTO;
@@ -28,6 +31,8 @@ public abstract class Context extends UnicastRemoteObject {
 	private static List<Jugador> jugadoresDisponiblesModoLibre;
 	private static List<Pareja> parejasDisponiblesModoLibre;
 	private static List<Grupo> grupos;
+	
+	private static Map<String, Map<Date, NotificacionDTO>> notificaciones = new HashMap<>();
 	
 	static {
 		juegos = new Vector<>();
@@ -129,13 +134,54 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 	
 	public void agregarInvitaciones(int idPartida, List<Jugador> jugadoresNoAdmin) {
-		//Quiero notificar a los usuarios de la invitacion a la partida
+		Map<Date, NotificacionDTO> jugadorNotificaciones = null;
+		NotificacionDTO notificacion = null;
 		
-		
+		for (Jugador j : jugadoresNoAdmin) {
+			jugadorNotificaciones = notificaciones.get(j.getApodo());
+			if (jugadorNotificaciones == null) {
+				jugadorNotificaciones = new HashMap<>();
+				jugadorNotificaciones.put(Calendar.getInstance().getTime(), getPartidaNotificacion(idPartida));
+				notificaciones.put(j.getApodo(), jugadorNotificaciones);
+			} else {
+				//Si ya tiene la notificacion ignora, sino agrega
+				notificacion = getPartidaNotificacion(idPartida);
+				if (!jugadorNotificaciones.containsValue(notificacion)) {
+					jugadorNotificaciones.put(Calendar.getInstance().getTime(), notificacion);
+				}
+			}
+		}
 	}
 	
-	public static List<NotificacionDTO> getInvitaciones(String apodoJugador) {
-		return null;
+	private NotificacionDTO getPartidaNotificacion(int idPartida) {
+		NotificacionDTO dto = new NotificacionDTO();
+		dto.setDescripcion("Nueva invitacion a partida");
+		dto.setIdPartida(idPartida);
+		dto.setUrl("juegoMain.jsp?idPartida=" + idPartida);
+		dto.setTipoNotificacion("nueva_partida");
+		return dto;
+	}
+
+	/**
+	 * Obtener invitaciones posteriores a ultimaFecha
+	 * 
+	 * @param apodoJugador El apodo del jugador para el que se quiere obtener invitaciones
+	 * @param ultimaFecha
+	 * @return
+	 */
+	public static Map<Date, NotificacionDTO> getInvitaciones(String apodoJugador, Date ultimaFecha) {
+		Map<Date, NotificacionDTO> retMap = new HashMap<>();
+		if (ultimaFecha == null)
+			ultimaFecha = new Date(0L);
+		Map<Date, NotificacionDTO> map = notificaciones.get(apodoJugador);
+		if (map != null && !map.isEmpty()) {
+			for (Map.Entry<Date, NotificacionDTO> entry : map.entrySet()) {
+				if (entry.getKey().after(ultimaFecha)) {
+					retMap.put(entry.getKey(), entry.getValue());
+				}
+			}
+		}
+		return retMap;
 	}
 
 	public void agregarJugadorAColaPartidaAbierta(Jugador jugador) {
@@ -164,13 +210,37 @@ public abstract class Context extends UnicastRemoteObject {
 			partida.setFechaInicio(Calendar.getInstance().getTime());
 			partida.setParejas(Arrays.asList(parejas));
 			partida.setTipoPartida(JuegoManager.getManager().getTipoPartida(JuegoManager.PARTIDA_ABIERTA_INDIVIDUAL));
+			for (Pareja p : parejas) {
+				//Agrega para notificar a jugadores de inclusion en la partida nueva
+				if (!p.getJugador1().equals(jugador)) {
+					agregarInvitacion(partida, p.getJugador1());
+				}
+				if (!p.getJugador2().equals(jugador)) {
+					agregarInvitacion(partida, p.getJugador2());
+				}
+			}
 			return partida;
 		} else {
 			return null;
 		}
 	}
 	
-	public Partida matchearPartidaAbiertaPareja(Pareja pareja) {
+	private void agregarInvitacion(Partida partida, Jugador j) {
+		Map<Date, NotificacionDTO> jugadorNotificaciones = notificaciones.get(j.getApodo());
+		if (jugadorNotificaciones == null) {
+			jugadorNotificaciones = new HashMap<>();
+			jugadorNotificaciones.put(Calendar.getInstance().getTime(), getPartidaNotificacion(partida.getIdPartida()));
+			notificaciones.put(j.getApodo(), jugadorNotificaciones);
+		} else {
+			//Si ya tiene la notificacion ignora, sino agrega
+			NotificacionDTO notificacion = getPartidaNotificacion(partida.getIdPartida());
+			if (!jugadorNotificaciones.containsValue(notificacion)) {
+				jugadorNotificaciones.put(Calendar.getInstance().getTime(), notificacion);
+			}
+		}
+	}
+
+	public Partida matchearPartidaAbiertaPareja(Jugador jugadorCreador, Pareja pareja) {
 		PartidaMatcher matcher = new PartidaAbiertaParejaMatcher(pareja, getParejasDisponiblesModoLibre());
 		Pareja[] parejas = matcher.match();
 		if (parejas.length > 0) {
@@ -181,6 +251,14 @@ public abstract class Context extends UnicastRemoteObject {
 			partida.setFechaInicio(Calendar.getInstance().getTime());
 			partida.setParejas(Arrays.asList(parejas));
 			partida.setTipoPartida(JuegoManager.getManager().getTipoPartida(JuegoManager.PARTIDA_ABIERTA_PAREJA));
+			for (Pareja p : parejas) {
+				if (!p.getJugador1().equals(jugadorCreador)) {
+					agregarInvitacion(partida, p.getJugador1());
+				}
+				if (!p.getJugador2().equals(jugadorCreador)) {
+					agregarInvitacion(partida, p.getJugador2());
+				}
+			}
 			return partida;
 		} else {
 			return null;
@@ -188,7 +266,7 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 
 	public void agregarPartida(Partida partida) {
-		
+		//TODO ??
 	}
 	
 	/**

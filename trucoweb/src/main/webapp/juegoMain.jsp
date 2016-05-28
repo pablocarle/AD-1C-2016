@@ -19,7 +19,7 @@ setInterval(function() {
 			procesarNotificacion(xhttp.responseXML);
 		}
 	};
-	xhttp.open("GET", "NotificationServlet?checkTurno", true);
+	xhttp.open("GET", "NotificationServlet", true);
 	xhttp.send();
 }, 1000);
 

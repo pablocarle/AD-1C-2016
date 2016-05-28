@@ -113,7 +113,7 @@ public class JuegoManager {
 		Jugador jugador = jDao.getPorApodo(apodo);
 		Pareja pareja = parejaDao.getPorId(Pareja.class, idPareja);
 		if (jugador != null && pareja != null && pareja.contieneJugador(jugador)) {
-			Partida partida = juegoContext.matchearPartidaAbiertaPareja(pareja);
+			Partida partida = juegoContext.matchearPartidaAbiertaPareja(jugador, pareja);
 			if (partida == null) {
 				tr.rollback();
 				//No se logro conseguir match. Va a cola
