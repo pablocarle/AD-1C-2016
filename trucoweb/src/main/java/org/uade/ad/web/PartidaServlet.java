@@ -231,9 +231,14 @@ public class PartidaServlet extends HttpServlet {
 				} else {
 					try {
 						PartidaDTO partida = delegate.crearNuevaPartidaAbiertaPareja(user, idPareja);
-						agregarPartidaSesion(session, partida);
-						request.setAttribute("partidaId", partida.getIdPartida());
-						request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
+						if (partida.esNull()) {
+							request.setAttribute("mensaje", "Agregado a cola de espera partida abierta en pareja");
+							request.getRequestDispatcher("/main.jsp").forward(request, response);
+						} else {
+							agregarPartidaSesion(session, partida);
+							request.setAttribute("partidaId", partida.getIdPartida());
+							request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
+						}
 					} catch (JuegoException e) {
 						error("Ocurrio un error iniciando la partida: " + e.getMessage(), request, response);
 						e.printStackTrace();
@@ -264,9 +269,13 @@ public class PartidaServlet extends HttpServlet {
 						GrupoDTO grupo = user.getGrupo(idGrupoInt);
 						try {
 							PartidaDTO partida = delegate.crearNuevaPartidaCerrada(user, grupo);
-							agregarPartidaSesion(session, partida);
-							request.setAttribute("partidaId", partida.getIdPartida());
-							request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
+							if (partida.esNull()) {
+								error("No fue posible crear la partida en grupo. Contacte admin", request, response); 
+							} else {
+								agregarPartidaSesion(session, partida);
+								request.setAttribute("partidaId", partida.getIdPartida());
+								request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
+							}
 						} catch (JuegoException e) {
 							error("Ocurrio un error al crear la partida cerrada: " + e.getMessage(), request, response);
 							e.printStackTrace();
@@ -280,7 +289,7 @@ public class PartidaServlet extends HttpServlet {
 	}
 
 	private void nuevaPartidaAbierta(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		//Le pasamos al delegate que el usuario quiere participar en nueva partida abierta y forward a vista de juego principal con data de la partida
+		//Le pasamos al delegate que el usuario quiere participar en nueva panuevaPartidaAbiertaParejasrtida abierta y forward a vista de juego principal con data de la partida
 		HttpSession session = request.getSession();
 		if (session == null) {
 			error("No hay sesion", request, response);
@@ -291,9 +300,14 @@ public class PartidaServlet extends HttpServlet {
 				JugadorDTO jugador = (JugadorDTO) session.getAttribute("user");
 				try {
 					PartidaDTO dto = delegate.crearNuevaPartidaAbierta(jugador);
-					agregarPartidaSesion(session, dto);
-					request.setAttribute("partidaId", dto.getIdPartida());
-					request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
+					if (dto.esNull()) {
+						request.setAttribute("mensaje", "Agregado a cola de partida abierta");
+						request.getRequestDispatcher("/main.jsp").forward(request, response);
+					} else {
+						agregarPartidaSesion(session, dto);
+						request.setAttribute("partidaId", dto.getIdPartida());
+						request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
+					}
 				} catch (JuegoException e) {
 					error("Ocurrio un problema en la creacion de partida: " + e.getMessage(), request, response);
 				}

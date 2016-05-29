@@ -2,6 +2,9 @@ package org.uade.ad.web;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -64,10 +67,13 @@ public class NotificationServlet extends HttpServlet {
 			if (jugador == null) {
 				error("No hay jugador en curso", request, response);
 			} else {
+				String fechaStr = request.getParameter("fecha");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 				try {
-					NotificacionesDTO dto = delegate.getNotificaciones(jugador, null);
+					Date fecha = sdf.parse(fechaStr);
+					NotificacionesDTO dto = delegate.getNotificaciones(jugador, fecha);
 					xmlResponse(dto, request, response);
-				} catch (JuegoException e) {
+				} catch (JuegoException | ParseException e) {
 					e.printStackTrace();
 					error(e.getLocalizedMessage(), request, response);
 				}

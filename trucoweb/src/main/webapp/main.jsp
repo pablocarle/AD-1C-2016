@@ -20,15 +20,31 @@ setInterval(function() {
 
 mostrarNotificaciones = function(xml) {
 	var notificationElement = document.getElementById("notification");
+	var html = "";
 	if (notificationElement) {
-		var nl = xml.getElementsByTagName("tagName"); //Obtener notificaciones
+		// xml.getElementsByTagName("notificaciones")[0].children[0].textContent
+		var notificaciones = xml.getElementsByTagName("notificaciones"); //Obtener notificaciones
+		if (notificaciones) {
+			for (var i = 0; i < notificaciones.length; i++) {
+				var children = notificaciones[i].children;
+				if (children) {
+					
+				}
+			}
+		}
 		//Ponemos la url que viene de la notificacion
-		notificacionElement.innerHTML = "";
+		notificacionElement.innerHTML = html;
 	}
 };
 </script>
 </head>
 <body>
+	<%
+	String mensaje = "No hay notificaciones";
+	if (request.getAttribute("mensaje") != null) {
+		mensaje = (String)request.getAttribute("mensaje");
+	}
+	%>
 	<!-- TODO Cambiar la ubicacion por algo basico en css -->
 	<div>
 		<a href="PartidaServlet/NuevaPartida?tipoPartida=abierta">Nueva partida abierta individual</a><br><br>
@@ -46,7 +62,7 @@ mostrarNotificaciones = function(xml) {
 	<div id="notificationArea" >
 		<table>
 			<tr>
-				<td id="notification">No hay notificaciones</td>
+				<td id="notification"><%=mensaje %></td>
 			</tr>
 		</table>
 	</div>
