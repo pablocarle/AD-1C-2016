@@ -7,7 +7,9 @@ import org.uade.ad.trucoserver.entities.Carta;
 import org.uade.ad.trucoserver.entities.CartaJugada;
 import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Chico;
+import org.uade.ad.trucoserver.entities.EnvidoEnvite;
 import org.uade.ad.trucoserver.entities.Envite;
+import org.uade.ad.trucoserver.entities.EnvitesManoPareja;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.GrupoDetalle;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -16,6 +18,7 @@ import org.uade.ad.trucoserver.entities.Mano;
 import org.uade.ad.trucoserver.entities.Pareja;
 import org.uade.ad.trucoserver.entities.Partida;
 import org.uade.ad.trucoserver.entities.TipoPartida;
+import org.uade.ad.trucoserver.entities.TrucoEnvite;
 
 public final class HibernateUtil {
 	
@@ -38,6 +41,9 @@ public final class HibernateUtil {
         	 conf.addAnnotatedClass(TipoPartida.class);
         	 conf.addAnnotatedClass(Partida.class);
         	 conf.addAnnotatedClass(GrupoDetalle.class);
+        	 conf.addAnnotatedClass(TrucoEnvite.class);
+        	 conf.addAnnotatedClass(EnvidoEnvite.class);
+        	 conf.addAnnotatedClass(EnvitesManoPareja.class);
              sessionFactory = conf.buildSessionFactory();
         } catch (Throwable ex) {
             System.err.println("Initial SessionFactory creation failed." + ex);

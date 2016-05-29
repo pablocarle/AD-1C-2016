@@ -1,18 +1,20 @@
 package org.uade.ad.web;
 
 import java.io.IOException;
-import java.util.List;
+import java.io.PrintWriter;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import org.uade.ad.trucorepo.delegates.JuegoDelegate;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
-import org.uade.ad.trucorepo.dtos.NotificacionDTO;
+import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
+import org.uade.ad.web.util.XMLSerialize;
 
 /**
  * Servlet implementation class NotificationServlet
@@ -63,12 +65,12 @@ public class NotificationServlet extends HttpServlet {
 				error("No hay jugador en curso", request, response);
 			} else {
 				try {
-					List<NotificacionDTO> dtos = delegate.getNotificaciones(jugador);
+					NotificacionesDTO dto = delegate.getNotificaciones(jugador, null);
+					xmlResponse(dto, request, response);
 				} catch (JuegoException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
+					error(e.getLocalizedMessage(), request, response);
 				}
-				//TODO Enviar como XML
 			}
 		}
 	}
@@ -77,5 +79,18 @@ public class NotificationServlet extends HttpServlet {
 		request.setAttribute("error", true);
 		request.setAttribute("errorMessage", mensaje);
 		request.getRequestDispatcher("error.jsp").forward(request, response);
+	}
+	
+	private void xmlResponse(NotificacionesDTO dto, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+		PrintWriter writer = response.getWriter();
+		response.setContentType("text/xml");
+		try {
+			writer.write(XMLSerialize.serialize(dto));
+		} catch (JAXBException e) {
+			error("Error en serializacion de notificacion: " + e.getMessage(), request, response);
+			e.printStackTrace();
+		} finally {
+			writer.close();
+		}
 	}
 }

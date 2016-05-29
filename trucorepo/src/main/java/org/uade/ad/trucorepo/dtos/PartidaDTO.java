@@ -3,10 +3,13 @@ package org.uade.ad.trucorepo.dtos;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="Partida")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class PartidaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -18,6 +21,7 @@ public class PartidaDTO implements Serializable {
 	private String estado;
 	private ParejaDTO pareja1;
 	private ParejaDTO pareja2;
+	private GrupoDTO grupo;
 	
 	private JugadorDTO turnoAnterior;
 	private JugadorDTO turnoActual;
@@ -101,5 +105,13 @@ public class PartidaDTO implements Serializable {
 
 	public void setTurnoActual(JugadorDTO turnoActual) {
 		this.turnoActual = turnoActual;
+	}
+
+	public void setGrupo(GrupoDTO grupo) {
+		this.grupo = grupo;
+	}
+	
+	public GrupoDTO getGrupo() {
+		return grupo;
 	}
 }

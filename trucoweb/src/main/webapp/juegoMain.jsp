@@ -8,19 +8,29 @@
 <title>Truco!</title>
 <script type="text/javascript">
 
+ultimoIdxNotificacion = 0;
+
 setInterval(function() {
 	//Busca turno
 	var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			//Leer el DOC para saver si es el turno del usuario
-			if (isTurno()) {
-				habilitarTurno(xhttp);
-			}
+			procesarNotificacion(xhttp.responseXML);
 		}
 	};
-	xhttp.open("GET", "NotificationServlet?checkTurno", true);
+	xhttp.open("GET", "/trucoweb/NotificationServlet", true);
 	xhttp.send();
+}, 5000);
+
+procesarNotificacion = function(xml) {
+
+	var id = 1+1;
+	
+};
+
+setInterval(function() {
+	//Busca novedades de la partida
 }, 1000);
 
 habilitarTurno = function(xml) {

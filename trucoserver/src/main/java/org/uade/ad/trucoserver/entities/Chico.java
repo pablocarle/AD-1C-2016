@@ -17,10 +17,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucoserver.business.CartasManager;
-import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
-import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
 /**
  * Implementaciones de esta clase son las formas de juego disponibles.
@@ -28,14 +27,12 @@ import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
  * 
  * XXX: Imagino que todo lo referido a envites iria en esta clase base, delegando si hace falta
  * 
- * TODO Invocar observers
- * 
  * @author Grupo9
  *
  */
 @Entity
 @Table(name="chicos")
-public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
+public class Chico implements HasDTO<ChicoDTO> {
 	
 	@Id
 	protected int idChico;
@@ -76,26 +73,11 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 		this.primerOrdenJuego = primerOrdenJuego;
 	}
 	
-	public void cantar(String apodo, Envite envite) throws Exception {
+	public void cantar(Jugador j, Envite envite) throws Exception {
 		Mano manoActual = getManoActual();
-		Jugador jugador = getJugador(apodo);
-		manoActual.cantar(jugador, envite);
+		manoActual.cantar(j, envite);
 	}
 	
-	private Jugador getJugador(String apodo) {
-		Pareja pareja1 = partida.getParejas().get(0);
-		Pareja pareja2 = partida.getParejas().get(1);
-		if (pareja1.getJugador1().getApodo().equals(apodo))
-			return pareja1.getJugador1();
-		if (pareja1.getJugador2().getApodo().equals(apodo))
-			return pareja1.getJugador2();
-		if (pareja2.getJugador1().getApodo().equals(apodo))
-			return pareja2.getJugador1();
-		if (pareja2.getJugador2().getApodo().equals(apodo))
-			return pareja2.getJugador2();
-		return null;
-	}
-
 	/**
 	 * Obtener la mano actual o null si no arranco el juego
 	 * 
@@ -257,24 +239,18 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 		return null;
 	}
 	
-	@Override
-	public void agregarObserver(PartidaTerminadaObserver observer) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	public Pareja getParejaPerdedora() {
 		//TODO Pareja perdedora (de la partida!)
 		return null;
 	}
 	
 	@Override
-	public PartidaDTO getDTO() {
+	public ChicoDTO getDTO() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	public PartidaDTO irseAlMazo() {
+	public PartidaDTO irseAlMazo(Jugador j) {
 		// TODO 
 		return null;
 	}

@@ -2,6 +2,7 @@ package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +13,7 @@ import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
-import org.uade.ad.trucorepo.dtos.NotificacionDTO;
+import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
@@ -95,8 +96,8 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+		Partida partida = manager.crearPartidaAbiertaPareja(user.getApodo(), idPareja, this);
+		return partida.getDTO();
 	}
 	
 	@Override
@@ -106,32 +107,26 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	}
 
 	@Override
-	public List<NotificacionDTO> getNotificaciones(JugadorDTO jugador) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia) throws RemoteException, JuegoException {
+		return new NotificacionesDTO(new ArrayList<>(Context.getInvitaciones(jugador.getApodo(), fechaReferencia).values()));
 	}
 
 	@Override
 	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, int idEnvite)
 			throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+		assertJugadorPartida(jugador.getApodo(), idJuego);
+		return manager.cantarEnvite(idJuego, jugador.getApodo(), idEnvite, this).getDTO();
 	}
 
 	@Override
 	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		/**
-		 * TODO
-		 * Aca debe verificar que la partida exista. Si existe llama al manager que se encarga de las
-		 * demas validaciones
-		 */
-		return null;
+		assertJugadorPartida(jugador.getApodo(), idJuego);
+		return manager.jugarCarta(idJuego, jugador.getApodo(), idCarta, this).getDTO();
 	}
 
 	@Override
 	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+		assertJugadorPartida(jugador.getApodo(), idPartida);
+		return manager.irAlMazo(idPartida, jugador.getApodo(), this).getDTO();
 	}
 }

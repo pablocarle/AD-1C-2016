@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.JAXBException;
 
 import org.uade.ad.trucorepo.delegates.JuegoDelegate;
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
@@ -150,22 +151,22 @@ public class PartidaServlet extends HttpServlet {
 			switch (getTipoAccion(idCartaStr, idEnviteStr, alMazoStr, repartirCartas)) {
 				case ALMAZO:
 					partida = delegate.irAlMazo(jugador, idPartida);
-					xmlResponse(partida, response);
+					xmlResponse(partida, request, response);
 					break;
 				case ENVITE:
 					partida = delegate.cantar(jugador, idPartida, Integer.parseInt(idEnviteStr));
-					xmlResponse(partida, response);
+					xmlResponse(partida, request, response);
 					break;
 				case JUEGACARTA:
 					partida = delegate.jugarCarta(jugador, idPartida, Integer.parseInt(idCartaStr));
-					xmlResponse(partida, response);
+					xmlResponse(partida, request, response);
 					break;
 				case REPARTIR_CARTAS:
 					partida = delegate.repartirCartas(jugador, idPartida);
-					xmlResponse(partida, response);
+					xmlResponse(partida, request, response);
 					break;
 				default:
-					//TODO Enviar xml error
+					errorXML("error", request, response);
 					break;
 			}
 		} catch (JuegoException e) {
@@ -173,11 +174,21 @@ public class PartidaServlet extends HttpServlet {
 		}
 	}
 	
-	private void xmlResponse(PartidaDTO partida, HttpServletResponse response) throws IOException {
+	private void errorXML(String string, HttpServletRequest request, HttpServletResponse response) {
+		// TODO error xml
+		
+	}
+
+	private void xmlResponse(PartidaDTO partida, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter writer = response.getWriter();
 		response.setContentType("text/xml");
-		writer.write(XMLSerialize.serialize(partida));
-		writer.close();
+		try {
+			writer.write(XMLSerialize.serialize(partida));
+			writer.close();
+		} catch (JAXBException e) {
+			error("Error en serializacion: " + e.getMessage(), request, response);
+			e.printStackTrace();
+		}
 	}
 
 	/**

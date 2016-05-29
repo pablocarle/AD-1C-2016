@@ -6,6 +6,9 @@ import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
+import javax.xml.bind.JAXBException;
+
+import org.uade.ad.web.util.XMLSerialize;
 
 /**
  * Application Lifecycle Listener implementation class TrucoInitListener
@@ -58,8 +61,12 @@ public class TrucoInitListener implements ServletContextListener, HttpSessionLis
 	/**
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
-    public void contextInitialized(ServletContextEvent sce)  { 
-         // TODO Auto-generated method stub
+    public void contextInitialized(ServletContextEvent sce)  {
+    	try {
+			XMLSerialize.init();
+		} catch (JAXBException e) {
+			throw new RuntimeException("Fallo en inicializacion de contexto JAXB: ", e);
+		}
     }
 	
 }

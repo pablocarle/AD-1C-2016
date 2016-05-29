@@ -9,11 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.Table;
 
 @Table (name = "tipo_envites")
-@MappedSuperclass
+@Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="tipoEnvite", discriminatorType=DiscriminatorType.STRING)
 public abstract class Envite {
@@ -24,26 +23,22 @@ public abstract class Envite {
 	@Column
 	protected String nombreEnvite;
 	@Column
-	protected String tipoEnvite;
-	@Column
 	protected int puntajeQuerido;
 	@Column
 	protected int puntajeNoQuerido;
 	@Column
 	protected int enviteAnterior;
 	
-	
 	public Envite() {
 		super();
 
 	}
 	
-	public Envite(int idTipoEnvite, String nombreEnvite, String tipoEnvite, int puntajeQuerido, int puntajeNoQuerido,
+	public Envite(int idTipoEnvite, String nombreEnvite, int puntajeQuerido, int puntajeNoQuerido,
 			int enviteAnterior) {
 		super();
 		this.idTipoEnvite = idTipoEnvite;
 		this.nombreEnvite = nombreEnvite;
-		this.tipoEnvite = tipoEnvite;
 		this.puntajeQuerido = puntajeQuerido;
 		this.puntajeNoQuerido = puntajeNoQuerido;
 		this.enviteAnterior = enviteAnterior;
@@ -59,12 +54,6 @@ public abstract class Envite {
 	}
 	public void setNombreEnvite(String nombreEnvite) {
 		this.nombreEnvite = nombreEnvite;
-	}
-	public String getTipoEnvite() {
-		return tipoEnvite;
-	}
-	public void setTipoEnvite(String tipoEnvite) {
-		this.tipoEnvite = tipoEnvite;
 	}
 	public int getPuntajeQuerido() {
 		return puntajeQuerido;

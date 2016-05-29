@@ -1,6 +1,5 @@
 package org.uade.ad.trucoserver.business;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Transaction;
@@ -14,6 +13,8 @@ import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
+import org.uade.ad.trucoserver.dao.ParejaDao;
+import org.uade.ad.trucoserver.dao.ParejaDaoImpl;
 import org.uade.ad.trucoserver.dao.PartidaDao;
 import org.uade.ad.trucoserver.dao.PartidaDaoImpl;
 import org.uade.ad.trucoserver.dao.TipoPartidaDao;
@@ -43,8 +44,11 @@ public class JuegoManager {
 	}
 	
 	private GrupoDao gDao = GrupoDaoImpl.getDAO();
+	private ParejaDao parejaDao = ParejaDaoImpl.getDAO();
 	private PartidaDao pDao = PartidaDaoImpl.getDAO();
 	private JugadorDao jDao = JugadorDaoImpl.getDAO();
+	private CartaDao cDao = CartaDaoImpl.getDAO();
+	private EnviteDao eDao = EnviteDaoImpl.getDAO();
 	
 	private List<TipoPartida> tiposPartidas;
 	{
@@ -81,15 +85,6 @@ public class JuegoManager {
 		return partida;
 	}
 	
-	private List<Jugador> getPrimerOrdenJuego(Pareja pareja1, Pareja pareja2) {
-		List<Jugador> retList = new ArrayList<>(4);
-		retList.add(pareja1.getJugador1());
-		retList.add(pareja2.getJugador1());
-		retList.add(pareja1.getJugador2());
-		retList.add(pareja2.getJugador2());
-		return retList;
-	}
-
 	public Partida crearPartidaAbiertaIndividual(String apodo, Context juegoContext) throws JuegoException {
 		//Avisa a contexto para que envie las notificaciones
 		//En realidad en esta etapa no hay creacion de partida
@@ -103,13 +98,69 @@ public class JuegoManager {
 				juegoContext.agregarJugadorAColaPartidaAbierta(jugador);
 				return Partida.Null;
 			} else {
-				pDao.guardar(partida);
+				guardarPartida(partida);
+				for (Pareja p : partida.getParejas()) {
+					//Agrega para notificar a jugadores de inclusion en la partida nueva
+					if (!p.getJugador1().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador1());
+					}
+					if (!p.getJugador2().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador2());
+					}
+				}
 				tr.commit();
 				return partida;
 			}
 		} else {
 			tr.rollback();
 			throw new JuegoException("No se encontro el jugador con apodo " + apodo);
+		}
+	}
+	
+	private void guardarPartida(Partida partida) {
+		if (!(partida instanceof PartidaCerrada)) {
+			//Si es una partida cerrada las parejas y grupo ya existen
+			List<Pareja> parejas = partida.getParejas();
+			Pareja parejaDb = null;
+			for (Pareja pareja : parejas) {
+				parejaDb = parejaDao.getParejaNoGrupo(pareja.getJugador1().getIdJugador(), pareja.getJugador2().getIdJugador());
+				if (parejaDb == null) {
+					parejaDao.guardar(pareja);
+				} else {
+					pareja.setIdPareja(parejaDb.getIdPareja());
+				}
+			}
+		}
+		pDao.guardar(partida);
+	}
+
+	public Partida crearPartidaAbiertaPareja(String apodo, int idPareja, Context juegoContext) throws JuegoException {
+		Transaction tr = pDao.getSession().beginTransaction();
+		Jugador jugador = jDao.getPorApodo(apodo);
+		Pareja pareja = parejaDao.getPorId(Pareja.class, idPareja);
+		if (jugador != null && pareja != null && pareja.contieneJugador(jugador)) {
+			Partida partida = juegoContext.matchearPartidaAbiertaPareja(jugador, pareja);
+			if (partida == null) {
+				tr.rollback();
+				//No se logro conseguir match. Va a cola
+				juegoContext.agregarParejaAColaPartidaAbierta(pareja);
+				return Partida.Null;
+			} else {
+				guardarPartida(partida);
+				for (Pareja p : partida.getParejas()) {
+					if (!p.getJugador1().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador1());
+					}
+					if (!p.getJugador2().equals(jugador)) {
+						juegoContext.agregarInvitacion(partida, p.getJugador2());
+					}
+				}
+				tr.commit();
+				return partida;
+			}
+		} else{
+			tr.rollback();
+			throw new JuegoException();
 		}
 	}
 
@@ -132,5 +183,55 @@ public class JuegoManager {
 		Transaction tr = dao.getSession().beginTransaction();
 		envites = dao.getTodos(Envite.class);
 		tr.commit();
+	}
+
+	public Partida jugarCarta(int idJuego, String apodo, int idCarta, Context context) throws JuegoException {
+		Partida p = context.getPartida(idJuego);
+		if (p == null){
+			throw new JuegoException("No existe partida en curso con id " + idJuego);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		Carta c = cDao.getPorId(Carta.class, idCarta);
+		try {
+			p.jugarCarta(j, c);
+		} catch (Exception e) {
+			tr.rollback();
+			throw new JuegoException(e);
+		}
+		tr.commit();
+		context.actualizarPartida(p);
+		return p;
+	}
+
+	public Partida irAlMazo(int idPartida, String apodo, Context context) throws JuegoException {
+		Partida p = context.getPartida(idPartida);
+		if (p == null) {
+			throw new JuegoException("No existe partida en curso con id " + idPartida);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		p.irAlMazo(j);
+		context.actualizarPartida(p);
+		tr.commit();
+		return p;
+	}
+
+	public Partida cantarEnvite(int idJuego, String apodo, int idEnvite, Context context) throws JuegoException {
+		Partida p = context.getPartida(idJuego);
+		if (p == null) {
+			throw new JuegoException("No existe partida en curso con id " + idJuego);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		Envite e = eDao.getPorId(Envite.class, idEnvite);
+		try {
+			p.cantarEnvite(j, e);
+		} catch (Exception e1) {
+			throw new JuegoException(e1);
+		}
+		context.actualizarPartida(p);
+		tr.commit();
+		return p;
 	}
 }
