@@ -125,18 +125,12 @@ public class JuegoManager {
 			throw new RuntimeException("No hay tipos de partidas definidos");
 		}
 	}
-	
-	
 	private EnviteDao dao = EnviteDaoImpl.getDAO();
 	
-	private List<Envite> envites;
+	public List<Envite> envites;
 	{
 		Transaction tr = dao.getSession().beginTransaction();
 		envites = dao.getTodos(Envite.class);
 		tr.commit();
-	}
-	
-	public List<Envite> getEnvites(){
-		return envites;
 	}
 }

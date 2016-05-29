@@ -38,9 +38,10 @@ public class EnvitesManoPareja {
 
 	} 
 		
-	public EnvitesManoPareja(Envite envite, Mano mano, byte aceptado, int puntosObtenidos,
+	public EnvitesManoPareja(int idEnviteParejaMano, Envite envite, Mano mano, byte aceptado, int puntosObtenidos,
 			Pareja pareja) {
 		super();
+		this.idEnviteParejaMano = idEnviteParejaMano;
 		this.envite = envite;
 		this.mano = mano;
 		this.aceptado = aceptado;
@@ -50,6 +51,10 @@ public class EnvitesManoPareja {
 
 	public int getIdEnviteParejaMano() {
 		return idEnviteParejaMano;
+	}
+
+	public void setIdEnviteParejaMano(int idEnviteParejaMano) {
+		this.idEnviteParejaMano = idEnviteParejaMano;
 	}
 
 	public Envite getEnvite() {

@@ -79,7 +79,7 @@ public class Chico implements PartidaTerminadaObservable, HasDTO<PartidaDTO> {
 	public void cantar(String apodo, Envite envite) throws Exception {
 		Mano manoActual = getManoActual();
 		Jugador jugador = getJugador(apodo);
-		manoActual.cantarTruco(jugador, envite);
+		manoActual.cantar(jugador, envite);
 	}
 	
 	private Jugador getJugador(String apodo) {
