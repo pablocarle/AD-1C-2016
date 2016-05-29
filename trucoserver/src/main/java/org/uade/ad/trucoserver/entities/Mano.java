@@ -39,9 +39,9 @@ public class Mano {
 	@Transient
 	private Pareja pareja2;
 	@OneToMany(mappedBy="mano")
-	private List<EnvitesManoPareja> envites;
+	private List<EnvitesManoPareja> envitesCantados;
 	{
-		envites = new ArrayList<>();
+		envitesCantados = new ArrayList<>();
 	}
 	@OneToMany(mappedBy="mano")
 	private List<Baza> bazas;
@@ -178,32 +178,42 @@ public class Mano {
 		throw new RuntimeException(""); //TODO Definir excepcion
 	}
 	
-//	public EnvidoEnvite enviteEnvidoDisponible (int idEnviteEnvido, int idEnviteTruco){
-//		List<Envite> envitetotales = new JuegoManager().envites;
-//		List<Envite> envitesDisponibles;
-//		envitesDisponibles.obtenerEnvites(idEnviteEnvido,'E');
-//		if(idEnviteTruco==-1)
-//			return envitesDisponibles;
-//		else
-//			return null;
+	public List<Envite> enviteEnvidoDisponible (int idEnviteEnvido){
+		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+		List<Envite> envitesDisponibles;
+		Envite ee = new EnvidoEnvite();
+		envitesDisponibles = ee.obtenerEnvites(envitetotales,idEnviteEnvido,'E');
+		return envitesDisponibles;
+
 		
-//	}
-//	public TrucoEnvite enviteTrucoDisponible (int idEnviteEnvido, int idEnviteTruco){
-//		List<TrucoEnvite> envitesDisponibles;
-//		envitesDisponibles.obtenerEnvido(-1)
-//			
-//		
-//		
-//		return envitesDisponibles;
-//	}
-	// TODO Terminar cantar envites. 
-	public void cantar(Jugador jugador, Envite envite) {
-		Pareja parejaEnvite;
+	}
+	public List<Envite> enviteTrucoDisponible (int idEnviteTruco){
+		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+		List<Envite> envitesDisponibles;
+		Envite ee = new EnvidoEnvite();
+		envitesDisponibles =  ee.obtenerEnvites(envitetotales,idEnviteEnvido,'T');
+		return envitesDisponibles;
+
 	
+}
+	// TODO Terminar cantar envites. 
+//	Canta tanto: devuelve el registro guardado
+//	despues llama a aceptar, rechazar o cantar de nuevo
+	public void cantarTruco(Jugador jugador, Envite envite) {
+		Pareja parejaEnvite;
+		
 		if(pareja1.contieneJugador(jugador))
 			parejaEnvite = pareja1;
 		else if (pareja2.contieneJugador(jugador))
 			parejaEnvite=pareja2;
+
+		
+		List<Envite> env = this.enviteTrucoDisponible(idEnviteTruco);
+		if(env != null){
+			if(env.contains(envite)){
+//				EnvitesManoPareja NuevoEnvite = new EnvitesManoPareja (envite,this.getClass(),0,envite.getPuntajeNoQuerido(),parejaEnvite);
+			}
+		}
 
 		
 	}
@@ -239,7 +249,7 @@ public class Mano {
 	}
 
 	public boolean tieneEnvites() {
-		return envites != null && !envites.isEmpty();
+		return envitesCantados != null && !envitesCantados.isEmpty();
 	}
 	
 	public void irseAlMazo(Jugador jugador) {

@@ -1,5 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -24,7 +26,7 @@ public abstract class Envite {
 	@Column
 	protected String nombreEnvite;
 	@Column
-	protected String tipoEnvite;
+	protected char tipoEnvite;
 	@Column
 	protected int puntajeQuerido;
 	@Column
@@ -38,7 +40,7 @@ public abstract class Envite {
 
 	}
 	
-	public Envite(int idTipoEnvite, String nombreEnvite, String tipoEnvite, int puntajeQuerido, int puntajeNoQuerido,
+	public Envite(int idTipoEnvite, String nombreEnvite, char tipoEnvite, int puntajeQuerido, int puntajeNoQuerido,
 			int enviteAnterior) {
 		super();
 		this.idTipoEnvite = idTipoEnvite;
@@ -60,10 +62,10 @@ public abstract class Envite {
 	public void setNombreEnvite(String nombreEnvite) {
 		this.nombreEnvite = nombreEnvite;
 	}
-	public String getTipoEnvite() {
+	public char getTipoEnvite() {
 		return tipoEnvite;
 	}
-	public void setTipoEnvite(String tipoEnvite) {
+	public void setTipoEnvite(char tipoEnvite) {
 		this.tipoEnvite = tipoEnvite;
 	}
 	public int getPuntajeQuerido() {
@@ -85,7 +87,16 @@ public abstract class Envite {
 		this.enviteAnterior = enviteAnterior;
 	}
 	
+	public List<Envite> obtenerEnvites(List<Envite> envitetotales, int idEnviteEnvido, char c) {
+		List<Envite> envites = null;
+		for (Envite env : envitetotales){
+			if(env.getEnviteAnterior()==idEnviteEnvido && env.getTipoEnvite()==c)
+				envites.add(env);
+		}
+			
+		return envites;
 	
+	}
 }
 	
 	

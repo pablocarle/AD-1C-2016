@@ -13,7 +13,7 @@ public class TrucoEnvite extends Envite {
 		// TODO Auto-generated constructor stub
 	}
 
-	public TrucoEnvite(int idTipoEnvite, String nombreEnvite, String tipoEnvite, int puntajeQuerido,
+	public TrucoEnvite(int idTipoEnvite, String nombreEnvite, char tipoEnvite, int puntajeQuerido,
 			int puntajeNoQuerido, int enviteAnterior) {
 		super(idTipoEnvite, nombreEnvite, tipoEnvite, puntajeQuerido, puntajeNoQuerido, enviteAnterior);
 		// TODO Auto-generated constructor stub
