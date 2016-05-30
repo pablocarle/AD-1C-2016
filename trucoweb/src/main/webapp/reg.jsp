@@ -20,26 +20,6 @@
 		}
 		return true;
 	};
-
-// 	submitForm = function() {
-// 		if (validaForm()) {
-// 			var form = document.getElementById("regForm");
-// 			var apodoField = document.getElementById("apodoField").value;
-// 			var passField = document.getElementById("passField").value;
-// 			var emailField = document.getElementById("emailField").value;
-// 			var xhttp = new XMLHttpRequest();
-// 			xhttp.onreadystatechange = function() {
-// 				if (xhttp.readyState == 4 && xhttp.status == 200) {
-// 					//Dar OK
-// 				} else if (xhttp.readyState == 4) {
-// 					//Error HTTP
-// 				}
-// 			};
-// 			xhttp.open(form.method, form.action, true);
-// 			xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-// 			xhttp.send("apodo=" + encodeURIComponent(apodoField) + "&pass=" + encodeURIComponent(passField) + "&email=" + encodeURIComponent(emailField));
-// 		}
-// 	};
 </script>
 </head>
 <body>
