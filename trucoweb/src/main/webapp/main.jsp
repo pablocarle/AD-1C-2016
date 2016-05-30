@@ -25,6 +25,7 @@ mostrarNotificaciones = function(xml) {
 	var html = "";
 	if (notificationElement) {
 		// xml.getElementsByTagName("notificaciones")[0].children[0].textContent
+		//TODO Solo me deben interesar las notificaciones de nueva_partida en este punto
 		var notificaciones = xml.getElementsByTagName("notificaciones"); //Obtener notificaciones
 		if (notificaciones) {
 			for (var i = 0; i < notificaciones.length; i++) {
@@ -67,6 +68,10 @@ mostrarNotificaciones = function(xml) {
 	<div>
 		<br><br><br>
 		<a href="grupoReg.jsp">Nuevo Grupo</a>
+	</div>
+	<div>
+		<br><br>
+		<a href="RankingServlet">Ver Ranking</a>
 	</div>
 	<br>
 	<br>

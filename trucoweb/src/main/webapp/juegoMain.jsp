@@ -18,13 +18,14 @@ setInterval(function() {
 			//Leer el DOC para saver si es el turno del usuario
 			procesarNotificacion(xhttp.responseXML);
 		}
+		//En el pedido a notificacionServlet se ignoran las invitaciones a nuevas partidas
 	};
 	xhttp.open("GET", "/trucoweb/NotificationServlet", true);
 	xhttp.send();
 }, 5000);
 
 procesarNotificacion = function(xml) {
-
+	//Ver las notificaciones de la partida (Vendrían notificaciones?. O solo en la pregunta de cada turno?)
 	var id = 1+1;
 	
 };
@@ -41,9 +42,54 @@ finTurno = function() {
 	//Deshabilitar todos los elementos hasta que sea turno de nuevo
 };
 
+validarForm = function() {
+	return true;
+};
+
+irAlMazo = function() {
+	var form = document.getElementById("juegoForm");
+	var alMazo = document.getElementById("alMazoField");
+	
+	if (form) {
+		//TODO Pedir confirmacion, modificar el hidden si hace falta y disparar el submit
+		form.submit();
+	} else {
+		alert('No form');
+	}
+};
+
 </script>
 </head>
 <body>
-JUGANDO
+<h1>Juego de Pepe [Modalidad Abierta]</h1>
+<form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
+	<table border="0">
+		<tr>
+			<td>Jugar carta</td>
+			<td><select name="idCarta" id="cartaSelect"></select></td>
+			<td><input type="submit" id="btnSubmitCarta" value="Jugar"/></td>
+		</tr>
+		<tr>
+			<td>Cantar Envido</td>
+			<td><select name="idEnvite" id="envidoSelect"></select></td>
+			<td><input type="submit" id="btnSubmitEnvido" value="Cantar"/></td>
+		</tr>
+		<tr>
+			<td colspan="1">Cantar Truco</td>
+			<td colspan="1"><select name="idEnvite" id="trucoSelect"></select></td>
+			<td><input type="submit" id="btnSubmitTruco" value="Cantar"/></td>
+		</tr>
+		<tr>
+			<td colspan="3">
+				<input type="button" value="Ir al Mazo" onclick="irAlMazo();" />
+				<input type="hidden" name="alMazo" id="alMazoField" value="false" />
+			</td>
+		</tr>
+	</table>
+</form>
+
+<div id="juegoLog" style="width: 500px; height: 200px; border: medium;" >
+<!-- Area de juego (ver novedades) -->
+</div>
 </body>
 </html>
