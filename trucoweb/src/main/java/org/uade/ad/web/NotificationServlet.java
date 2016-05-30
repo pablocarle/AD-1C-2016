@@ -70,7 +70,10 @@ public class NotificationServlet extends HttpServlet {
 				String fechaStr = request.getParameter("fecha");
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 				try {
-					Date fecha = sdf.parse(fechaStr);
+					Date fecha = null;
+					if (fechaStr != null && fechaStr.length() > 0 && !"null".equals(fechaStr)) {
+						fecha = sdf.parse(fechaStr);
+					}
 					NotificacionesDTO dto = delegate.getNotificaciones(jugador, fecha);
 					xmlResponse(dto, request, response);
 				} catch (JuegoException | ParseException e) {

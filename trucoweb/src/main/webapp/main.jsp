@@ -6,6 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Truco!</title>
 <script type="text/javascript">
+fechaNotificaciones = null;
+
 setInterval(function() {
 	//Buscamos novedades (notificaciones de invitaciones)
 	var request = new XMLHttpRequest();
@@ -14,7 +16,7 @@ setInterval(function() {
 			mostrarNotificaciones(request.responseXML);
 		}
 	};
-	request.open("POST", "/trucoweb/NotificationServlet", true);
+	request.open("POST", "/trucoweb/NotificationServlet?fecha=" + fechaNotificaciones, true);
 	request.send();
 }, 5000);
 
@@ -28,7 +30,17 @@ mostrarNotificaciones = function(xml) {
 			for (var i = 0; i < notificaciones.length; i++) {
 				var children = notificaciones[i].children;
 				if (children) {
-					
+					for (var j = 0; i < children.length; j++) {
+						if (children[j].nodeName == "descripcion") {
+							html = "<p>" + children[j].textContent + "</p>";
+						} else if (children[j].nodeName == "fechaNotificacion") {
+							if (!fechaNotificaciones) {
+								fechaNotificaciones = children[j].textContent;
+							} else if (children[j].textContent > fechaNotificaciones) {
+								fechaNotificaciones = children[j].textContent;
+							}
+						}
+					}
 				}
 			}
 		}
