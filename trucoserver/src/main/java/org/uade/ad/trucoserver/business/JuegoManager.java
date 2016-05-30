@@ -178,13 +178,15 @@ public class JuegoManager {
 	}
 	private EnviteDao dao = EnviteDaoImpl.getDAO();
 	
-	public List<Envite> envites;
+	public List<Envite> getEnvites()
 	{
+		List<Envite> envites;
 		Transaction tr = dao.getSession().beginTransaction();
 		envites = dao.getTodos(Envite.class);
 		tr.commit();
+		return envites;
 	}
-
+	
 	public Partida jugarCarta(int idJuego, String apodo, int idCarta, Context context) throws JuegoException {
 		Partida p = context.getPartida(idJuego);
 		if (p == null){

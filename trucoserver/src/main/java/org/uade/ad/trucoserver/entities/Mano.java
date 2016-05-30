@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
 @Entity
@@ -177,16 +178,29 @@ public class Mano {
 		throw new RuntimeException(""); //TODO Definir excepcion
 	}
 	
-//	public EnvidoEnvite enviteEnvidoDisponible (int idEnviteEnvido, int idEnviteTruco){
-//		List<Envite> envitetotales = new JuegoManager().envites;
-//		List<Envite> envitesDisponibles;
-//		envitesDisponibles.obtenerEnvites(idEnviteEnvido,'E');
-//		if(idEnviteTruco==-1)
-//			return envitesDisponibles;
-//		else
-//			return null;
+	@SuppressWarnings("null")
+	private List<Envite> obtenerEnvitesDispo(List<Envite> envitesTot, int EnvitePrevio){
+		List<Envite> proxEnvites=null;
+		for(Envite env: envitesTot){
+			if(env.getEnviteAnterior()==EnvitePrevio){
+				proxEnvites.add(env);
+			}
+		}
+		if(proxEnvites.isEmpty())
+			return null;
+		else
+			return proxEnvites;
 		
-//	}
+	}
+	
+	public List<Envite> enviteEnvidoDisponible (int idEnviteEnvido){
+		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+		List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
+		if(idEnviteTruco==-1)
+			return envitesDisponibles;
+		else
+			return null;
+	}
 //	public TrucoEnvite enviteTrucoDisponible (int idEnviteEnvido, int idEnviteTruco){
 //		List<TrucoEnvite> envitesDisponibles;
 //		envitesDisponibles.obtenerEnvido(-1)
