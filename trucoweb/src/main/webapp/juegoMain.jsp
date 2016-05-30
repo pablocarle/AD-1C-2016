@@ -51,7 +51,8 @@ irAlMazo = function() {
 	var alMazo = document.getElementById("alMazoField");
 	
 	if (form) {
-		//TODO Pedir confirmacion, modificar el hidden si hace falta y disparar el submit	
+		//TODO Pedir confirmacion, modificar el hidden si hace falta y disparar el submit
+		form.submit();
 	} else {
 		alert('No form');
 	}
@@ -60,7 +61,7 @@ irAlMazo = function() {
 </script>
 </head>
 <body>
-<h1></h1>
+<h1>Juego de Pepe [Modalidad Abierta]</h1>
 <form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
 	<table border="0">
 		<tr>
@@ -87,7 +88,7 @@ irAlMazo = function() {
 	</table>
 </form>
 
-<div id="" style="overflow: auto; width: 500px; height: 200px" >
+<div id="juegoLog" style="width: 500px; height: 200px; border: medium;" >
 <!-- Area de juego (ver novedades) -->
 </div>
 </body>
