@@ -207,14 +207,20 @@ public class Mano {
 		else
 			return null;
 	}
-//	public TrucoEnvite enviteTrucoDisponible (int idEnviteEnvido, int idEnviteTruco){
-//		List<TrucoEnvite> envitesDisponibles;
-//		envitesDisponibles.obtenerEnvido(-1)
-//			
-//		
-//		
-//		return envitesDisponibles;
-//	}
+	
+	public Envite TrucoDisponible (int idEnviteTruco){
+//	TODO: corroborar si hace falta validar que sea turno jugador o si lo hace en otro lado.
+		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+		List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
+		Envite posibleTruco = null;  
+		for (Envite env: envitesDisponibles)
+			if(env instanceof EnvidoEnvite)
+				posibleTruco=env;
+			return posibleTruco;
+		
+	}
+
+
 	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
 		
