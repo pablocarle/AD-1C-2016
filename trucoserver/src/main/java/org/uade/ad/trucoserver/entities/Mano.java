@@ -56,9 +56,9 @@ public class Mano {
 	@Transient
 	private List<Jugador> jugadoresEnMazo;
 	@Column
-	private int idEnviteTruco;
+	private int idEnviteTruco = -1;
 	@Column
-	private int idEnviteEnvido;
+	private int idEnviteEnvido = -1;
 	
 	
 	public Mano() {
@@ -193,11 +193,17 @@ public class Mano {
 		
 	}
 	
-	public List<Envite> enviteEnvidoDisponible (int idEnviteEnvido){
-		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
-		List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
-		if(idEnviteTruco==-1)
-			return envitesDisponibles;
+	public List<Envite> EnvidosDisponibles (int idEnviteEnvido, int idEnviteTruco){
+		if (idEnviteTruco == -1){
+//			TODO: corroborar si hace falta validar que sea turno jugador o si lo hace en otro lado.
+			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
+			List<Envite> posiblesEnvidos = null;  
+			for (Envite env: envitesDisponibles)
+				if(env instanceof EnvidoEnvite)
+					posiblesEnvidos.add(env);
+			return posiblesEnvidos;
+		}
 		else
 			return null;
 	}
