@@ -8,7 +8,7 @@
 <script type="text/javascript">
 fechaNotificaciones = null;
 
-setInterval(function() {
+checkNotificaciones = function() {
 	//Buscamos novedades (notificaciones de invitaciones)
 	var request = new XMLHttpRequest();
 	request.onreadystatechange = function() {
@@ -18,7 +18,7 @@ setInterval(function() {
 	};
 	request.open("POST", "/trucoweb/NotificationServlet?fecha=" + fechaNotificaciones, true);
 	request.send();
-}, 5000);
+};
 
 mostrarNotificaciones = function(xml) {
 	var notificationElement = document.getElementById("notification");
@@ -27,28 +27,51 @@ mostrarNotificaciones = function(xml) {
 		// xml.getElementsByTagName("notificaciones")[0].children[0].textContent
 		//TODO Solo me deben interesar las notificaciones de nueva_partida en este punto
 		var notificaciones = xml.getElementsByTagName("notificaciones"); //Obtener notificaciones
+		var update = false;
 		if (notificaciones) {
 			for (var i = 0; i < notificaciones.length; i++) {
 				var children = notificaciones[i].children;
+				var tipoNotificacion = null;
+				var descripcion = null;
+				var url = null;
+				
 				if (children) {
-					for (var j = 0; i < children.length; j++) {
-						if (children[j].nodeName == "descripcion") {
-							html = "<p>" + children[j].textContent + "</p>";
-						} else if (children[j].nodeName == "fechaNotificacion") {
-							if (!fechaNotificaciones) {
-								fechaNotificaciones = children[j].textContent;
-							} else if (children[j].textContent > fechaNotificaciones) {
-								fechaNotificaciones = children[j].textContent;
+					for (var j = 0; j < children.length; j++) {
+						if (children[j]) {
+							if (children[j].nodeName == "descripcion") {
+								descripcion = children[j].textContent;
+							} else if (children[j].nodeName == "fechaNotificacion") {
+								if (!fechaNotificaciones) {
+									fechaNotificaciones = children[j].textContent;
+									update = true;
+								} else if (children[j].textContent) {
+									var d1 = Date.parse(fechaNotificaciones);
+									var d2 = Date.parse(children[j].textContent);
+									if (d2 > d1) {
+										fechaNotificaciones = children[j].textContent;
+										update = true;
+									}
+								}
+							} else if (children[j].nodeName == "url") {
+								url = children[j].textContent;
+							} else if (children[j].nodeName == "tipoNotificacion") {
+								tipoNotificacion = children[j].textContent;
 							}
 						}
 					}
 				}
+				if (tipoNotificacion == "nueva_partida" && update) { //Ignoro cualquier otra notificacion
+					html = '<p>' + descripcion + '&nbsp;' + '<a href="' + url + '">Aqui</a></p>';
+				}
 			}
 		}
-		//Ponemos la url que viene de la notificacion
-		notificacionElement.innerHTML = html;
+		if (html && html.length > 0) {
+			//Ponemos la url que viene de la notificacion
+			notificationElement.innerHTML = notificationElement.innerHTML + html;
+		}
 	}
 };
+setInterval(checkNotificaciones, 2000);
 </script>
 </head>
 <body>

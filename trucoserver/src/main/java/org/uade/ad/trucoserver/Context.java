@@ -191,6 +191,26 @@ public abstract class Context extends UnicastRemoteObject {
 	public void agregarParejaAColaPartidaAbierta(Pareja pareja) {
 		Context.agregarParejaModoLibre(pareja);
 	}
+	
+	public void agregarNotificacion(String mensaje, Jugador jugador) {
+		Map<Date, NotificacionDTO> mapa = null;
+		if (notificaciones.containsKey(jugador.getApodo())) {
+			mapa = notificaciones.get(jugador.getApodo());
+			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje));
+		} else {
+			mapa = new HashMap<>();
+			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje));
+			synchronized (notificaciones) {
+				notificaciones.put(jugador.getApodo(), mapa);
+			}
+		}
+	}
+	
+	public void agregarNotificacion(String mensaje, List<Jugador> jugadores) {
+		for (Jugador j : jugadores) {
+			agregarNotificacion(mensaje, j);
+		}
+	}
 
 	/**
 	 * Busca los jugadores para completar de acuerdo al matcher

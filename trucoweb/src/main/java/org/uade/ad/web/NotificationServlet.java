@@ -68,7 +68,7 @@ public class NotificationServlet extends HttpServlet {
 				error("No hay jugador en curso", request, response);
 			} else {
 				String fechaStr = request.getParameter("fecha");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 				try {
 					Date fecha = null;
 					if (fechaStr != null && fechaStr.length() > 0 && !"null".equals(fechaStr)) {
