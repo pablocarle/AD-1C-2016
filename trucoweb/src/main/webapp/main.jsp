@@ -83,18 +83,18 @@ setInterval(checkNotificaciones, 2000);
 	%>
 	<!-- TODO Cambiar la ubicacion por algo basico en css -->
 	<div>
-		<a href="PartidaServlet/NuevaPartida?tipoPartida=abierta">Nueva partida abierta individual</a><br><br>
-		<a href="SeleccionPareja">Nueva partida abierta en pareja</a><br><br>
-		<a href="partidaCerrada.jsp">Nueva partida Cerrada</a>
+		<a href="/PartidaServlet/NuevaPartida?tipoPartida=abierta">Nueva partida abierta individual</a><br><br>
+		<a href="/SeleccionPareja">Nueva partida abierta en pareja</a><br><br>
+		<a href="/partidaCerrada.jsp">Nueva partida Cerrada</a>
 	</div>
 	
 	<div>
 		<br><br><br>
-		<a href="grupoReg.jsp">Nuevo Grupo</a>
+		<a href="/grupoReg.jsp">Nuevo Grupo</a>
 	</div>
 	<div>
 		<br><br>
-		<a href="RankingServlet">Ver Ranking</a>
+		<a href="/RankingServlet">Ver Ranking</a>
 	</div>
 	<br>
 	<br>

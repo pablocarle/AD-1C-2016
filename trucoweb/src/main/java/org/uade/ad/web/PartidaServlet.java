@@ -86,8 +86,12 @@ public class PartidaServlet extends HttpServlet {
 						error("No se identifica el tipo de partida " + tipoPartida, request, response);
 					}
 					break;
-				default: 
+				case "Partida":
+					//Obtener la partida que solicita
+					consultarPartida(request, response);
 					break;
+				default: 
+					throw new ServletException("No se identifica que operacion realizar");
 			}
 		} else if (request.getMethod().equalsIgnoreCase("post")) {
 			String[] path = request.getRequestURI().split("/");
@@ -97,6 +101,31 @@ public class PartidaServlet extends HttpServlet {
 				break;
 			case "Verificar":
 				break;
+			}
+		}
+	}
+
+	private void consultarPartida(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idPartidaStr = request.getParameter("idPartida");
+		if (idPartidaStr == null || idPartidaStr.length() == 0) {
+			errorXML("No se proporciono idPartida", request, response);
+		} else {
+			HttpSession session = request.getSession();
+			if (session == null) {
+				error("No hay sesion", request, response);
+				return;
+			}
+			JugadorDTO user = (JugadorDTO) session.getAttribute("user");
+			if (user == null) {
+				error("No hay usuario logueado", request, response);
+				return;
+			}
+			try {
+				PartidaDTO partida = delegate.getPartida(user, Integer.parseInt(idPartidaStr));
+				xmlResponse(partida, request, response);
+			} catch (JuegoException e) {
+				e.printStackTrace();
+				errorXML(e.getLocalizedMessage(), request, response);
 			}
 		}
 	}
@@ -162,7 +191,7 @@ public class PartidaServlet extends HttpServlet {
 					xmlResponse(partida, request, response);
 					break;
 				case REPARTIR_CARTAS:
-					partida = delegate.repartirCartas(jugador, idPartida);
+					//partida = delegate.repartirCartas(jugador, idPartida); //TODO Revisar
 					xmlResponse(partida, request, response);
 					break;
 				default:

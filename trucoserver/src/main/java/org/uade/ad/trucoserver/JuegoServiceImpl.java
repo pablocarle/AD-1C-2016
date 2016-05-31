@@ -39,19 +39,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	private static final long serialVersionUID = 1L;
 
-	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException {
-		try {
-			Chico partida = getPartida(idJuego).getChicoActual();
-			if (partida == null) {
-				throw new RemoteException("No se encontro la partida con id " + idJuego);
-			}
-			Map<Jugador, Set<Carta>> cartasAsignadas = partida.repartirCartas();
-			return convertToDTO(cartasAsignadas);
-		} catch (Exception e) {
-			throw new RemoteException("Ocurrio un problema al repartir cartas", e);
-		}
-	}
-
 	private Map<JugadorDTO, Set<CartaDTO>> convertToDTO(Map<Jugador, Set<Carta>> cartasAsignadas) {
 		Map<JugadorDTO, Set<CartaDTO>> retMap = new HashMap<>(cartasAsignadas.size());
 		Set<CartaDTO> cartaSet = null;
@@ -128,5 +115,26 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idPartida);
 		return manager.irAlMazo(idPartida, jugador.getApodo(), this).getDTO();
+	}
+
+	@Override
+	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
+		assertJugadorPartida(jugador.getApodo(), idJuego);
+		try {
+			Chico partida = getPartida(idJuego).getChicoActual();
+			if (partida == null) {
+				throw new RemoteException("No se encontro la partida con id " + idJuego);
+			}
+			Map<Jugador, Set<Carta>> cartasAsignadas = partida.repartirCartas();
+			return convertToDTO(cartasAsignadas);
+		} catch (Exception e) {
+			throw new RemoteException("Ocurrio un problema al repartir cartas", e);
+		}
+	}
+
+	@Override
+	public PartidaDTO getPartida(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

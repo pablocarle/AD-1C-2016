@@ -2,14 +2,26 @@ package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
+@XmlAccessorType(XmlAccessType.FIELD)
 public class CartaDTO implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
+	@XmlAttribute
 	private int idCarta;
+	@XmlAttribute
 	private int pesoTruco;
+	@XmlAttribute
 	private int pesoEnvido;
+	@XmlAttribute
 	private String palo;
+	@XmlAttribute
 	private int numero;
 	
 	public CartaDTO() {

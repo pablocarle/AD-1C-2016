@@ -44,8 +44,6 @@ public class NotificacionDTO implements Serializable {
 		this.fechaNotificacion = fechaNotificacion;
 	}
 
-
-
 	public NotificacionDTO(String mensaje) {
 		this.descripcion = mensaje;
 		this.fechaNotificacion = Calendar.getInstance().getTime();

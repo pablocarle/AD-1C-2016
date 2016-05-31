@@ -6,7 +6,10 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
+import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
@@ -108,8 +111,21 @@ public class JuegoDelegate extends BusinessDelegate {
 		}
 	}
 
-	public PartidaDTO repartirCartas(JugadorDTO jugador, int idPartida) throws JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(JugadorDTO jugador, int idPartida) throws JuegoException {
+		try {
+			return juegoService.repartirCartas(idPartida, jugador);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
+	}
+
+	public PartidaDTO getPartida(JugadorDTO jugador, int idPartida) throws JuegoException {
+		try{
+			return juegoService.getPartida(idPartida, jugador);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+			throw new JuegoException(e);
+		}
 	}
 }

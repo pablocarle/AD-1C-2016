@@ -19,7 +19,7 @@ public interface JuegoService extends Remote {
 	
 	public static final String SERVICENAME = "juegoService"; //TODO El nombre del servicio (Para el Naming.lookup)
 	
-	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego) throws RemoteException;
+	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException;
 	
 	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, int idEnvite) throws RemoteException, JuegoException;
 	
@@ -38,5 +38,7 @@ public interface JuegoService extends Remote {
 	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException;
 
 	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException;
+
+	public PartidaDTO getPartida(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException;
 	
 }
