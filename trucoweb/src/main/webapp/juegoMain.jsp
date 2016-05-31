@@ -3,10 +3,17 @@
 <%@page import="org.uade.ad.trucorepo.dtos.JugadorDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE >
 <html>
 <!--  Esta es la vista principal del juego (unica para todas las modalidades) -->
 <head>
+
+<style type="text/css">
+#contenedor {height: 100%; width: 100%; font-size: 0;}
+#formDiv, #juegoLog { display: inline-block; *display: inline; zoom: 1; vertical-align: top; font-size: 12px;}
+#formDiv { width: 35%; border: medium;}
+#juegoLog {width: 65%; border: medium; background: gray; height: 300px; overflow: scroll;}
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Truco!</title>
 <script type="text/javascript">
@@ -83,41 +90,42 @@ title = "Juego de " + user.getApodo() + "[" + "Modalidad " + partida.getTipoPart
 }
 %>
 <h1><%=title %></h1>
-<form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
-	<table border="0">
-		<tr>
-			<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" disabled="disabled" />
-		</tr>
-		<tr>
-			<td>Jugar carta</td>
-			<td><select name="idCarta" id="cartaSelect" disabled="disabled"></select></td>
-			<td><input type="submit" id="btnSubmitCarta" value="Jugar" disabled="disabled"/></td>
-		</tr>
-		<tr>
-			<td>Cantar Envido</td>
-			<td><select name="idEnvite" id="envidoSelect" disabled="disabled"></select></td>
-			<td><input type="submit" id="btnSubmitEnvido" value="Cantar" disabled="disabled"/></td>
-		</tr>
-		<tr>
-			<td colspan="1">Cantar Truco</td>
-			<td colspan="1"><select name="idEnvite" id="trucoSelect" disabled="disabled"></select></td>
-			<td><input type="submit" id="btnSubmitTruco" value="Cantar" disabled="disabled"/></td>
-		</tr>
-		<tr>
-			<td colspan="3">
-				<input type="button" value="Ir al Mazo" onclick="irAlMazo();" disabled="disabled" />
-				<input type="hidden" name="alMazo" id="alMazoField" value="false" />
-			</td>
-		</tr>
-	</table>
-</form>
-
-<br>
-<br>
-
-<div id="juegoLog" style="width: 500px; height: 200px; border: medium; border-width: 2px" >
-	<p>Inicio de juego</p>
-	<p>Pepe jugo 1 de basto</p>
+<div id="contenedor" >
+	<div id="formDiv" >
+		<form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
+			<table>
+				<tr>
+					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" disabled="disabled" />
+				</tr>
+				<tr>
+					<td>Jugar carta</td>
+					<td><select name="idCarta" id="cartaSelect" disabled="disabled"></select></td>
+					<td><input type="submit" id="btnSubmitCarta" value="Jugar" disabled="disabled"/></td>
+				</tr>
+				<tr>
+					<td>Cantar Envido</td>
+					<td><select name="idEnvite" id="envidoSelect" disabled="disabled"></select></td>
+					<td><input type="submit" id="btnSubmitEnvido" value="Cantar" disabled="disabled"/></td>
+				</tr>
+				<tr>
+					<td colspan="1">Cantar Truco</td>
+					<td colspan="1"><select name="idEnvite" id="trucoSelect" disabled="disabled"></select></td>
+					<td><input type="submit" id="btnSubmitTruco" value="Cantar" disabled="disabled"/></td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<input type="button" value="Ir al Mazo" onclick="irAlMazo();" disabled="disabled" />
+						<input type="hidden" name="alMazo" id="alMazoField" value="false" />
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	<div id="juegoLog" >
+		<p>Inicio de juego</p>
+		<p>Pepe jugo 1 de basto</p>
+	</div>
 </div>
 </body>
 </html>
