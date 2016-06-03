@@ -18,7 +18,7 @@
 <title>Truco!</title>
 <script type="text/javascript">
 
-ultimoIdxNotificacion = 0;
+fechaNotificaciones = null;
 
 setInterval(function() {
 	//Busca turno
@@ -28,15 +28,64 @@ setInterval(function() {
 			procesarNotificacion(xhttp.responseXML);
 		}
 	};
-	xhttp.open("GET", "/trucoweb/NotificationServlet", true);
-	xhttp.send();
+	if (document) {
+		var idPartidaElement = document.getElementById("idPartidaField");
+		if (idPartidaElement && idPartidaElement.value) {
+			//TODO Verificar
+			xhttp.open("GET", "/trucoweb/NotificationServlet?idPartida=" + idPartidaElement.value + "&fecha=" + fechaNotificaciones , true);
+			xhttp.send();
+		}
+	}
 }, 5000);
 
 procesarNotificacion = function(xml) {
 	if (xml) {
-		
+		var notificaciones = parseNotificaciones(xml);
+		if (notificaciones.length) {
+			for (var i = 0; i < notificaciones.length; i++) {
+				var n = notificaciones[i];
+				if (n.tipoNotificacion != "nueva_partida") {
+					if (!fechaNotificaciones) {
+						fechaNotificaciones = n.fechaNotificacionStr;
+					} else {
+						
+					}
+				}
+			}
+		}
 	}
 	var id = 1+1;
+};
+
+parseNotificaciones = function(xml) {
+	var retArray = [];
+	var notificaciones = xml.getElementsByTagName("notificaciones");
+	if (notificaciones) {
+		for (var i = 0; i < notificaciones.length; i++) {
+			var children = notificaciones[i].children;
+			var notificacion = {};
+			if (children) {
+				for (var j = 0; j < children.length; j++) {
+					if (children[j]) {
+						if (children[j].nodeName == "descripcion") {
+							notificacion.descripcion = children[j].textContent;
+						} else if (children[j].nodeName == "url") {
+							notificacion.url = children[j].textContent;
+						} else if (children[j].nodeName == "tipoNotificacion") {
+							notificacion.tipoNotificacion = children[j].textContent;
+						} else if (children[j].nodeName == "fechaNotificacion") {
+							notificacion.fechaNotificacion = Date.parse(children[j].textContent);
+							notificacion.fechaNotificacionStr = children[j].textContent;
+						}
+					}
+				}
+			}
+			if (notificacion.tipoNotificacion) {
+				retArray.push(notificacion);	
+			}
+		}
+	}
+	return retArray;
 };
 
 setInterval(function() {
@@ -72,7 +121,7 @@ irAlMazo = function() {
 <body>
 <%
 JugadorDTO user = (JugadorDTO)session.getAttribute("user");
-String title = "Juego de pepe";
+String title = "Juego de Test [Modalidad Partida Abierta Individual]";
 try {
 int idPartida = Integer.parseInt(request.getParameter("idPartida"));
 List<PartidaDTO> partidas = (List<PartidaDTO>)session.getAttribute("");
@@ -119,6 +168,7 @@ title = "Juego de " + user.getApodo() + "[" + "Modalidad " + partida.getTipoPart
 					</td>
 				</tr>
 			</table>
+			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getParameter("idPartida") %>/>
 		</form>
 	</div>
 	
