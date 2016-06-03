@@ -21,7 +21,7 @@
 fechaNotificaciones = null;
 
 setInterval(function() {
-	//Busca turno
+	//Busca notificaciones para mostrar de la partida (cualquier evento que se genere en el server)
 	var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -36,7 +36,7 @@ setInterval(function() {
 			xhttp.send();
 		}
 	}
-}, 5000);
+}, 2000);
 
 procesarNotificacion = function(xml) {
 	if (xml) {
@@ -48,8 +48,13 @@ procesarNotificacion = function(xml) {
 					if (!fechaNotificaciones) {
 						fechaNotificaciones = n.fechaNotificacionStr;
 					} else {
-						
+						var d1 = Date.parse(fechaNotificaciones);
+						if (notificacion.fechaNotificacion > d1) {
+							fechaNotificaciones = notificacion.fechaNotificacionStr;
+						}
 					}
+					//Muestro la notificacion. Asumo en orden?
+					
 				}
 			}
 		}
@@ -89,19 +94,67 @@ parseNotificaciones = function(xml) {
 };
 
 setInterval(function() {
-	//Busca novedades de la partida
+	//Busca si es el turno
+	var xhttp = new XMLHttpRequest();
+		xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status == 200) {
+			verificarTurno(xhttp.responseXML);
+		}
+	};
+	if (document) {
+		var idPartidaElement = document.getElementById("idPartidaField");
+		if (idPartidaElement && idPartidaElement.value) {
+			xhttp.open("GET", "/trucoweb/PartidaServlet/Partida?idPartida=" + idPartidaElement.value, true);
+			xhttp.send();
+		}
+	}
 }, 1000);
 
-habilitarTurno = function(xml) {
+verificarTurno = function(xml) {
+	var apodo = document.getElementById("apodoField");
+	if (apodo && apodo.value) {
+		var partida = parsePartida(xml);
+		if (partida.turnoActual == apodo.value) {
+			habilitarTurno(partida);
+		} else {
+			finTurno();	
+		}
+	}
+};
+
+habilitarTurno = function(partida) {
 	//Habilitar las funciones que llegan en el response
+	var envidos = partida.jugadorActual.envidosDisponibles;
+	var trucos = partida.jugadorActual.trucosDisponibles;
+	var cartas = partida.jugadorActual.cartasDisponibles;
+	//Al mazo tiene que estar disponible porque esta en su turno
+	var selectEnvidos = null;
+	var selectTrucos = null;
+	var selectCartas = null;
+	var alMazoBtn = document.getElementById("alMazoBtn");
+	
+	alMazoBtn.disabled = null;
 };
 
 finTurno = function() {
 	//Deshabilitar todos los elementos hasta que sea turno de nuevo
+	var form = document.getElementById("juegoForm");
+	form.disabled = "disabled";
+};
+
+parsePartida = function(xml) {
+	//TODO Parsear PartidaDTO en objeto javascript
+	//Lo que se ve en esta pagina es la información que hace falta enviar desde el servidor (lo que tiene que estar si o si en el DTO de partida)
 };
 
 validarForm = function() {
-	return true;
+	var form = document.getElementById("juegoForm");
+	if (form) {
+		//TODO Verificar que solo se carga una accion
+		return true;
+	} else {
+		return false;
+	}
 };
 
 irAlMazo = function() {
@@ -163,12 +216,13 @@ title = "Juego de " + user.getApodo() + "[" + "Modalidad " + partida.getTipoPart
 				</tr>
 				<tr>
 					<td colspan="3">
-						<input type="button" value="Ir al Mazo" onclick="irAlMazo();" disabled="disabled" />
+						<input type="button" id="alMazoBtn" value="Ir al Mazo" onclick="irAlMazo();" disabled="disabled" />
 						<input type="hidden" name="alMazo" id="alMazoField" value="false" />
 					</td>
 				</tr>
 			</table>
 			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getParameter("idPartida") %>/>
+			<input type="hidden" name="apodo" id="apodoField" value=<%= session.getAttribute("uid").toString() %> />
 		</form>
 	</div>
 	
