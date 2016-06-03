@@ -254,5 +254,15 @@ public class Chico implements HasDTO<ChicoDTO> {
 		// TODO 
 		return null;
 	}
+
+	public Jugador getTurnoActual() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Carta> getCartasDisponibles(Jugador turnoActual) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 }

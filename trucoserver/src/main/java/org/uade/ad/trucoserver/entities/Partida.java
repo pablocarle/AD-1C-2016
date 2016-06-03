@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
@@ -164,7 +165,28 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 		PartidaDTO dto = new PartidaDTO();
 		dto.setIdPartida(idPartida);
 		dto.setChicos(getChicosDTO());
+		if (parejas != null && !parejas.isEmpty()) {
+			//TODO Pareja 1 y pareja2
+		}
+		dto.setTipoPartida(tipoPartida.getDTO());
+		Chico chicoActual = null;
+		try {
+			chicoActual = getChicoActual();
+		} catch (JuegoException e) {
+			e.printStackTrace();
+		}
+		if (chicoActual != null) {
+			dto.setTurnoActual(chicoActual.getTurnoActual().getDTO());
+			dto.setTurnoActualCartasDisponibles(getDTOs(chicoActual.getCartasDisponibles(chicoActual.getTurnoActual())));
+			dto.setTurnoActualEnvidos(null); //TODO
+			dto.setTurnoActualTrucos(null); //TODO
+		}
 		return dto;
+	}
+
+	private List<CartaDTO> getDTOs(List<? extends HasDTO<?>> cartasDisponibles) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private List<ChicoDTO> getChicosDTO() {

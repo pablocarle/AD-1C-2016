@@ -5,9 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.TipoPartidaDTO;
+
 @Entity
 @Table(name="tipopartidas")
-public class TipoPartida {
+public class TipoPartida implements HasDTO<TipoPartidaDTO> {
 
 	@Id
 	private int idTipoPartida;
@@ -72,5 +74,13 @@ public class TipoPartida {
 
 	public void setPuntosVictoria(int puntosVictoria) {
 		this.puntosVictoria = puntosVictoria;
+	}
+
+	@Override
+	public TipoPartidaDTO getDTO() {
+		TipoPartidaDTO dto = new TipoPartidaDTO();
+		dto.setNombre(nombre);
+		dto.setPuntosVictoria(puntosVictoria);
+		return dto;
 	}
 }
