@@ -6,6 +6,7 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="Partida")
@@ -16,22 +17,33 @@ public class PartidaDTO implements Serializable {
 	
 	@XmlAttribute
 	private int idPartida;
+	@XmlElement
 	private TipoPartidaDTO tipoPartida;
+	@XmlElement
 	private List<ChicoDTO> chicos;
+	@XmlAttribute
 	private String estado;
+	@XmlElement
 	private ParejaDTO pareja1;
+	@XmlElement
 	private ParejaDTO pareja2;
+	@XmlElement(required=false)
 	private GrupoDTO grupo;
 	
+	@XmlElement
 	private JugadorDTO turnoAnterior;
+	@XmlElement
 	private JugadorDTO turnoActual;
+	
+	@XmlElement
+	private List<EnviteDTO> turnoActualEnvidos;
+	@XmlElement
+	private List<CartaDTO> turnoActualCartasDisponibles;
+	@XmlElement
+	private List<EnviteDTO> turnoActualTrucos;
 	
 	public PartidaDTO() {
 		super();
-	}
-	
-	public void irseAlMazo() {
-		
 	}
 	
 	public boolean esNull() {
@@ -113,5 +125,29 @@ public class PartidaDTO implements Serializable {
 	
 	public GrupoDTO getGrupo() {
 		return grupo;
+	}
+
+	public List<EnviteDTO> getTurnoActualEnvidos() {
+		return turnoActualEnvidos;
+	}
+
+	public void setTurnoActualEnvidos(List<EnviteDTO> turnoActualEnvidos) {
+		this.turnoActualEnvidos = turnoActualEnvidos;
+	}
+
+	public List<CartaDTO> getTurnoActualCartasDisponibles() {
+		return turnoActualCartasDisponibles;
+	}
+
+	public void setTurnoActualCartasDisponibles(List<CartaDTO> turnoActualCartasDisponibles) {
+		this.turnoActualCartasDisponibles = turnoActualCartasDisponibles;
+	}
+
+	public List<EnviteDTO> getTurnoActualTrucos() {
+		return turnoActualTrucos;
+	}
+
+	public void setTurnoActualTrucos(List<EnviteDTO> turnoActualTrucos) {
+		this.turnoActualTrucos = turnoActualTrucos;
 	}
 }
