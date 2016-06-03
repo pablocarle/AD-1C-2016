@@ -39,6 +39,7 @@ setInterval(function() {
 }, 2000);
 
 procesarNotificacion = function(xml) {
+	var juego = document.getElementById("juegoLog");
 	if (xml) {
 		var notificaciones = parseNotificaciones(xml);
 		if (notificaciones.length) {
@@ -53,6 +54,7 @@ procesarNotificacion = function(xml) {
 							fechaNotificaciones = notificacion.fechaNotificacionStr;
 						}
 					}
+					juego.innerHTML = juego.innerHTML + html; //TODO Verificar en que caso no se tiene que hacer el append
 					//Muestro la notificacion. Asumo en orden?
 					
 				}
@@ -132,7 +134,7 @@ habilitarTurno = function(partida) {
 	var selectTrucos = null;
 	var selectCartas = null;
 	var alMazoBtn = document.getElementById("alMazoBtn");
-	
+	//TODO Continuar
 	alMazoBtn.disabled = null;
 };
 
@@ -143,8 +145,12 @@ finTurno = function() {
 };
 
 parsePartida = function(xml) {
+	var partida = {};
+	var jugadorActual = {};
+	
 	//TODO Parsear PartidaDTO en objeto javascript
 	//Lo que se ve en esta pagina es la información que hace falta enviar desde el servidor (lo que tiene que estar si o si en el DTO de partida)
+	return partida;
 };
 
 validarForm = function() {
@@ -176,19 +182,19 @@ irAlMazo = function() {
 JugadorDTO user = (JugadorDTO)session.getAttribute("user");
 String title = "Juego de Test [Modalidad Partida Abierta Individual]";
 try {
-int idPartida = Integer.parseInt(request.getParameter("idPartida"));
-List<PartidaDTO> partidas = (List<PartidaDTO>)session.getAttribute("");
-PartidaDTO partida = null;
-for (PartidaDTO p : partidas) {
-	if (p.getIdPartida() == idPartida) {
-		partida = p;
-		break;
+	int idPartida = Integer.parseInt(request.getParameter("idPartida"));
+	List<PartidaDTO> partidas = (List<PartidaDTO>)session.getAttribute("");
+	PartidaDTO partida = null;
+	for (PartidaDTO p : partidas) {
+		if (p.getIdPartida() == idPartida) {
+			partida = p;
+			break;
+		}
 	}
-}
-
-title = "Juego de " + user.getApodo() + "[" + "Modalidad " + partida.getTipoPartida().getNombre() + "]";
-} catch (Exception e) {
 	
+	title = "Juego de " + user.getApodo() + "[" + "Modalidad " + partida.getTipoPartida().getNombre() + "]";
+} catch (Exception e) {
+	e.printStackTrace();	
 }
 %>
 <h1><%=title %></h1>
