@@ -134,7 +134,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO getPartida(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
-		// TODO Auto-generated method stub
-		return null;
+		assertJugadorPartida(jugador.getApodo(), idPartida);
+		return getPartida(idPartida).getDTO();
 	}
 }
