@@ -55,6 +55,7 @@ procesarNotificacion = function(xml) {
 						}
 					}
 					juego.innerHTML = juego.innerHTML + html; //TODO Verificar en que caso no se tiene que hacer el append
+					//TODO Modificar, lo mas nuevo arriba de todo
 					//Muestro la notificacion. Asumo en orden?
 					
 				}
@@ -134,7 +135,8 @@ habilitarTurno = function(partida) {
 	var selectTrucos = null;
 	var selectCartas = null;
 	var alMazoBtn = document.getElementById("alMazoBtn");
-	//TODO Continuar
+	//TODO Continuar (eliminar los options existentes y agregar los nuevos)
+	
 	alMazoBtn.disabled = null;
 };
 
@@ -147,6 +149,13 @@ finTurno = function() {
 parsePartida = function(xml) {
 	var partida = {};
 	var jugadorActual = {};
+	
+	partida.idPartida = xml.getAttribute("idPartida");
+	partida.estado = xml.getAttribute("estado");
+	
+	var turnoActualElement = xml.getElementsByTagName("TurnoActual");
+	var envidosTurnoActualElement = xml.getElementsByTagName("TunoActualEnvidos");
+	
 	
 	//TODO Parsear PartidaDTO en objeto javascript
 	//Lo que se ve en esta pagina es la información que hace falta enviar desde el servidor (lo que tiene que estar si o si en el DTO de partida)
@@ -168,6 +177,7 @@ irAlMazo = function() {
 	var alMazo = document.getElementById("alMazoField");
 	
 	if (form) {
+		
 		//TODO Pedir confirmacion, modificar el hidden si hace falta y disparar el submit
 		form.submit();
 	} else {
@@ -223,10 +233,10 @@ try {
 				<tr>
 					<td colspan="3">
 						<input type="button" id="alMazoBtn" value="Ir al Mazo" onclick="irAlMazo();" disabled="disabled" />
-						<input type="hidden" name="alMazo" id="alMazoField" value="false" />
 					</td>
 				</tr>
 			</table>
+			<input type="hidden" name="alMazo" id="alMazoField" value="false" />
 			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getParameter("idPartida") %>/>
 			<input type="hidden" name="apodo" id="apodoField" value=<%= session.getAttribute("uid").toString() %> />
 		</form>
