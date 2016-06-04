@@ -25,8 +25,6 @@ import org.uade.ad.trucoserver.business.CartasManager;
  * Implementaciones de esta clase son las formas de juego disponibles.
  * Determinada por eleccion de usuario
  * 
- * XXX: Imagino que todo lo referido a envites iria en esta clase base, delegando si hace falta
- * 
  * @author Grupo9
  *
  */
@@ -126,7 +124,7 @@ public class Chico implements HasDTO<ChicoDTO> {
 		if (manoActual != null && manoActual.terminada()) {
 			Collections.rotate(ordenJuegoActual, -1);
 		} else if (manoActual != null) {
-			throw new Exception("La mano actual no ha terminado. No se puede modificar el orden de juego"); //TODO Definir excepcion
+			throw new Exception("La mano actual no ha terminado. No se puede modificar el orden de juego");
 		}
 	}
 
@@ -261,6 +259,16 @@ public class Chico implements HasDTO<ChicoDTO> {
 	}
 
 	public List<Carta> getCartasDisponibles(Jugador turnoActual) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Envite> getEnvidosDisponibles(Jugador turnoActual) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public List<Envite> getTrucosDisponibles(Jugador turnoActual) {
 		// TODO Auto-generated method stub
 		return null;
 	}

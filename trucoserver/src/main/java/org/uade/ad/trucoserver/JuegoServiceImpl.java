@@ -64,15 +64,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	@Override
 	public List<JugadorDTO> getJugadoresDisponibles() throws RemoteException, JuegoException {
 		List<Jugador> jugadoresOnline = getJugadoresOnline();
-		return convertToDTO(jugadoresOnline);
-	}
-
-	private List<JugadorDTO> convertToDTO(List<Jugador> jugadores) {
-		List<JugadorDTO> retList = new ArrayList<JugadorDTO>(jugadores.size());
-		for (Jugador j : jugadores) {
-			retList.add(j.getDTO());
-		}
-		return retList;
+		return DTOUtil.getDTOs(jugadoresOnline, JugadorDTO.class);
 	}
 
 	@Override

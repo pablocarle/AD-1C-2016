@@ -32,4 +32,10 @@ public class PartidaCerrada extends Partida {
 		dto.setGrupo(grupo == null ? null : grupo.getDTO());
 		return dto;
 	}
+	
+	@Override
+	public int getPuntosObtenidos(Jugador j) {
+		// TODO Auto-generated method stub
+		return super.getPuntosObtenidos(j);
+	}
 }

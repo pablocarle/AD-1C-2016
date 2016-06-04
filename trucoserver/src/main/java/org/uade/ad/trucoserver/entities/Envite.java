@@ -11,11 +11,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import org.uade.ad.trucorepo.dtos.EnviteDTO;
+
 @Table (name = "tipo_envites")
 @Entity
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="tipoEnvite", discriminatorType=DiscriminatorType.STRING)
-public abstract class Envite {
+public abstract class Envite implements HasDTO<EnviteDTO> {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -74,7 +76,9 @@ public abstract class Envite {
 		this.enviteAnterior = enviteAnterior;
 	}
 	
-	
+	@Override
+	public EnviteDTO getDTO() {
+		EnviteDTO dto = new EnviteDTO();
+		return dto;
+	}
 }
-	
-	

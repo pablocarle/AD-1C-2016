@@ -1,6 +1,5 @@
 package org.uade.ad.trucoserver.entities;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -16,6 +15,7 @@ import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucoserver.DTOUtil;
 
 @Entity
 @Table(name="jugadores")
@@ -146,19 +146,7 @@ public class Jugador implements HasDTO<JugadorDTO> {
 		JugadorDTO jugadorDTO = new JugadorDTO();
 		jugadorDTO.setEmail(this.email);
 		jugadorDTO.setApodo(this.apodo);
-		jugadorDTO.setGrupos(getDTOs(grupos));
+		jugadorDTO.setGrupos(DTOUtil.getDTOs(grupos, GrupoDTO.class));
 		return jugadorDTO;
-	}
-
-	private List<GrupoDTO> getDTOs(List<Grupo> grupos) {
-		if (grupos != null) {
-			List<GrupoDTO> retList = new ArrayList<>(grupos.size());
-			for (Grupo g : grupos) {
-				retList.add(g.getDTO());
-			}
-			return retList;
-		} else {
-			return null;
-		}
 	}
 }

@@ -21,8 +21,10 @@ import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.dtos.CartaDTO;
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
+import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
+import org.uade.ad.trucoserver.DTOUtil;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
@@ -164,9 +166,14 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 		// TODO Auto-generated method stub
 		PartidaDTO dto = new PartidaDTO();
 		dto.setIdPartida(idPartida);
-		dto.setChicos(getChicosDTO());
+		dto.setChicos(DTOUtil.getDTOs(chicos, ChicoDTO.class));
 		if (parejas != null && !parejas.isEmpty()) {
-			//TODO Pareja 1 y pareja2
+			if (parejas.size() == 1) {
+				dto.setPareja1(parejas.get(0).getDTO());
+			} else {
+				dto.setPareja1(parejas.get(0).getDTO());
+				dto.setPareja2(parejas.get(1).getDTO());
+			}
 		}
 		dto.setTipoPartida(tipoPartida.getDTO());
 		Chico chicoActual = null;
@@ -177,27 +184,11 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 		}
 		if (chicoActual != null) {
 			dto.setTurnoActual(chicoActual.getTurnoActual().getDTO());
-			dto.setTurnoActualCartasDisponibles(getDTOs(chicoActual.getCartasDisponibles(chicoActual.getTurnoActual())));
-			dto.setTurnoActualEnvidos(null); //TODO
-			dto.setTurnoActualTrucos(null); //TODO
+			dto.setTurnoActualCartasDisponibles(DTOUtil.getDTOs(chicoActual.getCartasDisponibles(chicoActual.getTurnoActual()), CartaDTO.class));
+			dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(chicoActual.getTurnoActual()), EnviteDTO.class));
+			dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(chicoActual.getTurnoActual()), EnviteDTO.class));
 		}
 		return dto;
-	}
-
-	private List<CartaDTO> getDTOs(List<? extends HasDTO<?>> cartasDisponibles) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	private List<ChicoDTO> getChicosDTO() {
-		if (chicos != null) {
-			List<ChicoDTO> retList = new ArrayList<>(chicos.size());
-			for (Chico c : chicos) {
-				retList.add(c.getDTO());
-			}
-			return retList;
-		}
-		return null;
 	}
 
 	public boolean contieneJugador(int idJugador) {

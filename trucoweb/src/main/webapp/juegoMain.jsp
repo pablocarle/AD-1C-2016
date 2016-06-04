@@ -46,6 +46,7 @@ procesarNotificacion = function(xml) {
 			for (var i = 0; i < notificaciones.length; i++) {
 				var n = notificaciones[i];
 				if (n.tipoNotificacion != "nueva_partida") {
+					var html = "<p>";
 					if (!fechaNotificaciones) {
 						fechaNotificaciones = n.fechaNotificacionStr;
 					} else {
@@ -54,10 +55,8 @@ procesarNotificacion = function(xml) {
 							fechaNotificaciones = notificacion.fechaNotificacionStr;
 						}
 					}
-					juego.innerHTML = juego.innerHTML + html; //TODO Verificar en que caso no se tiene que hacer el append
-					//TODO Modificar, lo mas nuevo arriba de todo
-					//Muestro la notificacion. Asumo en orden?
-					
+					html = html + n.fechaNotificacion + ": " + n.descripcion + "</p>";
+					juego.innerHTML = html + juego.innerHTML; 
 				}
 			}
 		}
@@ -65,6 +64,7 @@ procesarNotificacion = function(xml) {
 	var id = 1+1;
 };
 
+//Parsea el DOM xml y genera un objeto javascript con la informacion "cocinada"
 parseNotificaciones = function(xml) {
 	var retArray = [];
 	var notificaciones = xml.getElementsByTagName("notificaciones");
