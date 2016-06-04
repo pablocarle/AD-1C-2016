@@ -40,12 +40,28 @@ public abstract class Context extends UnicastRemoteObject {
 		parejasDisponiblesModoLibre = new Vector<>();
 		jugadoresDisponiblesModoLibre = new Vector<>();
 		grupos = new Vector<>();
+		addTestPlayers();
 	}
 	
 	protected Context() throws RemoteException {
 		super();
 	}
 	
+	protected static void addTestPlayers() {
+		Jugador b = new Jugador("b", "b", "b");
+		b.setIdJugador(2);
+		Jugador c = new Jugador("c", "c", "c");
+		c.setIdJugador(2);
+		Jugador d = new Jugador("d", "d", "d");
+		d.setIdJugador(2);
+		if (!jugadoresDisponiblesModoLibre.contains(b))
+			jugadoresDisponiblesModoLibre.add(b);
+		if (!jugadoresDisponiblesModoLibre.contains(c))
+			jugadoresDisponiblesModoLibre.add(c);
+		if (!jugadoresDisponiblesModoLibre.contains(d))
+			jugadoresDisponiblesModoLibre.add(d);
+	}
+
 	/**
 	 * Agregar jugador disponible para partida abierta
 	 * 
@@ -167,16 +183,17 @@ public abstract class Context extends UnicastRemoteObject {
 	 * 
 	 * @param apodoJugador El apodo del jugador para el que se quiere obtener invitaciones
 	 * @param ultimaFecha
+	 * @param idPartida 
 	 * @return
 	 */
-	public static Map<Date, NotificacionDTO> getInvitaciones(String apodoJugador, Date ultimaFecha) {
+	public static Map<Date, NotificacionDTO> getInvitaciones(String apodoJugador, Date ultimaFecha, Integer idPartida) {
 		Map<Date, NotificacionDTO> retMap = new HashMap<>();
 		if (ultimaFecha == null)
 			ultimaFecha = new Date(0L);
 		Map<Date, NotificacionDTO> map = notificaciones.get(apodoJugador);
 		if (map != null && !map.isEmpty()) {
 			for (Map.Entry<Date, NotificacionDTO> entry : map.entrySet()) {
-				if (entry.getKey().after(ultimaFecha)) {
+				if (entry.getKey().after(ultimaFecha) && (idPartida == null || idPartida.equals(entry.getValue().getIdPartida()))) {
 					retMap.put(entry.getKey(), entry.getValue());
 				}
 			}

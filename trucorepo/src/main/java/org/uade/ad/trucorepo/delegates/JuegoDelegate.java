@@ -63,12 +63,13 @@ public class JuegoDelegate extends BusinessDelegate {
 	 * @param jugador El jugador referencia de notificaciones
 	 * @param fechaReferencia Fecha de referencia (se obtienen notificaciones posteriores
 	 * ). Puede ser null para todas las notificaciones
+	 * @param idPartida idPartida o null
 	 * @return Lista de notificaciones o lista vacia
 	 * @throws JuegoException
 	 */
-	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia) throws JuegoException {
+	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia, Integer idPartida) throws JuegoException {
 		try {
-			return juegoService.getNotificaciones(jugador, fechaReferencia);
+			return juegoService.getNotificaciones(jugador, fechaReferencia, idPartida);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 			throw new JuegoException(e);

@@ -69,6 +69,8 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO crearPartidaAbiertaIndividual(JugadorDTO jugador) throws RemoteException, JuegoException {
+		//TODO Eliminar en produccion
+		addTestPlayers();
 		Partida partida = manager.crearPartidaAbiertaIndividual(jugador.getApodo(), this);
 		return partida.getDTO();
 	}
@@ -86,8 +88,8 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	}
 
 	@Override
-	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia) throws RemoteException, JuegoException {
-		return new NotificacionesDTO(new ArrayList<>(Context.getInvitaciones(jugador.getApodo(), fechaReferencia).values()));
+	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia, Integer idPartida) throws RemoteException, JuegoException {
+		return new NotificacionesDTO(new ArrayList<>(Context.getInvitaciones(jugador.getApodo(), fechaReferencia, idPartida).values()));
 	}
 
 	@Override

@@ -33,7 +33,17 @@ public interface JuegoService extends Remote {
 
 	public PartidaDTO crearPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws RemoteException, JuegoException;
 
-	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia) throws RemoteException, JuegoException;
+	/**
+	 * Obtener notificaciones para el jugador
+	 * 
+	 * @param jugador Jugador
+	 * @param fechaReferencia Fecha desde la que obtener notificaciones
+	 * @param idPartida idPartida o null para notificaciones de todo tipo
+	 * @return notificaciones
+	 * @throws RemoteException
+	 * @throws JuegoException
+	 */
+	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia, Integer idPartida) throws RemoteException, JuegoException;
 
 	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException;
 

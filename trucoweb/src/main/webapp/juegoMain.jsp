@@ -36,7 +36,7 @@ setInterval(function() {
 			xhttp.send();
 		}
 	}
-}, 2000);
+}, 10000);
 
 procesarNotificacion = function(xml) {
 	var juego = document.getElementById("juegoLog");
@@ -111,7 +111,7 @@ setInterval(function() {
 			xhttp.send();
 		}
 	}
-}, 1000);
+}, 10000);
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
@@ -165,6 +165,7 @@ parsePartida = function(xml) {
 validarForm = function() {
 	var form = document.getElementById("juegoForm");
 	if (form) {
+		
 		//TODO Verificar que solo se carga una accion
 		return true;
 	} else {

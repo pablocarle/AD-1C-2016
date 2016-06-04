@@ -69,13 +69,14 @@ public class NotificationServlet extends HttpServlet {
 				error("No hay jugador en curso", request, response);
 			} else {
 				String fechaStr = request.getParameter("fecha");
+				String idPartidaStr = request.getParameter("idPartida");
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
 				try {
 					Date fecha = Calendar.getInstance().getTime(); //Por default debe ser desde la fecha actual, sino desastre!
 					if (fechaStr != null && fechaStr.length() > 0 && !"null".equals(fechaStr)) {
 						fecha = sdf.parse(fechaStr);
 					}
-					NotificacionesDTO dto = delegate.getNotificaciones(jugador, fecha);
+					NotificacionesDTO dto = delegate.getNotificaciones(jugador, fecha, idPartidaStr == null ? null : Integer.parseInt(idPartidaStr));
 					xmlResponse(dto, request, response);
 				} catch (JuegoException | ParseException e) {
 					e.printStackTrace();
