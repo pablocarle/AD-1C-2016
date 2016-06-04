@@ -1,5 +1,7 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Transaction;
@@ -20,6 +22,7 @@ import org.uade.ad.trucoserver.dao.PartidaDaoImpl;
 import org.uade.ad.trucoserver.dao.TipoPartidaDao;
 import org.uade.ad.trucoserver.dao.TipoPartidaDaoImpl;
 import org.uade.ad.trucoserver.entities.Carta;
+import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Envite;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -73,6 +76,8 @@ public class JuegoManager {
 		Partida partida = null;
 		try {
 			partida = new PartidaCerrada(grupo);
+			Chico primerChico = new Chico(sortOrden(partida.getParejas()));
+			partida.agregarChico(primerChico);
 			pDao.guardar(partida);
 			tr.commit();
 			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
@@ -85,6 +90,23 @@ public class JuegoManager {
 		return partida;
 	}
 	
+	private List<Jugador> sortOrden(List<Pareja> parejas) {
+		List<Jugador> retList = new ArrayList<>(parejas.size() * 2);
+		List<Jugador> listaAux = new ArrayList<>();
+		Collections.shuffle(parejas);
+		List<Jugador> jugadoresAux = null;
+		for (int i = 0; i < parejas.size(); i++) {
+			jugadoresAux = parejas.get(i).getJugadores();
+			Collections.shuffle(jugadoresAux);
+			listaAux.addAll(jugadoresAux);
+		}
+		for (int i = 0; i < parejas.size(); i++) {
+			retList.add(listaAux.get(i++));
+			retList.add(listaAux.get(i));
+		}
+		return retList;
+	}
+
 	public Partida crearPartidaAbiertaIndividual(String apodo, Context juegoContext) throws JuegoException {
 		//Avisa a contexto para que envie las notificaciones
 		//En realidad en esta etapa no hay creacion de partida
@@ -98,6 +120,8 @@ public class JuegoManager {
 				juegoContext.agregarJugadorAColaPartidaAbierta(jugador);
 				return Partida.Null;
 			} else {
+				Chico primerChico = new Chico(sortOrden(partida.getParejas()));
+				partida.agregarChico(primerChico);
 				guardarPartida(partida);
 				for (Pareja p : partida.getParejas()) {
 					//Agrega para notificar a jugadores de inclusion en la partida nueva

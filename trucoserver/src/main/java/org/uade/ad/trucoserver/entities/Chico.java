@@ -1,13 +1,17 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
@@ -32,24 +36,29 @@ import org.uade.ad.trucoserver.business.CartasManager;
 public class Chico implements HasDTO<ChicoDTO> {
 	
 	@Id
-	protected int idChico;
-	@OneToMany(mappedBy="chico", fetch=FetchType.LAZY)
-	protected List<Mano> manos;
+	private int idChico;
+	@OneToMany(mappedBy="chico", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
+	private List<Mano> manos;
 	
 	@ManyToOne
 	@JoinColumn(name="idPartida")
-	protected Partida partida;
+	private Partida partida;
 
 	//Variables para acceso rapido
 	@Transient
-	protected int pareja1Score = 0;
+	private int pareja1Score = 0;
 	@Transient
-	protected int pareja2Score = 0;
+	private int pareja2Score = 0;
 	
 	@Transient
 	private List<Jugador> primerOrdenJuego = new ArrayList<>();
 	@Transient
 	private List<Jugador> ordenJuegoActual;
+	
+	@Column
+	private Date fechaInicio = Calendar.getInstance().getTime();
+	@Column
+	private Date fechaFin;
 	
 	/**
 	 * Constructor vacio para hibernate (en v5 todavia necesita del constructor vacio sin argumentos?)
@@ -68,6 +77,7 @@ public class Chico implements HasDTO<ChicoDTO> {
 	public Chico(List<Jugador> primerOrdenJuego) {
 		super();
 		this.primerOrdenJuego = primerOrdenJuego;
+		this.ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 	}
 	
 	public void cantar(Jugador j, Envite envite) throws Exception {
@@ -280,5 +290,76 @@ public class Chico implements HasDTO<ChicoDTO> {
 		// TODO trucos disponibles para el jugador
 		return retList;
 	}
-	
+
+	public int getIdChico() {
+		return idChico;
+	}
+
+	public void setIdChico(int idChico) {
+		this.idChico = idChico;
+	}
+
+	public List<Mano> getManos() {
+		return manos;
+	}
+
+	public void setManos(List<Mano> manos) {
+		this.manos = manos;
+	}
+
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
+	}
+
+	public int getPareja1Score() {
+		return pareja1Score;
+	}
+
+	public void setPareja1Score(int pareja1Score) {
+		this.pareja1Score = pareja1Score;
+	}
+
+	public int getPareja2Score() {
+		return pareja2Score;
+	}
+
+	public void setPareja2Score(int pareja2Score) {
+		this.pareja2Score = pareja2Score;
+	}
+
+	public List<Jugador> getPrimerOrdenJuego() {
+		return primerOrdenJuego;
+	}
+
+	public void setPrimerOrdenJuego(List<Jugador> primerOrdenJuego) {
+		this.primerOrdenJuego = primerOrdenJuego;
+	}
+
+	public List<Jugador> getOrdenJuegoActual() {
+		return ordenJuegoActual;
+	}
+
+	public void setOrdenJuegoActual(List<Jugador> ordenJuegoActual) {
+		this.ordenJuegoActual = ordenJuegoActual;
+	}
+
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
 }

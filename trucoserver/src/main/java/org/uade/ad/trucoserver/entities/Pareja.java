@@ -1,5 +1,8 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,6 +62,13 @@ public class Pareja implements HasDTO<ParejaDTO> {
 		} else {
 			return jugador1.getCategoria();
 		}
+	}
+	
+	public List<Jugador> getJugadores() {
+		List<Jugador> retList = new ArrayList<>();
+		retList.add(jugador1);
+		retList.add(jugador2);
+		return retList;
 	}
 	
 	@Override

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -46,7 +47,7 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 				joinColumns=@JoinColumn(name="idPartida", referencedColumnName="idPartida"),
 				inverseJoinColumns=@JoinColumn(name="idPareja", referencedColumnName="idPareja"))
 	protected List<Pareja> parejas;
-	@OneToMany(mappedBy="partida")
+	@OneToMany(mappedBy="partida", cascade=CascadeType.ALL)
 	protected List<Chico> chicos;
 	@ManyToOne
 	@JoinColumn(name="idTipoPartida")
@@ -61,6 +62,12 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	public Partida() {
 		super();
+	}
+	
+	public Partida(List<Pareja> parejas) {
+		super();
+		this.parejas = parejas;
+		this.chicos = new ArrayList<>();
 	}
 
 	public List<Envite> getEnvitesDisponibles(Jugador jugador) throws JuegoException {
@@ -163,7 +170,6 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	@Override
 	public PartidaDTO getDTO() {
-		// TODO Auto-generated method stub
 		PartidaDTO dto = new PartidaDTO();
 		dto.setIdPartida(idPartida);
 		dto.setChicos(DTOUtil.getDTOs(chicos, ChicoDTO.class));
@@ -231,5 +237,14 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	public void cantarEnvite(Jugador j, Envite e) throws Exception {
 		getChicoActual().cantar(j, e);
+	}
+
+	public void agregarChico(Chico primerChico) {
+		if (chicos == null) {
+			chicos = new ArrayList<>();
+		}
+		//TODO Agregar alguna validacion
+		primerChico.setPartida(this);
+		chicos.add(primerChico);
 	}
 }

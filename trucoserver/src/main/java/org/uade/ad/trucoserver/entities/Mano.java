@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -44,7 +46,7 @@ public class Mano {
 	{
 		envites = new ArrayList<>();
 	}
-	@OneToMany(mappedBy="mano")
+	@OneToMany(mappedBy="mano", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Baza> bazas;
 	@Transient
 	private List<Jugador> ordenJuegoInicial;

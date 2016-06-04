@@ -31,7 +31,6 @@ setInterval(function() {
 	if (document) {
 		var idPartidaElement = document.getElementById("idPartidaField");
 		if (idPartidaElement && idPartidaElement.value) {
-			//TODO Verificar
 			xhttp.open("GET", "/trucoweb/NotificationServlet?idPartida=" + idPartidaElement.value + "&fecha=" + fechaNotificaciones , true);
 			xhttp.send();
 		}
@@ -150,9 +149,11 @@ parsePartida = function(xml) {
 	if (xml) {
 		var partida = {};
 		var jugadorActual = {};
+
+		var partidaElement = xml.getElementsByTagName("Partida")[0];
 		
-		partida.idPartida = xml.getAttribute("idPartida");
-		partida.estado = xml.getAttribute("estado");
+		partida.idPartida = partidaElement.getAttribute("idPartida");
+		partida.estado = partidaElement.getAttribute("estado");
 		
 		var turnoActualElement = xml.getElementsByTagName("TurnoActual");
 		var envidosTurnoActualElement = xml.getElementsByTagName("TunoActualEnvidos");

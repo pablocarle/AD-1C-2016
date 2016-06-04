@@ -22,7 +22,7 @@ public class PartidaCerrada extends Partida {
 	}
 	
 	public PartidaCerrada(Grupo grupo) {
-		super();
+		super(grupo.getParejas());
 		this.grupo = grupo;
 	}
 	

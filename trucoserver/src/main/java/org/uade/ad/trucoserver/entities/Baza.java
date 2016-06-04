@@ -8,6 +8,7 @@ import java.util.List;
 
 import javax.persistence.Access;
 import javax.persistence.AccessType;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class Baza {
 	private Date fechaInicio;
 	@Column
 	private Date fechaFin;
-	@OneToMany(mappedBy="baza")
+	@OneToMany(mappedBy="baza", cascade=CascadeType.ALL)
 	private List<CartaJugada> cartasJugadas;
 	@Transient
 	private List<Jugador> ordenJuego;
