@@ -74,9 +74,9 @@ public class JuegoManager {
 		try {
 			partida = new PartidaCerrada(grupo);
 			pDao.guardar(partida);
-			juegoContext.agregarPartida(partida);
-			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
 			tr.commit();
+			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
+			juegoContext.agregarJuego(partida);
 		} catch (Exception e) {
 			System.out.println("transaction rollback");
 			tr.rollback();
@@ -109,6 +109,7 @@ public class JuegoManager {
 					}
 				}
 				tr.commit();
+				juegoContext.agregarJuego(partida);
 				return partida;
 			}
 		} else {

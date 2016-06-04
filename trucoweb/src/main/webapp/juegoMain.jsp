@@ -115,7 +115,7 @@ setInterval(function() {
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
-	if (apodo && apodo.value) {
+	if (apodo && apodo.value && xml) {
 		var partida = parsePartida(xml);
 		if (partida.turnoActual == apodo.value) {
 			habilitarTurno(partida);
@@ -147,19 +147,21 @@ finTurno = function() {
 };
 
 parsePartida = function(xml) {
-	var partida = {};
-	var jugadorActual = {};
-	
-	partida.idPartida = xml.getAttribute("idPartida");
-	partida.estado = xml.getAttribute("estado");
-	
-	var turnoActualElement = xml.getElementsByTagName("TurnoActual");
-	var envidosTurnoActualElement = xml.getElementsByTagName("TunoActualEnvidos");
-	
-	
-	//TODO Parsear PartidaDTO en objeto javascript
-	//Lo que se ve en esta pagina es la información que hace falta enviar desde el servidor (lo que tiene que estar si o si en el DTO de partida)
-	return partida;
+	if (xml) {
+		var partida = {};
+		var jugadorActual = {};
+		
+		partida.idPartida = xml.getAttribute("idPartida");
+		partida.estado = xml.getAttribute("estado");
+		
+		var turnoActualElement = xml.getElementsByTagName("TurnoActual");
+		var envidosTurnoActualElement = xml.getElementsByTagName("TunoActualEnvidos");
+		
+		
+		//TODO Parsear PartidaDTO en objeto javascript
+		//Lo que se ve en esta pagina es la información que hace falta enviar desde el servidor (lo que tiene que estar si o si en el DTO de partida)
+		return partida;
+	}
 };
 
 validarForm = function() {
@@ -193,8 +195,8 @@ irAlMazo = function() {
 JugadorDTO user = (JugadorDTO)session.getAttribute("user");
 String title = "Juego de Test [Modalidad Partida Abierta Individual]";
 try {
-	int idPartida = Integer.parseInt(request.getParameter("idPartida"));
-	List<PartidaDTO> partidas = (List<PartidaDTO>)session.getAttribute("");
+	int idPartida = Integer.parseInt(request.getAttribute("idPartida").toString());
+	List<PartidaDTO> partidas = (List<PartidaDTO>)session.getAttribute("partidas");
 	PartidaDTO partida = null;
 	for (PartidaDTO p : partidas) {
 		if (p.getIdPartida() == idPartida) {
@@ -238,7 +240,7 @@ try {
 				</tr>
 			</table>
 			<input type="hidden" name="alMazo" id="alMazoField" value="false" />
-			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getParameter("idPartida") %>/>
+			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getAttribute("idPartida") %> />
 			<input type="hidden" name="apodo" id="apodoField" value=<%= session.getAttribute("uid").toString() %> />
 		</form>
 	</div>

@@ -265,7 +265,7 @@ public class PartidaServlet extends HttpServlet {
 							request.getRequestDispatcher("/main.jsp").forward(request, response);
 						} else {
 							agregarPartidaSesion(session, partida);
-							request.setAttribute("partidaId", partida.getIdPartida());
+							request.setAttribute("idPartida", partida.getIdPartida());
 							request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
 						}
 					} catch (JuegoException e) {
@@ -302,7 +302,7 @@ public class PartidaServlet extends HttpServlet {
 								error("No fue posible crear la partida en grupo. Contacte admin", request, response); 
 							} else {
 								agregarPartidaSesion(session, partida);
-								request.setAttribute("partidaId", partida.getIdPartida());
+								request.setAttribute("idPartida", partida.getIdPartida());
 								request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
 							}
 						} catch (JuegoException e) {
@@ -334,7 +334,7 @@ public class PartidaServlet extends HttpServlet {
 						request.getRequestDispatcher("/main.jsp").forward(request, response);
 					} else {
 						agregarPartidaSesion(session, dto);
-						request.setAttribute("partidaId", dto.getIdPartida());
+						request.setAttribute("idPartida", dto.getIdPartida());
 						request.getRequestDispatcher("/juegoMain.jsp").forward(request, response);
 					}
 				} catch (JuegoException e) {

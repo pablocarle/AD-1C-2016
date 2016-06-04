@@ -17,6 +17,7 @@ import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.business.PartidaAbiertaIndividualMatcher;
 import org.uade.ad.trucoserver.business.PartidaAbiertaParejaMatcher;
 import org.uade.ad.trucoserver.business.PartidaMatcher;
+import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
@@ -48,11 +49,15 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 	
 	protected static void addTestPlayers() {
+		Categoria novato = new Categoria(1, 1, "novato", 0, 0, 0);
 		Jugador b = new Jugador("b", "b", "b");
+		b.setCategoria(novato);
 		b.setIdJugador(2);
 		Jugador c = new Jugador("c", "c", "c");
+		c.setCategoria(novato);
 		c.setIdJugador(2);
 		Jugador d = new Jugador("d", "d", "d");
+		d.setCategoria(novato);
 		d.setIdJugador(2);
 		if (!jugadoresDisponiblesModoLibre.contains(b))
 			jugadoresDisponiblesModoLibre.add(b);
@@ -115,7 +120,7 @@ public abstract class Context extends UnicastRemoteObject {
 		parejasDisponiblesModoLibre.remove(p);
 	}
 	
-	protected static void agregarJuego(Partida juego) {
+	public void agregarJuego(Partida juego) {
 		juegos.add(juego);
 	}
 	
@@ -285,10 +290,6 @@ public abstract class Context extends UnicastRemoteObject {
 		}
 	}
 
-	public void agregarPartida(Partida partida) {
-		//TODO Agregar partida al contexto
-	}
-	
 	/**
 	 * Verificar si un jugador pertenece a una partida
 	 * 
