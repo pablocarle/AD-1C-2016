@@ -18,7 +18,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
-import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucoserver.business.CartasManager;
 
 /**
@@ -88,7 +87,7 @@ public class Chico implements HasDTO<ChicoDTO> {
 		} else if (manos == null) {
 			manos = new ArrayList<>();
 		}
-		return null; //Dead
+		return null;
 	}
 	
 	public void jugarCarta(Jugador jugador, Carta carta) throws Exception {
@@ -144,7 +143,6 @@ public class Chico implements HasDTO<ChicoDTO> {
 			cartas = new HashMap<>(partida.getParejas().size()*2);
 			Jugador jugador = null;
 			for (int i = 0; i < r.size(); i++) {
-				//FIXME Cambiar esto:
 				if (i == 0) {
 					jugador = partida.getParejas().get(0).getJugador1();
 				} else if (i == 1) {
@@ -218,9 +216,8 @@ public class Chico implements HasDTO<ChicoDTO> {
 		}
 	}
 
-	/** Agregue  la verificacion de la pareja ganadora para la mano actual*/
 	public Pareja getParejaGanadora() {
-		//FIXME La pareja ganadora debe ser para la partida
+		//FIXME La pareja ganadora debe ser para el chico
 		Mano manoActual = getManoActual();
 		if (manoActual != null) {
 			return manoActual.getGanador();
@@ -230,10 +227,7 @@ public class Chico implements HasDTO<ChicoDTO> {
 	}
 	
 	public List<Envite> getEnvitesDisponibles() {
-		/**
-		 * 
-		 * 
-		 */
+		//TODO Todos los envites (abajo metodos especificos para truco y envidos)
 		return null;
 	}
 	
@@ -244,33 +238,47 @@ public class Chico implements HasDTO<ChicoDTO> {
 	
 	@Override
 	public ChicoDTO getDTO() {
-		// TODO Auto-generated method stub
-		return null;
+		ChicoDTO dto = new ChicoDTO();
+		return dto;
 	}
 	
-	public PartidaDTO irseAlMazo(Jugador j) {
-		// TODO 
-		return null;
+	public ChicoDTO irseAlMazo(Jugador j) {
+		//TODO Irse al mazo
+		return getDTO();
 	}
 
 	public Jugador getTurnoActual() {
-		// TODO Auto-generated method stub
-		return null;
+		if (ordenJuegoActual == null) {
+			return null;
+		} else {
+			Mano manoActual = getManoActual();
+			if (manoActual == null) {
+				return ordenJuegoActual.get(0);
+			} else {
+				return manoActual.getTurnoActual();
+			}
+		}
 	}
 
-	public List<Carta> getCartasDisponibles(Jugador turnoActual) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Carta> getCartasDisponibles(Jugador j) {
+		List<Carta> retList = new ArrayList<>();
+		Mano mano = getManoActual();
+		if (mano != null) {
+			retList = mano.getCartasDisponibles(j);
+		}
+		return retList;
 	}
 
-	public List<Envite> getEnvidosDisponibles(Jugador turnoActual) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Envite> getEnvidosDisponibles(Jugador j) {
+		List<Envite> retList = new ArrayList<>();
+		// TODO envidos disponibles para el jugador
+		return retList;
 	}
 
-	public List<Envite> getTrucosDisponibles(Jugador turnoActual) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Envite> getTrucosDisponibles(Jugador j) {
+		List<Envite> retList = new ArrayList<>();
+		// TODO trucos disponibles para el jugador
+		return retList;
 	}
 	
 }

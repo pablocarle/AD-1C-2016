@@ -125,6 +125,17 @@ public class Baza {
 		return cartasJugadas != null && numJugadores == cartasJugadas.size();
 	}
 	
+	public Carta getCartaJugada(Jugador j) {
+		if (cartasJugadas != null) {
+			for (CartaJugada cj : cartasJugadas) {
+				if (cj.getJugador().equals(j)) {
+					return cj.getCarta();
+				}
+			}
+		}
+		return null;
+	}
+	
 	public static class BazaResultado {
 		
 		private Resultado resultado;

@@ -2,6 +2,7 @@ package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -170,12 +171,12 @@ public class Mano {
 	private void assertCartaValida(Jugador jugador, Carta carta) {
 		if (cartasAsignadas.containsKey(jugador)) {
 			if (!cartasAsignadas.get(jugador).contains(carta)) {
-				throw new RuntimeException(""); //TODO Definir excepcion
+				throw new RuntimeException("El jugador " + jugador + " no tiene asignada la carta " + carta);
 			} else {
 				return;
 			}
 		}
-		throw new RuntimeException(""); //TODO Definir excepcion
+		throw new RuntimeException("El jugador " + jugador + " no pertenece a la partida");
 	}
 	
 	@SuppressWarnings("null")
@@ -263,6 +264,13 @@ public class Mano {
 		}
 		return ordenJuegoActual.get(turnoActualIdx).equals(jugador);
 	}
+	
+	public Jugador getTurnoActual() {
+		if (turnoActualIdx >= ordenJuegoActual.size()) {
+			turnoActualIdx = 0;
+		}
+		return ordenJuegoActual.get(turnoActualIdx);
+	}
 
 	public boolean tieneEnvites() {
 		return envites != null && !envites.isEmpty();
@@ -283,7 +291,18 @@ public class Mano {
 	public List<Jugador> getJugadoresEnMazo() {
 		return jugadoresEnMazo;
 	}
-	
-	
-	
+
+	public List<Carta> getCartasDisponibles(Jugador j) {
+		Set<Carta> cartasAsignadas = new HashSet<>(getCartasAsignadas().get(j));
+		if (bazas != null) {
+			Carta jugada = null;
+			for (Baza b : bazas) {
+				jugada = b.getCartaJugada(j);
+				if (jugada != null) {
+					cartasAsignadas.remove(jugada);
+				}
+			}
+		}
+		return new ArrayList<>(cartasAsignadas);
+	}
 }

@@ -55,7 +55,7 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	@Override
 	public List<EnviteDTO> getEnvitesDisponibles(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
 		/**
-		 * TODO
+		 * TODO Envites disponibles (servicio remoto)
 		 * 
 		 */
 		return null;

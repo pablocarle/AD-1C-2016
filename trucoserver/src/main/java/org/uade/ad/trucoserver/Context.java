@@ -269,7 +269,7 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 
 	public void agregarPartida(Partida partida) {
-		//TODO ??
+		//TODO Agregar partida al contexto
 	}
 	
 	/**

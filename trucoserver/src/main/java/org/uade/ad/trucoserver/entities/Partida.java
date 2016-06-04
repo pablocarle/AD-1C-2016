@@ -183,10 +183,13 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 			e.printStackTrace();
 		}
 		if (chicoActual != null) {
-			dto.setTurnoActual(chicoActual.getTurnoActual().getDTO());
-			dto.setTurnoActualCartasDisponibles(DTOUtil.getDTOs(chicoActual.getCartasDisponibles(chicoActual.getTurnoActual()), CartaDTO.class));
-			dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(chicoActual.getTurnoActual()), EnviteDTO.class));
-			dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(chicoActual.getTurnoActual()), EnviteDTO.class));
+			Jugador turnoActual = chicoActual.getTurnoActual();
+			if (turnoActual != null) {
+				dto.setTurnoActual(turnoActual.getDTO());
+				dto.setTurnoActualCartasDisponibles(DTOUtil.getDTOs(chicoActual.getCartasDisponibles(turnoActual), CartaDTO.class));
+				dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(turnoActual), EnviteDTO.class));
+				dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(turnoActual), EnviteDTO.class));
+			}
 		}
 		return dto;
 	}
