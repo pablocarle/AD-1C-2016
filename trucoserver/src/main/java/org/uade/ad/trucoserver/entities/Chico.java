@@ -254,11 +254,6 @@ public class Chico implements HasDTO<ChicoDTO> {
 	
 	public ChicoDTO irseAlMazo(Jugador j) {
 		//TODO Irse al mazo
-		Mano manoActual = getManoActual();
-		if (manoActual != null) {
-			manoActual.irseAlMazo(j);
-//			List<Jugador> enMazo = manoActual.getJugadoresEnMazo();
-		}
 		return getDTO();
 	}
 
