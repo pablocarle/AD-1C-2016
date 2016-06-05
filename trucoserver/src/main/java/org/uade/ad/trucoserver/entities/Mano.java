@@ -280,13 +280,35 @@ public class Mano {
 	
 	public void irseAlMazo(Jugador jugador) {
 		List<Jugador> j = this.getJugadoresEnMazo();
-		for (int i = 0; i < j.size(); i++) {
-			// Si el jugador no estÃ¡ en la Lista, lo agrego para irse al mazo
-			if (j.get(i).getIdJugador() != jugador.getIdJugador()) {
-				j.add(jugador);
-			} else {
-				// Terminar la mano y dar por ganado al contrario
+		if (j != null) {
+			for (int i = 0; i < j.size(); i++) {
+				
+				if (pareja1.contieneJugador(jugador)) {
+					if (pareja1.getJugador1().equals(j.get(i))) {
+						// Termina la mano y da por ganadado al contrario
+					}
+					else if (pareja1.getJugador2().equals(j.get(i))) {
+						// Termina la mano y da por ganadado al contrario
+					}
+				}
+				else if (pareja2.contieneJugador(jugador)) {
+					if (pareja2.getJugador1().equals(j.get(i))) {
+						// Termina la mano y da por ganadado al contrario
+					}
+					else if (pareja2.getJugador2().equals(j.get(i))) {
+						// Termina la mano y da por ganadado al contrario
+					}
+				}
+				
+				// Si el jugador no está en la Lista, lo agrego para irse al mazo
+				if (j.get(i).getIdJugador() != jugador.getIdJugador()) {
+					j.add(jugador);									
+				}
 			}
+		}
+		// Si la lista está vacía, agrego al jugador actual
+		else {
+			j.add(jugador);	
 		}
 	}
 
