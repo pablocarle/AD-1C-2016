@@ -233,6 +233,14 @@ public abstract class Context extends UnicastRemoteObject {
 			agregarNotificacion(mensaje, j);
 		}
 	}
+	
+	public void agregarNotificacion(String mensaje, int idPartida) {
+		Partida p = getPartida(idPartida);
+		if (p == null) {
+			throw new RuntimeException("No se encontro partida activa con id " + idPartida);
+		}
+		agregarNotificacion(mensaje, p.getJugadores());
+	}
 
 	/**
 	 * Busca los jugadores para completar de acuerdo al matcher

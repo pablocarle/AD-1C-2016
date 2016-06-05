@@ -247,4 +247,14 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 		primerChico.setPartida(this);
 		chicos.add(primerChico);
 	}
+
+	public List<Jugador> getJugadores() {
+		List<Jugador> retList = new ArrayList<>();
+		if (parejas != null) {
+			for (Pareja p : parejas) {
+				retList.addAll(p.getJugadores());
+			}
+		}
+		return retList;
+	}
 }

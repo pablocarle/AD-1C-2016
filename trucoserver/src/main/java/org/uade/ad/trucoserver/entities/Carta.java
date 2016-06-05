@@ -159,6 +159,12 @@ public class Carta implements Comparable<Carta>, HasDTO<CartaDTO> {
 
 	@Override
 	public CartaDTO getDTO() {
-		return new CartaDTO();
+		CartaDTO dto = new CartaDTO();
+		dto.setNumero(numero);
+		dto.setPalo(palo);
+		dto.setIdCarta(idCarta);
+		dto.setPesoEnvido(pesoEnvido);
+		dto.setPesoTruco(pesoTruco);
+		return dto;
 	}
 }

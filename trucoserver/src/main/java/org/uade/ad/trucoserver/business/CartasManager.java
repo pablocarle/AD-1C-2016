@@ -61,5 +61,15 @@ public class CartasManager {
 		}
 		return cartas;
 	}
+
+	public Carta getCarta(int idCarta) {
+		if (cartas != null) {
+			for (Carta c : cartas) {
+				if (idCarta == c.getIdCarta())
+					return c;
+			}
+		}
+		return null;
+	}
 	
 }

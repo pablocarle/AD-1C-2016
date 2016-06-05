@@ -148,19 +148,29 @@ finTurno = function() {
 parsePartida = function(xml) {
 	if (xml) {
 		var partida = {};
-		var jugadorActual = {};
+		var jugadorActual = {
+			envidos: [],
+			trucos: [],
+			alMazo: false,
+			repartirCartas: false
+		};
+		var truco = {};
+		var envido = {};
 
 		var partidaElement = xml.getElementsByTagName("Partida")[0];
 		
 		partida.idPartida = partidaElement.getAttribute("idPartida");
 		partida.estado = partidaElement.getAttribute("estado");
 		
-		var turnoActualElement = xml.getElementsByTagName("TurnoActual");
-		var envidosTurnoActualElement = xml.getElementsByTagName("TunoActualEnvidos");
+		var turnoActualElement = xml.getElementsByTagName("turnoActual");
+		var envidosTurnoActualElement = xml.getElementsByTagName("turnoActualEnvidos");
+		var trucosTurnoActualElement = xml.getElementsByTagName("turnoActualTrucos");
+
 		
+
 		
-		//TODO Parsear PartidaDTO en objeto javascript
-		//Lo que se ve en esta pagina es la información que hace falta enviar desde el servidor (lo que tiene que estar si o si en el DTO de partida)
+		partida.jugadorActual = jugadorActual;
+				
 		return partida;
 	}
 };
