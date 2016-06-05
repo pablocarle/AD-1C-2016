@@ -55,6 +55,8 @@ public class RegisterServlet extends HttpServlet {
 		String apodo = request.getParameter("apodo");
 		String password = request.getParameter("pass");
 		String email = request.getParameter("email");
+		
+		System.out.println("trucoWeb - RegisterServlet --> Se solicita registrar un usuario");
 		HttpSession session = request.getSession(true);
 		
 		StringBuilder userMessage = new StringBuilder();
@@ -74,10 +76,13 @@ public class RegisterServlet extends HttpServlet {
 			request.getRequestDispatcher("reg.jsp").forward(request, response);
 		} else {
 			try {
+				System.out.println("trucoWeb - RegisterServlet --> Se solicita registrar un usuario: PROCEDER");
 				JugadorDTO dto = jugadoresDelegate.registrarJugador(apodo, email, password);
+				System.out.println("trucoWeb - RegisterServlet ------> Se solicita registrar un usuario: pasa x aca");
 				session.setAttribute("regResult", "Jugador " + dto.getApodo() + " registrado correctamente");
 				request.getRequestDispatcher("reg.jsp").forward(request, response);
 			} catch (JugadorException e) {
+				System.out.println("trucoWeb - RegisterServlet --> Se solicita registrar un usuario: ERROR");
 				session.setAttribute("regResult", "Ocurrio un error al registrar al jugador: " + e.getMessage());
 				request.getRequestDispatcher("reg.jsp").forward(request, response);
 			}

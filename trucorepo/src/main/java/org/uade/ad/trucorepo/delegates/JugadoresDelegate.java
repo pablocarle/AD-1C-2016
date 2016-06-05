@@ -37,6 +37,7 @@ public class JugadoresDelegate extends BusinessDelegate {
 
 	public JugadorDTO registrarJugador(String apodo, String email, String password) throws JugadorException {
 		try {
+			System.out.println("TrucoRepo - JugadoresDelegate --> registrarJugador: "+email+""+apodo+" "+password);
 			return service.registrarJugador(email, apodo, password);
 		} catch (RemoteException e) {
 			throw new JugadorException("No se pudo registrar el jugador " + apodo, e);
