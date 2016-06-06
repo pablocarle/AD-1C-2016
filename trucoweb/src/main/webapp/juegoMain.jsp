@@ -54,7 +54,7 @@ procesarNotificacion = function(xml) {
 							fechaNotificaciones = notificacion.fechaNotificacionStr;
 						}
 					}
-					html = html + n.fechaNotificacion + ": " + n.descripcion + "</p>";
+					html = html + "<b>" + n.fechaNotificacion + ":</b> " + n.descripcion + "</p>";
 					juego.innerHTML = html + juego.innerHTML; 
 				}
 			}
@@ -163,14 +163,23 @@ parsePartida = function(xml) {
 		partida.estado = partidaElement.getAttribute("estado");
 		
 		var turnoActualElement = xml.getElementsByTagName("turnoActual");
+		jugadorActual.apodo = turnoActualElement.getAttribute("apodo");
 		var envidosTurnoActualElement = xml.getElementsByTagName("turnoActualEnvidos");
+		for (;;) {
+			jugadorActual.envidos.push({
+				idEnvite: 12,
+				nombreEnvite: "nombre"
+			});
+		}
 		var trucosTurnoActualElement = xml.getElementsByTagName("turnoActualTrucos");
-
-		
-
+		for (;;) {
+			jugadorActual.trucos.push({
+				idEnvite: 12,
+				nombreEnvite: "nombre"
+			});
+		}
 		
 		partida.jugadorActual = jugadorActual;
-				
 		return partida;
 	}
 };

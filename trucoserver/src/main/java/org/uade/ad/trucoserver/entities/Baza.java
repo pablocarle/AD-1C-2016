@@ -55,6 +55,11 @@ public class Baza {
 		this.ordenJuego = ordenJuego;
 	}
 	
+	Baza(Mano mano) {
+		super();
+		this.mano = mano;
+	}
+	
 	void jugarCarta(Jugador jugador, Carta carta) {
 		if (cartasJugadas == null) {
 			cartasJugadas = new ArrayList<>();

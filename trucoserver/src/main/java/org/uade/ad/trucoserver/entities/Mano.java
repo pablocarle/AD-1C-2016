@@ -43,9 +43,6 @@ public class Mano {
 	private Pareja pareja2;
 	@OneToMany(mappedBy="mano")
 	private List<EnvitesManoPareja> envites;
-	{
-		envites = new ArrayList<>();
-	}
 	@OneToMany(mappedBy="mano", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Baza> bazas;
 	@Transient
@@ -77,6 +74,10 @@ public class Mano {
 		this.cartasAsignadas = cartasAsignadas;
 		this.idEnviteEnvido=-1;
 		this.idEnviteTruco=-1;
+	}
+	
+	Mano(Partida p) {
+		//TODO Falta propiedad partida en la mano (para persistencia)
 	}
 	
 	public List<Baza> getBazas() {
