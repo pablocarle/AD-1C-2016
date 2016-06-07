@@ -26,15 +26,6 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 		return instancia;
 	}
 
-	public boolean login(String apodo, String password) {
-		return false;
-	}
-	
-	public boolean isValidLogin(String apodo, String password) {
-		
-		return false;
-	}
-
 	@Override
 	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
 		//Actualizar log
