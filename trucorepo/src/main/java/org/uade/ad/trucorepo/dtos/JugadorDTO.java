@@ -123,4 +123,14 @@ public class JugadorDTO implements Serializable {
 		}
 		return null;
 	}
+
+	public boolean perteneceAGrupo(int idGrupo) {
+		if (grupos != null) {
+			for (GrupoDTO g : grupos) {
+				if (g.getIdGrupo() == idGrupo)
+					return true;
+			}
+		}
+		return false;
+	}
 }
