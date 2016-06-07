@@ -116,10 +116,14 @@ verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
 	if (apodo && apodo.value && xml) {
 		var partida = parsePartida(xml);
-		if (partida.turnoActual == apodo.value) {
-			habilitarTurno(partida);
+		if (partida.estado == "terminada") {
+			//TODO Que hacer si la partida terminó
 		} else {
-			finTurno();	
+			if (partida.turnoActual == apodo.value) {
+				habilitarTurno(partida);
+			} else {
+				finTurno();	
+			}
 		}
 	}
 };
