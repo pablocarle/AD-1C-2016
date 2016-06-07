@@ -22,44 +22,40 @@
 		return true;
 	}
 </script>
+<link rel="stylesheet" type="text/css" href="css/global.css">
+<link rel="stylesheet" type="text/css" href="css/login.css">
 </head>
 <body>
 	<!-- Estamos usando el submit del form como viene. Se podria reemplazar por llamada ajax (ECMA o jquery) -->
-	<form method="post" action="LoginServlet" onsubmit="return validarApodoPass();" >
-		<table border="1" >
-			<thead>
-				<tr>
-					<th colspan="2">Ingreso a Truco</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td>Apodo</td>
-					<td><input type="text" id="apodoField" name="apodo" value="" /></td>
-				</tr>
-				<tr>
-					<td>Password</td>
-					<td><input type="password" id="passField" name="pass" value="" /></td>
-				</tr>
-				<tr>
-					<td><input type="submit" value="Ingresar" /></td>
-					<td><input type="reset" value="Reset" /></td>
-				</tr>
-				<%
-					if (session != null && session.getAttribute("loginResult") != null && !((Boolean)session.getAttribute("loginResult"))) {
-						session.removeAttribute("loginResult");
-				%>
-					<tr id="messageRow">
-						<td colspan="2" id="message">Login incorrecto</td>
-					</tr>
-				<%
-					}
-				%>
-				<tr>
-					<td colspan="2">No tengo usuario! <a href="reg.jsp">Nuevo Usuario</a></td>
-				</tr>
-			</tbody>
-		</table>
+	<form method="post" action="LoginServlet"
+		onsubmit="return validarApodoPass();">
+		<div class="body"></div>
+		<div class="grad"></div>
+		<div class="header">
+			<div>
+				Truco<span>UADE</span>
+			</div>
+		</div>
+		<br>
+		<div class="login">
+			<input type="text" id="apodoField" placeholder="apodo" name="apodo"><br>
+			<input type="password" id="passField" placeholder="password"
+				name="pass"><br> <input type="submit" value="Entrar">
+			<%
+				if (session != null && session.getAttribute("loginResult") != null
+						&& !((Boolean) session.getAttribute("loginResult"))) {
+					session.removeAttribute("loginResult");
+			%>
+			<div id="messageRow">
+				<span id="message">Login incorrecto</span>
+			</div>
+			<%
+				}
+			%>
+			<div>
+				<span>No tengo usuario! <a href="reg.jsp">REGISTRARME</a></span>
+			</div>
+		</div>
 	</form>
 </body>
 </html>
