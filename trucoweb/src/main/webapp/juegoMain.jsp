@@ -160,9 +160,6 @@ parsePartida = function(xml) {
 			repartirCartas: false,
 			jugarCartas: false
 		};
-		var truco = {};
-		var envido = {};
-
 		var partidaElement = xml.getElementsByTagName("Partida")[0];
 		
 		partida.idPartida = partidaElement.getAttribute("idPartida");
@@ -193,7 +190,7 @@ parsePartida = function(xml) {
 			for (var i = 0; i < cartasTurnoActualElement.children.length; i++) {
 				jugadorActual.cartas.push({
 					idCarta: cartasTurnoActualElement.children[i].getAttribute("idCarta"),
-					nombreCarta: cartasTurnoActualElement.children[i].getAttribute("numero") + " de " + cartasTurnoActualElement.children[i].getAttribute("palo");
+					nombreCarta: cartasTurnoActualElement.children[i].getAttribute("numero") + " de " + cartasTurnoActualElement.children[i].getAttribute("palo")
 				});
 			}
 		}

@@ -60,7 +60,6 @@ public class Mano {
 	@Column
 	private int idEnviteEnvido = -1;
 	
-	
 	public Mano() {
 		super();
 	}
@@ -76,8 +75,9 @@ public class Mano {
 		this.idEnviteTruco=-1;
 	}
 	
-	Mano(Partida p) {
-		//TODO Falta propiedad partida en la mano (para persistencia)
+	Mano(Chico c) {
+		super();
+		this.chico = c;
 	}
 	
 	public List<Baza> getBazas() {
@@ -101,7 +101,7 @@ public class Mano {
 			Jugador ganadorAnterior = null;
 			bazaActual = bazas.get(bazas.size() - 1);
 			if (bazaActual.esCompleta() && getGanador() == Pareja.Null) {
-				bazaActual = new Baza(NUM_JUGADORES, ordenJuegoActual); //TODO Orden de juego actualizado segun quien gano la ultima baja
+				bazaActual = new Baza(NUM_JUGADORES, ordenJuegoActual);
 				bazaActual.jugarCarta(jugador, carta);
 				bazas.add(bazaActual);
 				turnoActualIdx++;
@@ -197,9 +197,10 @@ public class Mano {
 		
 	}
 	
-	public List<Envite> EnvidosDisponibles (int idEnviteEnvido, int idEnviteTruco){
+	public List<Envite> getEnvidosDisponibles(int idEnviteEnvido, int idEnviteTruco){
 		if (idEnviteTruco == -1){
 //			TODO: corroborar si hace falta validar que sea turno jugador o si lo hace en otro lado.
+			//XXX PHC: Siempre hay que verificar que sea el turno actual del jugador, y el jugador debe llegar como parametro
 			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
 			List<Envite> posiblesEnvidos = null;  
@@ -212,7 +213,7 @@ public class Mano {
 			return null;
 	}
 	
-	public Envite TrucoDisponible (int idEnviteTruco){
+	public List<Envite> getTrucosDisponibles(int idEnviteTruco){
 //	TODO: corroborar si hace falta validar que sea turno jugador o si lo hace en otro lado.
 		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 		List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
@@ -220,7 +221,7 @@ public class Mano {
 		for (Envite env: envitesDisponibles)
 			if(env instanceof EnvidoEnvite)
 				posibleTruco=env;
-			return posibleTruco;
+			return null;
 		
 	}
 
