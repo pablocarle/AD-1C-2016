@@ -129,18 +129,21 @@ verificarTurno = function(xml) {
 };
 
 habilitarTurno = function(partida) {
+	var jActual = partida.jugadorActual;
 	//Habilitar las funciones que llegan en el response
-	var envidos = partida.jugadorActual.envidosDisponibles;
-	var trucos = partida.jugadorActual.trucosDisponibles;
-	var cartas = partida.jugadorActual.cartasDisponibles;
+	var envidos = jActual.envidos;
+	var trucos = jActual.trucos;
+	var cartas = jActual.cartasDisponibles;
 	//Al mazo tiene que estar disponible porque esta en su turno
-	var selectEnvidos = null;
-	var selectTrucos = null;
-	var selectCartas = null;
+	var selectEnvidos = document.getElementById("envidoSelect");
+	var selectTrucos = document.getElementById("trucoSelect");
+	var selectCartas = document.getElementById("cartaSelect");
 	var alMazoBtn = document.getElementById("alMazoBtn");
-	//TODO Continuar (eliminar los options existentes y agregar los nuevos)
-	
-	alMazoBtn.disabled = null;
+	var repartirCartasBtn = document.getElementById("btnRepartir");
+
+	if (jActual.repartirCartas) {
+		repartirCartasBtn.removeAttribute("disabled");
+	}
 };
 
 finTurno = function() {
@@ -158,7 +161,9 @@ parsePartida = function(xml) {
 			trucos: [],
 			alMazo: false,
 			repartirCartas: false,
-			jugarCartas: false
+			jugarCartas: false,
+			envidoEnCurso: false,
+			trucoEnCurso: false
 		};
 		var partidaElement = xml.getElementsByTagName("Partida")[0];
 		
@@ -194,6 +199,20 @@ parsePartida = function(xml) {
 				});
 			}
 		}
+
+		//Para repartir cartas, no debe tener cartas disponibles, ni envites
+		if (!cartasTurnoActualElement && !trucosTurnoActualElement && !envidosTurnoActualElement) {
+			jugadorActual.repartirCartas = true;
+		} else {
+			if (partida.estado == "truco_curso") {
+				jugadorActual.trucoEnCurso = true;
+			} else if (partida.estado == "envido_curso") {
+				jugadorActual.envidoEnCurso = true;
+			} else {
+				jugadorActual.alMazo = true;
+				jugadorActual.jugarCartas = true;
+			}
+		}
 		
 		partida.jugadorActual = jugadorActual;
 		return partida;
@@ -219,6 +238,18 @@ irAlMazo = function() {
 		form.submit();
 	} else {
 		alert('No form');
+	}
+};
+
+repartirCartas = function() {
+	var form = document.getElementById("juegoForm");
+	var repartir = document.getElementById("repartirField");
+
+	if (form) {
+		
+		form.submit();
+	} else {
+		alert("No form");
 	}
 };
 
@@ -250,7 +281,7 @@ try {
 		<form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
 			<table>
 				<tr>
-					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" disabled="disabled" />
+					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" disabled="disabled" onclick="repartirCartas();" />
 				</tr>
 				<tr>
 					<td>Jugar carta</td>
@@ -274,6 +305,7 @@ try {
 				</tr>
 			</table>
 			<input type="hidden" name="alMazo" id="alMazoField" value="false" />
+			<input type="hidden" name="repartirCartas" id="repartirField" value="false" />
 			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getAttribute("idPartida") %> />
 			<input type="hidden" name="apodo" id="apodoField" value=<%= session.getAttribute("uid").toString() %> />
 		</form>
