@@ -236,11 +236,6 @@ public class Chico implements HasDTO<ChicoDTO> {
 		}
 	}
 	
-	public List<Envite> getEnvitesDisponibles() {
-		//TODO Todos los envites (abajo metodos especificos para truco y envidos)
-		return null;
-	}
-	
 	public Pareja getParejaPerdedora() {
 		//TODO Pareja perdedora (de la partida!)
 		return null;
@@ -361,5 +356,15 @@ public class Chico implements HasDTO<ChicoDTO> {
 
 	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
+	}
+
+	public boolean hayEnvidoEnCurso() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public boolean hayTrucoEnCurso() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

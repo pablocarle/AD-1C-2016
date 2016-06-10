@@ -41,6 +41,10 @@ public class PartidaDTO implements Serializable {
 	private List<CartaDTO> turnoActualCartasDisponibles;
 	@XmlElement
 	private List<EnviteDTO> turnoActualTrucos;
+	@XmlAttribute
+	private boolean trucoEnCurso = false;
+	@XmlAttribute
+	private boolean envidoEnCurso = false;
 	
 	public PartidaDTO() {
 		super();
@@ -149,5 +153,21 @@ public class PartidaDTO implements Serializable {
 
 	public void setTurnoActualTrucos(List<EnviteDTO> turnoActualTrucos) {
 		this.turnoActualTrucos = turnoActualTrucos;
+	}
+
+	public boolean isTrucoEnCurso() {
+		return trucoEnCurso;
+	}
+
+	public void setTrucoEnCurso(boolean trucoEnCurso) {
+		this.trucoEnCurso = trucoEnCurso;
+	}
+
+	public boolean isEnvidoEnCurso() {
+		return envidoEnCurso;
+	}
+
+	public void setEnvidoEnCurso(boolean envidoEnCurso) {
+		this.envidoEnCurso = envidoEnCurso;
 	}
 }

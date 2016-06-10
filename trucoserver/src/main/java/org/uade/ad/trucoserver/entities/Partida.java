@@ -192,6 +192,8 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 				dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(turnoActual), EnviteDTO.class));
 				dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(turnoActual), EnviteDTO.class));
 			}
+			dto.setEnvidoEnCurso(chicoActual.hayEnvidoEnCurso());
+			dto.setTrucoEnCurso(chicoActual.hayTrucoEnCurso());
 		}
 		return dto;
 	}

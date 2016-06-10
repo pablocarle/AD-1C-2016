@@ -205,9 +205,9 @@ parsePartida = function(xml) {
 			jugadorActual.repartirCartas = true;
 		} else {
 			if (partida.estado == "truco_curso") {
-				jugadorActual.trucoEnCurso = true;
+				partida.trucoEnCurso = true;
 			} else if (partida.estado == "envido_curso") {
-				jugadorActual.envidoEnCurso = true;
+				partida.envidoEnCurso = true;
 			} else {
 				jugadorActual.alMazo = true;
 				jugadorActual.jugarCartas = true;
@@ -234,8 +234,9 @@ irAlMazo = function() {
 	var alMazo = document.getElementById("alMazoField");
 	
 	if (form) {
-		//TODO Pedir confirmacion, modificar el hidden si hace falta y disparar el submit
+		alMazo.value = "true";
 		form.submit();
+		alMazo.value = "false";
 	} else {
 		alert('No form');
 	}
@@ -246,8 +247,9 @@ repartirCartas = function() {
 	var repartir = document.getElementById("repartirField");
 
 	if (form) {
-		
+		repartir.value = "true";
 		form.submit();
+		repartir.value = "false";
 	} else {
 		alert("No form");
 	}
