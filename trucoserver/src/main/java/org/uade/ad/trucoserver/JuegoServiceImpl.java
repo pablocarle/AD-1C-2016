@@ -3,24 +3,15 @@ package org.uade.ad.trucoserver;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.uade.ad.trucorepo.dtos.CartaDTO;
-import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
-import org.uade.ad.trucoserver.business.CartasManager;
 import org.uade.ad.trucoserver.business.JuegoManager;
-import org.uade.ad.trucoserver.entities.Carta;
-import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Partida;
 
@@ -33,35 +24,12 @@ import org.uade.ad.trucoserver.entities.Partida;
 public class JuegoServiceImpl extends Context implements JuegoService {
 
 	private JuegoManager manager = JuegoManager.getManager();
-	private CartasManager cartasManager = CartasManager.getManager();
 	
 	protected JuegoServiceImpl() throws RemoteException {
 		super();
 	}
 
 	private static final long serialVersionUID = 1L;
-
-	private Map<JugadorDTO, Set<CartaDTO>> convertToDTO(Map<Jugador, Set<Carta>> cartasAsignadas) {
-		Map<JugadorDTO, Set<CartaDTO>> retMap = new HashMap<>(cartasAsignadas.size());
-		Set<CartaDTO> cartaSet = null;
-		for (Map.Entry<Jugador, Set<Carta>> entry : cartasAsignadas.entrySet()) {
-			cartaSet = new HashSet<>(entry.getValue().size());
-			for (Carta carta : entry.getValue()) {
-				cartaSet.add(carta.getDTO());
-			}
-			retMap.put(entry.getKey().getDTO(), cartaSet);
-		}
-		return retMap;
-	}
-
-	@Override
-	public List<EnviteDTO> getEnvitesDisponibles(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
-		/**
-		 * TODO Envites disponibles (servicio remoto)
-		 * 
-		 */
-		return null;
-	}
 
 	@Override
 	public List<JugadorDTO> getJugadoresDisponibles() throws RemoteException, JuegoException {
@@ -99,7 +67,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 			throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idJuego);
 		PartidaDTO dto = manager.cantarEnvite(idJuego, jugador.getApodo(), idEnvite, this).getDTO();
-		agregarNotificacion(jugador.getApodo() + " cantó " + "envite", idJuego); //TODO Obtener descripcion del envite
 		return dto;
 	}
 
@@ -107,7 +74,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idJuego);
 		PartidaDTO dto = manager.jugarCarta(idJuego, jugador.getApodo(), idCarta, this).getDTO();
-		agregarNotificacion(jugador.getApodo() + " jugó carta " + cartasManager.getCarta(idCarta), idJuego);
 		return dto;
 	}
 
@@ -115,24 +81,13 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idPartida);
 		PartidaDTO dto = manager.irAlMazo(idPartida, jugador.getApodo(), this).getDTO();
-		agregarNotificacion(jugador.getApodo() + " se fue al mazo", idPartida);
 		return dto;
 	}
 
 	@Override
-	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
+	public PartidaDTO repartirCartas(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idJuego);
-		try {
-			Chico partida = getPartida(idJuego).getChicoActual();
-			if (partida == null) {
-				throw new RemoteException("No se encontro la partida con id " + idJuego);
-			}
-			Map<Jugador, Set<Carta>> cartasAsignadas = partida.repartirCartas();
-			agregarNotificacion("Jugador " + jugador.getApodo() + " repartio cartas", partida.getPartida().getJugadores());
-			return convertToDTO(cartasAsignadas);
-		} catch (Exception e) {
-			throw new RemoteException("Ocurrio un problema al repartir cartas", e);
-		}
+		return manager.repartirCartas(idJuego, jugador.getApodo(), this);
 	}
 
 	@Override

@@ -119,7 +119,7 @@ verificarTurno = function(xml) {
 		if (partida.estado == "terminada") {
 			//TODO Que hacer si la partida terminó
 		} else {
-			if (partida.turnoActual == apodo.value) {
+			if (partida.jugadorActual.apodo == apodo.value) {
 				habilitarTurno(partida);
 			} else {
 				finTurno();	
@@ -153,10 +153,12 @@ parsePartida = function(xml) {
 	if (xml) {
 		var partida = {};
 		var jugadorActual = {
+			cartas: [],
 			envidos: [],
 			trucos: [],
 			alMazo: false,
-			repartirCartas: false
+			repartirCartas: false,
+			jugarCartas: false
 		};
 		var truco = {};
 		var envido = {};
@@ -166,21 +168,34 @@ parsePartida = function(xml) {
 		partida.idPartida = partidaElement.getAttribute("idPartida");
 		partida.estado = partidaElement.getAttribute("estado");
 		
-		var turnoActualElement = xml.getElementsByTagName("turnoActual");
+		var turnoActualElement = xml.getElementsByTagName("turnoActual")[0];
 		jugadorActual.apodo = turnoActualElement.getAttribute("apodo");
-		var envidosTurnoActualElement = xml.getElementsByTagName("turnoActualEnvidos");
-		for (;;) {
-			jugadorActual.envidos.push({
-				idEnvite: 12,
-				nombreEnvite: "nombre"
-			});
+		var envidosTurnoActualElement = xml.getElementsByTagName("turnoActualEnvidos")[0];
+		if (envidosTurnoActualElement) {
+			for (var i = 0; i < envidosTurnoActualElement.children.length; i++) {
+				jugadorActual.envidos.push({
+					idEnvite: envidosTurnoActualElement.children[i].getAttribute("idEnvite"),
+					nombreEnvite: envidosTurnoActualElement.children[i].getAttribute("nombre")
+				});
+			}
 		}
-		var trucosTurnoActualElement = xml.getElementsByTagName("turnoActualTrucos");
-		for (;;) {
-			jugadorActual.trucos.push({
-				idEnvite: 12,
-				nombreEnvite: "nombre"
-			});
+		var trucosTurnoActualElement = xml.getElementsByTagName("turnoActualTrucos")[0];
+		if (trucosTurnoActualElement) {
+			for (var i = 0; i < trucosTurnoActualElement.children.length; i++) {
+				jugadorActual.trucos.push({
+					idEnvite: trucosTurnoActualElement.children[i].getAttribute("idEnvite"),
+					nombreEnvite: envidosTurnoActualElement.children[i].getAttribute("nombre")
+				});
+			}
+		}
+		var cartasTurnoActualElement = xml.getElementsByTagName("turnoActualCartasDisponibles")[0];
+		if (cartasTurnoActualElement) {
+			for (var i = 0; i < cartasTurnoActualElement.children.length; i++) {
+				jugadorActual.cartas.push({
+					idCarta: cartasTurnoActualElement.children[i].getAttribute("idCarta"),
+					nombreCarta: cartasTurnoActualElement.children[i].getAttribute("numero") + " de " + cartasTurnoActualElement.children[i].getAttribute("palo");
+				});
+			}
 		}
 		
 		partida.jugadorActual = jugadorActual;
@@ -191,7 +206,6 @@ parsePartida = function(xml) {
 validarForm = function() {
 	var form = document.getElementById("juegoForm");
 	if (form) {
-		
 		//TODO Verificar que solo se carga una accion
 		return true;
 	} else {
@@ -204,7 +218,6 @@ irAlMazo = function() {
 	var alMazo = document.getElementById("alMazoField");
 	
 	if (form) {
-		
 		//TODO Pedir confirmacion, modificar el hidden si hace falta y disparar el submit
 		form.submit();
 	} else {
@@ -270,8 +283,6 @@ try {
 	</div>
 	
 	<div id="juegoLog" >
-		<p>Inicio de juego</p>
-		<p>Pepe jugo 1 de basto</p>
 	</div>
 </div>
 </body>

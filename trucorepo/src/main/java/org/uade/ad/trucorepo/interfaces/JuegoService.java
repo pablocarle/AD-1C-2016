@@ -4,11 +4,7 @@ import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import org.uade.ad.trucorepo.dtos.CartaDTO;
-import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
@@ -17,15 +13,13 @@ import org.uade.ad.trucorepo.exceptions.JuegoException;
 
 public interface JuegoService extends Remote {
 	
-	public static final String SERVICENAME = "juegoService"; //TODO El nombre del servicio (Para el Naming.lookup)
+	public static final String SERVICENAME = "juegoService";
 	
-	public Map<JugadorDTO, Set<CartaDTO>> repartirCartas(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException;
+	public PartidaDTO repartirCartas(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException;
 	
 	public PartidaDTO cantarEnvite(int idJuego, JugadorDTO jugador, int idEnvite) throws RemoteException, JuegoException;
 	
 	public PartidaDTO jugarCarta(int idJuego, JugadorDTO jugador, int idCarta) throws RemoteException, JuegoException;
-	
-	public List<EnviteDTO> getEnvitesDisponibles(int idJuego, JugadorDTO jugador) throws RemoteException, JuegoException;
 	
 	public PartidaDTO crearPartidaAbiertaIndividual(JugadorDTO jugador) throws RemoteException, JuegoException;
 	

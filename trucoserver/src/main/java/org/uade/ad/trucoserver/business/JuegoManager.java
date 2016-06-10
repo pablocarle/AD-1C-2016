@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Transaction;
+import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.Context;
 import org.uade.ad.trucoserver.dao.CartaDao;
@@ -134,6 +135,7 @@ public class JuegoManager {
 				}
 				tr.commit();
 				juegoContext.agregarJuego(partida);
+				juegoContext.agregarNotificacion("Turno de " + partida.getTurnoActual(), partida.getIdPartida());
 				return partida;
 			}
 		} else {
@@ -228,6 +230,7 @@ public class JuegoManager {
 		}
 		tr.commit();
 		context.actualizarPartida(p);
+		context.agregarNotificacion(apodo + " jugó carta " + CartasManager.getManager().getCarta(idCarta), idJuego);
 		return p;
 	}
 
@@ -241,6 +244,7 @@ public class JuegoManager {
 		p.irAlMazo(j);
 		context.actualizarPartida(p);
 		tr.commit();
+		context.agregarNotificacion(apodo + " se fue al mazo", idPartida);
 		return p;
 	}
 
@@ -259,6 +263,25 @@ public class JuegoManager {
 		}
 		context.actualizarPartida(p);
 		tr.commit();
+		context.agregarNotificacion(apodo + " cantó " + e.getNombreEnvite(), idJuego);
 		return p;
+	}
+
+	public PartidaDTO repartirCartas(int idJuego, String apodo, Context context) throws JuegoException {
+		Partida p = context.getPartida(idJuego);
+		if (p == null) {
+			throw new JuegoException("No existe partida en curso con id " + idJuego);
+		}
+		Transaction tr = jDao.getSession().beginTransaction();
+		Jugador j = jDao.getPorApodo(apodo);
+		try {
+			p.repartirCartas(j);
+		} catch (Exception e) {
+			throw new JuegoException(e);
+		}
+		context.agregarNotificacion("Jugador " + apodo + " repartio cartas", idJuego);
+		context.actualizarPartida(p);
+		tr.commit();
+		return p.getDTO();
 	}
 }

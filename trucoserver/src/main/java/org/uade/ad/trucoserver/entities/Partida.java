@@ -70,10 +70,6 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 		this.chicos = new ArrayList<>();
 	}
 
-	public List<Envite> getEnvitesDisponibles(Jugador jugador) throws JuegoException {
-		return null;
-	}
-	
 	public int getPuntosObtenidos(Jugador j) {
 		// TODO Obtener los puntos segun que pareja gano la partida (gano 2 chicos)
 		return 0;
@@ -256,5 +252,13 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 			}
 		}
 		return retList;
+	}
+
+	public void repartirCartas(Jugador j) throws JuegoException, Exception {
+		getChicoActual().repartirCartas();
+	}
+
+	public Jugador getTurnoActual() throws JuegoException {
+		return getChicoActual().getTurnoActual();
 	}
 }
