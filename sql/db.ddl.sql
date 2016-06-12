@@ -146,10 +146,9 @@ create table manos (
 
 create table tipo_envites (
 	idTipoEnvite int not null,
-	nombreEnvite varchar(20) not null,
+	nombreEnvite varchar(30) not null,
 	tipoEnvite varchar(1) not null,
-    puntajeQuerido int not null,
-    puntajeNoQuerido int not null,
+    puntaje int not null,
 	enviteAnterior int,
     constraint tipoEnvites_pk primary key (idTipoEnvite)
 );

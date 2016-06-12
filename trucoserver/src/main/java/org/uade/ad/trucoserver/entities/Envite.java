@@ -25,9 +25,7 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 	@Column
 	protected String nombreEnvite;
 	@Column
-	protected int puntajeQuerido;
-	@Column
-	protected int puntajeNoQuerido;
+	protected int puntaje;
 	@Column
 	protected int enviteAnterior;
 	
@@ -41,8 +39,7 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 		super();
 		this.idTipoEnvite = idTipoEnvite;
 		this.nombreEnvite = nombreEnvite;
-		this.puntajeQuerido = puntajeQuerido;
-		this.puntajeNoQuerido = puntajeNoQuerido;
+		this.puntaje = puntajeQuerido;
 		this.enviteAnterior = enviteAnterior;
 	}
 	public int getIdTipoEnvite() {
@@ -57,18 +54,13 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 	public void setNombreEnvite(String nombreEnvite) {
 		this.nombreEnvite = nombreEnvite;
 	}
-	public int getPuntajeQuerido() {
-		return puntajeQuerido;
+	public int getPuntaje() {
+		return puntaje;
 	}
-	public void setPuntajeQuerido(int puntajeQuerido) {
-		this.puntajeQuerido = puntajeQuerido;
+	public void setPuntaje(int puntajeQuerido) {
+		this.puntaje = puntajeQuerido;
 	}
-	public int getPuntajeNoQuerido() {
-		return puntajeNoQuerido;
-	}
-	public void setPuntajeNoQuerido(int puntajeNoQuerido) {
-		this.puntajeNoQuerido = puntajeNoQuerido;
-	}
+
 	public int getEnviteAnterior() {
 		return enviteAnterior;
 	}
