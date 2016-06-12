@@ -20,10 +20,11 @@
 
 fechaNotificaciones = null;
 
-setInterval(function() {
-	//Busca notificaciones para mostrar de la partida (cualquier evento que se genere en el server)
+//setInterval(checkNotificaciones, 10000);
+
+checkNotificaciones = function() {
 	var xhttp = new XMLHttpRequest();
-		xhttp.onreadystatechange = function() {
+	xhttp.onreadystatechange = function() {
 		if (xhttp.readyState == 4 && xhttp.status == 200) {
 			procesarNotificacion(xhttp.responseXML);
 		}
@@ -35,7 +36,7 @@ setInterval(function() {
 			xhttp.send();
 		}
 	}
-}, 10000);
+};
 
 procesarNotificacion = function(xml) {
 	var juego = document.getElementById("juegoLog");
@@ -50,11 +51,11 @@ procesarNotificacion = function(xml) {
 						fechaNotificaciones = n.fechaNotificacionStr;
 					} else {
 						var d1 = Date.parse(fechaNotificaciones);
-						if (notificacion.fechaNotificacion > d1) {
-							fechaNotificaciones = notificacion.fechaNotificacionStr;
+						if (n.fechaNotificacion > d1) {
+							fechaNotificaciones = n.fechaNotificacionStr;
 						}
 					}
-					html = html + "<b>" + n.fechaNotificacion + ":</b> " + n.descripcion + "</p>";
+					html = html + "<b>" + n.fechaNotificacionStr + ":</b> " + n.descripcion + "</p>";
 					juego.innerHTML = html + juego.innerHTML; 
 				}
 			}
@@ -95,7 +96,9 @@ parseNotificaciones = function(xml) {
 	return retArray;
 };
 
-setInterval(function() {
+//setInterval(asyncCheckTurno, 10000);
+
+asyncCheckTurno = function() {
 	//Busca si es el turno
 	var xhttp = new XMLHttpRequest();
 		xhttp.onreadystatechange = function() {
@@ -110,7 +113,7 @@ setInterval(function() {
 			xhttp.send();
 		}
 	}
-}, 10000);
+};
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
@@ -138,13 +141,32 @@ habilitarTurno = function(partida) {
 	var selectEnvidos = document.getElementById("envidoSelect");
 	var selectTrucos = document.getElementById("trucoSelect");
 	var selectCartas = document.getElementById("cartaSelect");
+
+	var jugarCartaBtn = document.getElementById("btnSubmitCarta");
+	var cantarEnvidoBtn = document.getElementById("btnSubmitEnvido");
+	var cantarTrucoBtn = document.getElementById("btnSubmitTruco");
 	var alMazoBtn = document.getElementById("alMazoBtn");
 	var repartirCartasBtn = document.getElementById("btnRepartir");
 
 	if (jActual.repartirCartas) {
 		repartirCartasBtn.removeAttribute("disabled");
+		jugarCartaBtn.setAttribute("disabled", "disabled");
+		cantarEnvidoBtn.setAttribute("disabled", "disabled");
+		cantarTrucoBtn.setAttribute("disabled", "disabled");
+		alMazoBtn.setAttribute("disabled", "disabled");
+	} else {
+
 	}
 };
+
+function removeOptions(selectbox)
+{
+    var i;
+    for(i=selectbox.options.length-1;i>=0;i--)
+    {
+        selectbox.remove(i);
+    }
+}
 
 finTurno = function() {
 	//Deshabilitar todos los elementos hasta que sea turno de nuevo
@@ -161,41 +183,41 @@ parsePartida = function(xml) {
 			trucos: [],
 			alMazo: false,
 			repartirCartas: false,
-			jugarCartas: false,
-			envidoEnCurso: false,
-			trucoEnCurso: false
+			jugarCartas: false
 		};
 		var partidaElement = xml.getElementsByTagName("Partida")[0];
 		
 		partida.idPartida = partidaElement.getAttribute("idPartida");
 		partida.estado = partidaElement.getAttribute("estado");
+		partida.envidoEnCurso = partidaElement.getAttribute("envidoEnCurso");
+		partida.trucoEnCurso = partidaElement.getAttribute("trucoEnCurso");
 		
 		var turnoActualElement = xml.getElementsByTagName("turnoActual")[0];
 		jugadorActual.apodo = turnoActualElement.getAttribute("apodo");
-		var envidosTurnoActualElement = xml.getElementsByTagName("turnoActualEnvidos")[0];
-		if (envidosTurnoActualElement) {
-			for (var i = 0; i < envidosTurnoActualElement.children.length; i++) {
+		var envidosTurnoActualElements = xml.getElementsByTagName("turnoActualEnvidos");
+		if (envidosTurnoActualElements) {
+			for (var i = 0; i < envidosTurnoActualElements.length; i++) {
 				jugadorActual.envidos.push({
-					idEnvite: envidosTurnoActualElement.children[i].getAttribute("idEnvite"),
-					nombreEnvite: envidosTurnoActualElement.children[i].getAttribute("nombre")
+					idEnvite: envidosTurnoActualElements[i].getAttribute("idEnvite"),
+					nombreEnvite: envidosTurnoActualElements[i].getAttribute("nombre")
 				});
 			}
 		}
-		var trucosTurnoActualElement = xml.getElementsByTagName("turnoActualTrucos")[0];
-		if (trucosTurnoActualElement) {
-			for (var i = 0; i < trucosTurnoActualElement.children.length; i++) {
+		var trucosTurnoActualElements = xml.getElementsByTagName("turnoActualTrucos");
+		if (trucosTurnoActualElements) {
+			for (var i = 0; i < trucosTurnoActualElements.length; i++) {
 				jugadorActual.trucos.push({
-					idEnvite: trucosTurnoActualElement.children[i].getAttribute("idEnvite"),
-					nombreEnvite: envidosTurnoActualElement.children[i].getAttribute("nombre")
+					idEnvite: trucosTurnoActualElements[i].getAttribute("idEnvite"),
+					nombreEnvite: envidosTurnoActualElements[i].getAttribute("nombre")
 				});
 			}
 		}
-		var cartasTurnoActualElement = xml.getElementsByTagName("turnoActualCartasDisponibles")[0];
-		if (cartasTurnoActualElement) {
-			for (var i = 0; i < cartasTurnoActualElement.children.length; i++) {
+		var cartasTurnoActualElements = xml.getElementsByTagName("turnoActualCartasDisponibles");
+		if (cartasTurnoActualElements) {
+			for (var i = 0; i < cartasTurnoActualElements.length; i++) {
 				jugadorActual.cartas.push({
-					idCarta: cartasTurnoActualElement.children[i].getAttribute("idCarta"),
-					nombreCarta: cartasTurnoActualElement.children[i].getAttribute("numero") + " de " + cartasTurnoActualElement.children[i].getAttribute("palo")
+					idCarta: cartasTurnoActualElements[i].getAttribute("idCarta"),
+					nombreCarta: cartasTurnoActualElements[i].getAttribute("numero") + " de " + cartasTurnoActualElements[i].getAttribute("palo")
 				});
 			}
 		}
@@ -204,11 +226,7 @@ parsePartida = function(xml) {
 		if (!cartasTurnoActualElement && !trucosTurnoActualElement && !envidosTurnoActualElement) {
 			jugadorActual.repartirCartas = true;
 		} else {
-			if (partida.estado == "truco_curso") {
-				partida.trucoEnCurso = true;
-			} else if (partida.estado == "envido_curso") {
-				partida.envidoEnCurso = true;
-			} else {
+			if (partida.trucoEnCurso === "false" && partida.envidoEnCurso === "false") {
 				jugadorActual.alMazo = true;
 				jugadorActual.jugarCartas = true;
 			}
@@ -229,29 +247,105 @@ validarForm = function() {
 	}
 };
 
+//TODO Quitar todos los submit. Todos deben ser onclicks ajax, sino tengo que hacer forward a la vista y es un bardo que se refresque la pantalla
+
 irAlMazo = function() {
-	var form = document.getElementById("juegoForm");
-	var alMazo = document.getElementById("alMazoField");
-	
-	if (form) {
-		alMazo.value = "true";
-		form.submit();
-		alMazo.value = "false";
-	} else {
-		alert('No form');
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status != 200) {
+			handleError(xhttp.responseXML);
+		}
+	};
+	if (document) {
+		var idPartidaElement = document.getElementById("idPartidaField");
+		if (idPartidaElement && idPartidaElement.value) {
+			xhttp.open("POST", "/trucoweb/PartidaServlet/Jugar?idPartida=" + idPartidaElement.value + "&alMazo=true", true);
+			xhttp.send();
+			finTurno();
+		}
 	}
 };
 
-repartirCartas = function() {
-	var form = document.getElementById("juegoForm");
-	var repartir = document.getElementById("repartirField");
+repartircartas = function() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status != 200) {
+			handleError(xhttp.responseXML);
+		}
+	};
+	if (document) {
+		var idPartidaElement = document.getElementById("idPartidaField");
+		if (idPartidaElement && idPartidaElement.value) {
+			xhttp.open("POST", "/trucoweb/PartidaServlet/Jugar?idPartida=" + idPartidaElement.value + "&repartirCartas=true", true);
+			xhttp.send();
+			finTurno();
+		}
+	}
+};
 
-	if (form) {
-		repartir.value = "true";
-		form.submit();
-		repartir.value = "false";
-	} else {
-		alert("No form");
+jugarcarta = function() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status != 200) {
+			handleError(xhttp.responseXML);
+		}
+	};
+	if (document) {
+		var cartaSelect = document.getElementById("cartaSelect");
+		if (cartaSelect && cartaSelect.value) {
+			var idPartidaElement = document.getElementById("idPartidaField");
+			if (idPartidaElement && idPartidaElement.value) {
+				xhttp.open("POST", "/trucoweb/PartidaServlet/Jugar?idPartida=" + idPartidaElement.value + "&idCarta=" + cartaSelect.value, true);
+				xhttp.send();
+				finTurno();
+			}
+		} else if (cartaSelect && !cartaSelect.value) {
+			alert("Debe seleccionar una carta");
+		}
+	}
+};
+
+cantarenvido = function() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status != 200) {
+			handleError(xhttp.responseXML);
+		}
+	};
+	if (document) {
+		var enviteSelect = document.getElementById("envidoSelect");
+		if (enviteSelect && enviteSelect.value) {
+			var idPartidaElement = document.getElementById("idPartidaField");
+			if (idPartidaElement && idPartidaElement.value) {
+				xhttp.open("POST", "/trucoweb/PartidaServlet/Jugar?idPartida=" + idPartidaElement.value + "&idEnvite=" + enviteSelect.value, true);
+				xhttp.send();
+				finTurno();
+			}
+		} else if (cartaSelect && !cartaSelect.value) {
+			alert("Debe seleccionar un envido");
+		}
+	}
+};
+
+cantartruco = function() {
+	var xhttp = new XMLHttpRequest();
+	xhttp.onreadystatechange = function() {
+		if (xhttp.readyState == 4 && xhttp.status != 200) {
+			handleError(xhttp.responseXML);
+		}
+	};
+	if (document) {
+		var enviteSelect = document.getElementById("trucoSelect");
+		if (enviteSelect && enviteSelect.value) {
+			var idPartidaElement = document.getElementById("idPartidaField");
+			if (idPartidaElement && idPartidaElement.value) {
+				xhttp.open("POST", "/trucoweb/PartidaServlet/Jugar?idPartida=" + idPartidaElement.value + "&idEnvite=" + enviteSelect.value, true);
+				xhttp.send();
+				finTurno();
+			}
+		} else if (cartaSelect && !cartaSelect.value) {
+			alert("Debe seleccionar un truco");
+		}
 	}
 };
 
@@ -283,31 +377,29 @@ try {
 		<form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
 			<table>
 				<tr>
-					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" disabled="disabled" onclick="repartirCartas();" />
+					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" onclick="repartircartas();" />
 				</tr>
 				<tr>
 					<td>Jugar carta</td>
-					<td><select name="idCarta" id="cartaSelect" disabled="disabled"></select></td>
-					<td><input type="submit" id="btnSubmitCarta" value="Jugar" disabled="disabled"/></td>
+					<td><select name="idCarta" id="cartaSelect" ></select></td>
+					<td><input type="button" id="btnSubmitCarta" value="Jugar" onclick="jugarcarta();" /></td>
 				</tr>
 				<tr>
 					<td>Cantar Envido</td>
-					<td><select name="idEnvite" id="envidoSelect" disabled="disabled"></select></td>
-					<td><input type="submit" id="btnSubmitEnvido" value="Cantar" disabled="disabled"/></td>
+					<td><select name="idEnvite" id="envidoSelect" ></select></td>
+					<td><input type="button" id="btnSubmitEnvido" value="Cantar" onclick="cantarenvido();" /></td>
 				</tr>
 				<tr>
 					<td colspan="1">Cantar Truco</td>
-					<td colspan="1"><select name="idEnvite" id="trucoSelect" disabled="disabled"></select></td>
-					<td><input type="submit" id="btnSubmitTruco" value="Cantar" disabled="disabled"/></td>
+					<td colspan="1"><select name="idEnvite" id="trucoSelect" ></select></td>
+					<td><input type="button" id="btnSubmitTruco" value="Cantar" onclick="cantartruco();" /></td>
 				</tr>
 				<tr>
 					<td colspan="3">
-						<input type="button" id="alMazoBtn" value="Ir al Mazo" onclick="irAlMazo();" disabled="disabled" />
+						<input type="button" id="alMazoBtn" value="Ir al Mazo" onclick="irAlMazo();" />
 					</td>
 				</tr>
 			</table>
-			<input type="hidden" name="alMazo" id="alMazoField" value="false" />
-			<input type="hidden" name="repartirCartas" id="repartirField" value="false" />
 			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getAttribute("idPartida") %> />
 			<input type="hidden" name="apodo" id="apodoField" value=<%= session.getAttribute("uid").toString() %> />
 		</form>

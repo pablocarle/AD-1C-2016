@@ -191,7 +191,7 @@ public class PartidaServlet extends HttpServlet {
 					xmlResponse(partida, request, response);
 					break;
 				case REPARTIR_CARTAS:
-					//partida = delegate.repartirCartas(jugador, idPartida); //TODO Revisar
+					partida = delegate.repartirCartas(jugador, idPartida);
 					xmlResponse(partida, request, response);
 					break;
 				default:
@@ -236,9 +236,9 @@ public class PartidaServlet extends HttpServlet {
 			return AccionTipo.JUEGACARTA;
 		} else if (idEnviteStr != null && idEnviteStr.length() > 0) {
 			return AccionTipo.ENVITE;
-		} else if (alMazoStr != null && alMazoStr.length() > 0) {
+		} else if (alMazoStr != null && alMazoStr.length() > 0 && Boolean.parseBoolean(alMazoStr)) {
 			return AccionTipo.ALMAZO;
-		} else if (repartirCartas != null && repartirCartas.length() > 0) {
+		} else if (repartirCartas != null && repartirCartas.length() > 0 && Boolean.parseBoolean(repartirCartas)) {
 			return AccionTipo.REPARTIR_CARTAS;
 		}
 		return AccionTipo.DESCONOCIDO;
