@@ -22,6 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.CartasManager;
 
 /**
@@ -123,6 +124,7 @@ public class Chico implements HasDTO<ChicoDTO> {
 
 	/**
 	 * Modifica el orden de juego por cambio de mano
+	 * 
 	 * @throws Exception 
 	 */
 	private void circularOrdenJuego() throws Exception {
@@ -144,8 +146,10 @@ public class Chico implements HasDTO<ChicoDTO> {
 	 * @return Mapa K: Jugador V: Set de cartas asignadas
 	 * @throws Exception Si no se pueden repartir las cartas por tener mano en progreso
 	 */
-	public Map<Jugador, Set<Carta>> repartirCartas() throws Exception {
+	public Map<Jugador, Set<Carta>> repartirCartas(Jugador j) throws Exception {
 		Map<Jugador, Set<Carta>> cartas = null;
+		if (!esTurno(j))
+			throw new JuegoException("No es el turno de " + j.getApodo());
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada() || !manoActual.tieneMovimientos()) {
 			circularOrdenJuego();
@@ -166,12 +170,12 @@ public class Chico implements HasDTO<ChicoDTO> {
 			}
 			
 			List<Jugador> ordenJuego = null;
-			if ((ordenJuegoActual == null || ordenJuegoActual.isEmpty())){
+			if ((ordenJuegoActual == null || ordenJuegoActual.isEmpty())) {
 				ordenJuego = primerOrdenJuego;
 			} else {
 				ordenJuego = ordenJuegoActual;
 			}
-			manos.add(new Mano(partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego));
+			manos.add(new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego));
 		}
 		
 		return cartas == null ? getManoActual().getCartasAsignadas() : cartas;

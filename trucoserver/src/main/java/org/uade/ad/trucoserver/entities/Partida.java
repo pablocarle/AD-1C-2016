@@ -257,7 +257,7 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 	}
 
 	public void repartirCartas(Jugador j) throws JuegoException, Exception {
-		getChicoActual().repartirCartas();
+		getChicoActual().repartirCartas(j);
 	}
 
 	public Jugador getTurnoActual() throws JuegoException {

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.servlet.ServletException;
@@ -70,9 +69,9 @@ public class NotificationServlet extends HttpServlet {
 			} else {
 				String fechaStr = request.getParameter("fecha");
 				String idPartidaStr = request.getParameter("idPartida");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
 				try {
-					Date fecha = Calendar.getInstance().getTime(); //Por default debe ser desde la fecha actual, sino desastre!
+					Date fecha = null;
 					if (fechaStr != null && fechaStr.length() > 0 && !"null".equals(fechaStr)) {
 						fecha = sdf.parse(fechaStr);
 					}

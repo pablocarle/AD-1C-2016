@@ -50,6 +50,15 @@ public class NotificacionDTO implements Serializable {
 		this.tipoNotificacion = "mensaje";
 	}
 
+	public NotificacionDTO(String mensaje, Integer idPartida) {
+		this.descripcion = mensaje;
+		this.fechaNotificacion = Calendar.getInstance().getTime();
+		this.tipoNotificacion = "mensaje";
+		if (idPartida != null) {
+			this.idPartida = idPartida;
+		}
+	}
+
 	@Override
 	public String toString() {
 		return "NotificacionDTO [url=" + url + ", descripcion=" + descripcion + ", partida=" + partida

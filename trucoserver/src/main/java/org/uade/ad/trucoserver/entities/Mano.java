@@ -64,8 +64,9 @@ public class Mano {
 		super();
 	}
 	
-	public Mano(Pareja pareja1, Pareja pareja2, Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuegoInicial) {
+	Mano(Chico c, Pareja pareja1, Pareja pareja2, Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuegoInicial) {
 		super();
+		this.chico = c;
 		this.pareja1 = pareja1;
 		this.pareja2 = pareja2;
 		this.ordenJuegoInicial = ordenJuegoInicial;

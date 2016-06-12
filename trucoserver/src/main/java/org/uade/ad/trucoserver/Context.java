@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -197,9 +198,18 @@ public abstract class Context extends UnicastRemoteObject {
 			ultimaFecha = new Date(0L);
 		Map<Date, NotificacionDTO> map = notificaciones.get(apodoJugador);
 		if (map != null && !map.isEmpty()) {
-			for (Map.Entry<Date, NotificacionDTO> entry : map.entrySet()) {
+			Iterator<Map.Entry<Date, NotificacionDTO>> it = map.entrySet().iterator();
+			Map.Entry<Date, NotificacionDTO> entry = null;
+			while (it.hasNext()) {
+				entry = it.next();
 				if (entry.getKey().after(ultimaFecha) && (idPartida == null || idPartida.equals(entry.getValue().getIdPartida()))) {
 					retMap.put(entry.getKey(), entry.getValue());
+				} else if (entry.getKey().before(ultimaFecha)) {
+					if (entry.getValue().getTipoNotificacion().equals("nueva_partida")) {
+						it.remove();
+					} else if (entry.getValue().getTipoNotificacion().equals("mensaje") && entry.getValue().getIdPartida() == idPartida) {
+						it.remove();
+					}
 				}
 			}
 		}
@@ -214,23 +224,23 @@ public abstract class Context extends UnicastRemoteObject {
 		Context.agregarParejaModoLibre(pareja);
 	}
 	
-	public void agregarNotificacion(String mensaje, Jugador jugador) {
+	public void agregarNotificacion(String mensaje, Integer idPartida, Jugador jugador) {
 		Map<Date, NotificacionDTO> mapa = null;
 		if (notificaciones.containsKey(jugador.getApodo())) {
 			mapa = notificaciones.get(jugador.getApodo());
-			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje));
+			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));
 		} else {
 			mapa = new HashMap<>();
-			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje));
+			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));
 			synchronized (notificaciones) {
 				notificaciones.put(jugador.getApodo(), mapa);
 			}
 		}
 	}
 	
-	public void agregarNotificacion(String mensaje, List<Jugador> jugadores) {
+	public void agregarNotificacion(String mensaje, Integer idPartida, List<Jugador> jugadores) {
 		for (Jugador j : jugadores) {
-			agregarNotificacion(mensaje, j);
+			agregarNotificacion(mensaje, idPartida, j);
 		}
 	}
 	
@@ -239,7 +249,7 @@ public abstract class Context extends UnicastRemoteObject {
 		if (p == null) {
 			throw new RuntimeException("No se encontro partida activa con id " + idPartida);
 		}
-		agregarNotificacion(mensaje, p.getJugadores());
+		agregarNotificacion(mensaje, idPartida, p.getJugadores());
 	}
 
 	/**
@@ -314,9 +324,13 @@ public abstract class Context extends UnicastRemoteObject {
 		throw new JuegoException("La partida con ID " + idPartida + " no existe o el juegador con id " + apodoJugador + " no pertenece a la partida");
 	}
 
-	public void actualizarPartida(Partida p) {
-		//TODO Actualiza ultimo estado de la partida p (reemplazar en coleccion?)
-		///XXX Considerar en este punto que es clave la sincronizacion porque 
-		///mientras se actualiza el nuevo estado de la partida puede llegar otro preguntando por su turno
+	public synchronized void actualizarPartida(Partida p) {
+		Iterator<Partida> it = juegos.iterator();
+		while (it.hasNext()) {
+			if (it.next().equals(p)) {
+				it.remove();
+			}
+		}
+		juegos.add(p);
 	}
 }
