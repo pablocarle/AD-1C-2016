@@ -175,6 +175,7 @@ public class Chico implements HasDTO<ChicoDTO> {
 			} else {
 				ordenJuego = ordenJuegoActual;
 			}
+			Collections.rotate(ordenJuego, -1);
 			manos.add(new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego));
 		}
 		

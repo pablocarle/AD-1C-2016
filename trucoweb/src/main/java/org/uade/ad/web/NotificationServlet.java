@@ -69,7 +69,7 @@ public class NotificationServlet extends HttpServlet {
 			} else {
 				String fechaStr = request.getParameter("fecha");
 				String idPartidaStr = request.getParameter("idPartida");
-				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS");
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 				try {
 					Date fecha = null;
 					if (fechaStr != null && fechaStr.length() > 0 && !"null".equals(fechaStr)) {

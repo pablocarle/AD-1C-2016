@@ -21,6 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.dtos.CartaDTO;
+import org.uade.ad.trucorepo.dtos.CartasDisponiblesDTO;
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
@@ -192,6 +193,14 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 				dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(turnoActual), EnviteDTO.class));
 				dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(turnoActual), EnviteDTO.class));
 			}
+			List<CartasDisponiblesDTO> cartasDisponibles = new ArrayList<>();
+			List<CartaDTO> jCartasDisponibles;
+			List<Jugador> jugadores = getJugadores();
+			for (int i = 0; i < jugadores.size(); i++) {
+				jCartasDisponibles = DTOUtil.getDTOs(chicoActual.getCartasDisponibles(jugadores.get(i)), CartaDTO.class);
+				cartasDisponibles.add(new CartasDisponiblesDTO(jugadores.get(i).getDTO(), jCartasDisponibles));
+			}
+			dto.setCartasDisponibles(cartasDisponibles);
 			dto.setEnvidoEnCurso(chicoActual.hayEnvidoEnCurso());
 			dto.setTrucoEnCurso(chicoActual.hayTrucoEnCurso());
 		}

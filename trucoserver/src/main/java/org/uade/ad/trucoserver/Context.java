@@ -228,7 +228,13 @@ public abstract class Context extends UnicastRemoteObject {
 		Map<Date, NotificacionDTO> mapa = null;
 		if (notificaciones.containsKey(jugador.getApodo())) {
 			mapa = notificaciones.get(jugador.getApodo());
-			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));
+			Calendar c = Calendar.getInstance();
+			Date now = c.getTime();
+			if (mapa.containsKey(now)) {
+				mapa.put(new Date(now.getTime() + 1), new NotificacionDTO(mensaje, idPartida));
+			} else {
+				mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));
+			}
 		} else {
 			mapa = new HashMap<>();
 			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));

@@ -1,3 +1,4 @@
+use modeloparcial;
 
 drop database trucodb;
 

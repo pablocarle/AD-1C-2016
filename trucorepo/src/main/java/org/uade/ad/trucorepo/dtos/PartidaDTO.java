@@ -1,6 +1,7 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -36,15 +37,17 @@ public class PartidaDTO implements Serializable {
 	private JugadorDTO turnoActual;
 	
 	@XmlElement
-	private List<EnviteDTO> turnoActualEnvidos;
+	private List<EnviteDTO> turnoActualEnvidos = new ArrayList<>();
 	@XmlElement
-	private List<CartaDTO> turnoActualCartasDisponibles;
+	private List<CartaDTO> turnoActualCartasDisponibles = new ArrayList<>();
 	@XmlElement
-	private List<EnviteDTO> turnoActualTrucos;
+	private List<EnviteDTO> turnoActualTrucos= new ArrayList<>();
 	@XmlAttribute
 	private boolean trucoEnCurso = false;
 	@XmlAttribute
 	private boolean envidoEnCurso = false;
+	@XmlElement
+	private List<CartasDisponiblesDTO> cartasDisponibles = new ArrayList<>();
 	
 	public PartidaDTO() {
 		super();
@@ -169,5 +172,13 @@ public class PartidaDTO implements Serializable {
 
 	public void setEnvidoEnCurso(boolean envidoEnCurso) {
 		this.envidoEnCurso = envidoEnCurso;
+	}
+
+	public List<CartasDisponiblesDTO> getCartasDisponibles() {
+		return cartasDisponibles;
+	}
+
+	public void setCartasDisponibles(List<CartasDisponiblesDTO> cartasDisponibles) {
+		this.cartasDisponibles = cartasDisponibles;
 	}
 }

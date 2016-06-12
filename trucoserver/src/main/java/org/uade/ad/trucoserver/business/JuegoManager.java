@@ -291,7 +291,11 @@ public class JuegoManager {
 		context.agregarNotificacion("Jugador " + apodo + " repartio cartas", idJuego);
 		context.agregarNotificacion("Turno de " + p.getTurnoActual().getApodo(), p.getIdPartida());
 		context.actualizarPartida(p);
-		tr.commit();
+		try {
+			tr.commit();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return p.getDTO();
 	}
 }

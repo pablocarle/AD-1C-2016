@@ -43,7 +43,10 @@ procesarNotificacion = function(xml) {
 	if (xml) {
 		var notificaciones = parseNotificaciones(xml);
 		if (notificaciones.length) {
-			for (var i = 0; i < notificaciones.length; i++) {
+			notificaciones.sort(function(a, b) {
+				return b.fechaNotificacion - a.fechaNotificacion;
+			});
+			for (var i = notificaciones.length - 1; i >= 0; i--) {
 				var n = notificaciones[i];
 				if (n.tipoNotificacion != "nueva_partida") {
 					var html = "<p>";
@@ -125,10 +128,24 @@ verificarTurno = function(xml) {
 			if (partida.jugadorActual.apodo == apodo.value) {
 				habilitarTurno(partida);
 			} else {
+				actualizarCartasSelect(partida);
 				finTurno();	
 			}
 		}
 	}
+};
+
+actualizarCartasSelect = function(partida) {
+	var selectCartas = document.getElementById("cartaSelect");
+	removeOptions(selectCartas);
+	if (partida && partida.jugadorActual) {
+		for (var i = 0; i < partida.jugadorActual.cartas.length; i++) {
+			var option = document.createElement("option");
+			option.value = partida.jugadorActual.cartas[i].idCarta;
+			option.text = partida.jugadorActual.cartas[i].nombreCarta;
+			selectCartas.appendChild(option);
+		}
+	}	
 };
 
 habilitarTurno = function(partida) {
@@ -148,30 +165,96 @@ habilitarTurno = function(partida) {
 	var alMazoBtn = document.getElementById("alMazoBtn");
 	var repartirCartasBtn = document.getElementById("btnRepartir");
 
+	removeOptions(selectEnvidos);
+	removeOptions(selectTrucos);
+	removeOptions(selectCartas);
+
+	if (partida.jugadorActual.cartas) {
+		for (var i = 0; i < partida.jugadorActual.cartas.length; i++) {
+			var option = document.createElement("option");
+			option.value = partida.jugadorActual.cartas[i].idCarta;
+			option.text = partida.jugadorActual.cartas[i].nombreCarta;
+			selectCartas.appendChild(option);
+		}
+	}
+	if (partida.jugadorActual.trucos) {
+		for (var i = 0; i < partida.jugadorActual.trucos.length; i++) {
+			var option = document.createElement("option");
+			option.value = partida.jugadorActual.trucos[i].idEnvite;
+			option.text = partida.jugadorActual.trucos[i].nombreEnvite;
+		}
+	}
+	if (partida.jugadorActual.envidos) {
+		for (var i = 0; i < partida.jugadorActual.envidos.length; i++) {
+			var option = document.createElement("option");
+			option.value = partida.jugadorActual.envidos[i].idEnvite;
+			option.text = partida.jugadorActual.envidos[i].nombreEnvite;
+		}
+	}
+	
+	jugarCartaBtn.setAttribute("disabled", "disabled");
+	cantarEnvidoBtn.setAttribute("disabled", "disabled");
+	cantarTrucoBtn.setAttribute("disabled", "disabled");
+	alMazoBtn.setAttribute("disabled", "disabled");
+	repartirCartasBtn.setAttribute("disabled", "disabled");
+
+	selectEnvidos.setAttribute("disabled", "disabled");
+	selectTrucos.setAttribute("disabled", "disabled");
 	if (jActual.repartirCartas) {
 		repartirCartasBtn.removeAttribute("disabled");
-		jugarCartaBtn.setAttribute("disabled", "disabled");
-		cantarEnvidoBtn.setAttribute("disabled", "disabled");
-		cantarTrucoBtn.setAttribute("disabled", "disabled");
-		alMazoBtn.setAttribute("disabled", "disabled");
+	} else if (partida.envidoEnCurso === "true") {
+		cantarEnvidoBtn.removeAttribute("disabled");
+		selectEnvidos.removeAttribute("disabled");
+	} else if (partida.trucoEnCurso === "true") {
+		cantarTrucoBtn.removeAttribute("disabled");
+		selectTrucos.removeAttribute("disabled");
 	} else {
-
+		alMazoBtn.removeAttribute("disabled");
+		if (partida.jugadorActual.cartas.length > 0) {
+			jugarCartaBtn.removeAttribute("disabled");
+			selectCartas.removeAttribute("disabled");
+		}
+		if (partida.jugadorActual.envidos.length > 0) {
+			cantarEnvidoBtn.removeAttribute("disabled");
+			selectEnvidos.removeAttribute("disabled");
+		}
+		if (partida.jugadorActual.trucos.length > 0) {
+			cantarTrucoBtn.removeAttribute("disabled");
+			selectTrucos.removeAttribute("disabled");
+		}
 	}
 };
 
 function removeOptions(selectbox)
 {
-    var i;
-    for(i=selectbox.options.length-1;i>=0;i--)
-    {
-        selectbox.remove(i);
-    }
+	if (selectbox && selectbox.options) {
+	    var i;
+	    for(i=selectbox.options.length-1;i>=0;i--)
+	    {
+	        selectbox.remove(i);
+	    }
+	}
 }
 
 finTurno = function() {
-	//Deshabilitar todos los elementos hasta que sea turno de nuevo
-	var form = document.getElementById("juegoForm");
-	form.disabled = "disabled";
+	var selectEnvidos = document.getElementById("envidoSelect");
+	var selectTrucos = document.getElementById("trucoSelect");
+	var selectCartas = document.getElementById("cartaSelect");
+
+	var jugarCartaBtn = document.getElementById("btnSubmitCarta");
+	var cantarEnvidoBtn = document.getElementById("btnSubmitEnvido");
+	var cantarTrucoBtn = document.getElementById("btnSubmitTruco");
+	var alMazoBtn = document.getElementById("alMazoBtn");
+	var repartirCartasBtn = document.getElementById("btnRepartir");
+
+	jugarCartaBtn.setAttribute("disabled", "disabled");
+	cantarEnvidoBtn.setAttribute("disabled", "disabled");
+	cantarTrucoBtn.setAttribute("disabled", "disabled");
+	alMazoBtn.setAttribute("disabled", "disabled");
+	repartirCartasBtn.setAttribute("disabled", "disabled");
+
+	selectEnvidos.setAttribute("disabled", "disabled");
+	selectTrucos.setAttribute("disabled", "disabled");
 };
 
 parsePartida = function(xml) {
@@ -213,17 +296,32 @@ parsePartida = function(xml) {
 			}
 		}
 		var cartasTurnoActualElements = xml.getElementsByTagName("turnoActualCartasDisponibles");
-		if (cartasTurnoActualElements) {
+		var cartasJugadorElements = xml.getElementsByTagName("cartasDisponibles");
+		if (cartasTurnoActualElements && cartasTurnoActualElements.length > 0) {
 			for (var i = 0; i < cartasTurnoActualElements.length; i++) {
 				jugadorActual.cartas.push({
 					idCarta: cartasTurnoActualElements[i].getAttribute("idCarta"),
 					nombreCarta: cartasTurnoActualElements[i].getAttribute("numero") + " de " + cartasTurnoActualElements[i].getAttribute("palo")
 				});
 			}
+		} else if (cartasJugadorElements && cartasJugadorElements.length > 0) {
+			var children = cartasJugadorElements[i].children;
+			if (children) {
+				for (var j = 0; j < children.length; j++) {
+					if (children[j].tagName == "cartas") {
+						jugadorActual.cartas.push({
+							idCarta: children[j].getAttribute("idCarta"),
+							nombreCarta: children[j].getAttribute("numero") + " de " + children[j].getAttribute("palo")
+						});
+					}
+				}
+			}
 		}
 
 		//Para repartir cartas, no debe tener cartas disponibles, ni envites
-		if (!cartasTurnoActualElement && !trucosTurnoActualElement && !envidosTurnoActualElement) {
+		if ((!cartasTurnoActualElements || cartasTurnoActualElements.length == 0) 
+				&& (!trucosTurnoActualElements || trucosTurnoActualElements.length == 0) 
+				&& (!envidosTurnoActualElements || envidosTurnoActualElements.length == 0)) {
 			jugadorActual.repartirCartas = true;
 		} else {
 			if (partida.trucoEnCurso === "false" && partida.envidoEnCurso === "false") {
@@ -366,7 +464,7 @@ try {
 		}
 	}
 	
-	title = "Juego de " + user.getApodo() + "[" + "Modalidad " + partida.getTipoPartida().getNombre() + "]";
+	title = "Juego de " + user.getApodo() + " [" + "Modalidad " + partida.getTipoPartida().getNombre() + "]";
 } catch (Exception e) {
 	e.printStackTrace();	
 }
@@ -377,26 +475,26 @@ try {
 		<form id="juegoForm" method="post" action="PartidaServlet/Jugar" onsubmit="return validarForm();" >
 			<table>
 				<tr>
-					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" onclick="repartircartas();" />
+					<td colspan="3"><input type="button" id="btnRepartir" value="Repartir Cartas" disabled="disabled" onclick="repartircartas();" />
 				</tr>
 				<tr>
 					<td>Jugar carta</td>
 					<td><select name="idCarta" id="cartaSelect" ></select></td>
-					<td><input type="button" id="btnSubmitCarta" value="Jugar" onclick="jugarcarta();" /></td>
+					<td><input type="button" id="btnSubmitCarta" value="Jugar" disabled="disabled" onclick="jugarcarta();" /></td>
 				</tr>
 				<tr>
 					<td>Cantar Envido</td>
-					<td><select name="idEnvite" id="envidoSelect" ></select></td>
-					<td><input type="button" id="btnSubmitEnvido" value="Cantar" onclick="cantarenvido();" /></td>
+					<td><select name="idEnvite" id="envidoSelect" disabled="disabled" ></select></td>
+					<td><input type="button" id="btnSubmitEnvido" value="Cantar" disabled="disabled" onclick="cantarenvido();" /></td>
 				</tr>
 				<tr>
 					<td colspan="1">Cantar Truco</td>
-					<td colspan="1"><select name="idEnvite" id="trucoSelect" ></select></td>
-					<td><input type="button" id="btnSubmitTruco" value="Cantar" onclick="cantartruco();" /></td>
+					<td colspan="1"><select name="idEnvite" id="trucoSelect" disabled="disabled" ></select></td>
+					<td><input type="button" id="btnSubmitTruco" value="Cantar" disabled="disabled" onclick="cantartruco();" /></td>
 				</tr>
 				<tr>
 					<td colspan="3">
-						<input type="button" id="alMazoBtn" value="Ir al Mazo" onclick="irAlMazo();" />
+						<input type="button" id="alMazoBtn" value="Ir al Mazo" disabled="disabled" onclick="irAlMazo();" />
 					</td>
 				</tr>
 			</table>

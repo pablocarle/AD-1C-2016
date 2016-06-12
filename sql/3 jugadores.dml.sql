@@ -1,4 +1,16 @@
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
+values ('a', 'a', 'a@gmail.com', 1, 'a');
+
+insert into jugadores (nombre, apodo, email, idCategoria, password) 
+values ('b', 'b', 'b@gmail.com', 1, 'b');
+
+insert into jugadores (nombre, apodo, email, idCategoria, password) 
+values ('c', 'c', 'c@gmail.com', 1, 'c');
+
+insert into jugadores (nombre, apodo, email, idCategoria, password) 
+values ('d', 'd', 'd@gmail.com', 1, 'd');
+
+insert into jugadores (nombre, apodo, email, idCategoria, password) 
 values ('Pablo', 'Pablo', 'pablo.carle@gmail.com', 1, '123456');
 
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
@@ -7,13 +19,11 @@ values ('Leandro', 'Leandro', 'Leandro@gmail.com', 1, '123456');
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
 values ('Daniel', 'Daniel', 'Daniel@gmail.com', 1, '123456');
 
-
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
 values ('Damian', 'Damian', 'Damian@gmail.com', 1, '123456');
 
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
 values ('Nicolas', 'Nicolas', 'Nicolas@gmail.com', 1, '123456');
-
 
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
 values ('Facundo', 'Facundo', 'Facundo@gmail.com', 1, '123456');
@@ -35,17 +45,3 @@ values ('Alexis', 'Alexis', 'Alexis@gmail.com', 1, '123456');
 
 insert into jugadores (nombre, apodo, email, idCategoria, password) 
 values ('Carlos', 'Carlos', 'Carlos@gmail.com', 1, '123456');
-/*
-select * from jugadores;
-
-select * from categorias;
-
-select * from juego_log;
-
-select idJugador,
-count(*) as cantidad_jugados,
-sum(case when victoria = 1 then 1 else 0 END CASE;)
-from juego_log
-group by idJugador;
-
-*/

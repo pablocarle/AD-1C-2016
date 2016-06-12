@@ -3,6 +3,7 @@ package org.uade.ad.web;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.JAXBException;
 
 import org.uade.ad.trucorepo.delegates.JuegoDelegate;
+import org.uade.ad.trucorepo.dtos.CartasDisponiblesDTO;
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
@@ -131,7 +133,6 @@ public class PartidaServlet extends HttpServlet {
 	}
 
 	private void consultarEnvites(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String idPartidaStr = request.getParameter("idPartida");
 		HttpSession session = request.getSession();
 		if (session == null) {
 			error("No hay sesion", request, response);
@@ -142,7 +143,6 @@ public class PartidaServlet extends HttpServlet {
 				error("No hay jugador logueado", request, response);
 				return;
 			} else {
-				//TODO Devuelve todo xml de partida?
 			}
 		}
 	}
@@ -170,11 +170,11 @@ public class PartidaServlet extends HttpServlet {
 		int idPartida = 0;
 		
 		if (idPartidaStr == null || idPartidaStr.length() == 0) {
-			//TODO Enviar xml error
+			errorXML("Falta idPartida", request, response);
 		} else {
 			idPartida = Integer.parseInt(idPartidaStr);
 		}
-		PartidaDTO partida = null; //TODO Obtener la partida de las guardadas en sesion
+		PartidaDTO partida = null;
 		
 		try {
 			switch (getTipoAccion(idCartaStr, idEnviteStr, alMazoStr, repartirCartas)) {
@@ -199,7 +199,7 @@ public class PartidaServlet extends HttpServlet {
 					break;
 			}
 		} catch (JuegoException e) {
-			
+			errorXML(e.getLocalizedMessage(), request, response);
 		}
 	}
 	
@@ -211,12 +211,29 @@ public class PartidaServlet extends HttpServlet {
 	private void xmlResponse(PartidaDTO partida, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		PrintWriter writer = response.getWriter();
 		response.setContentType("text/xml");
+		eliminarDatosOtrosJugadores(partida, request);
 		try {
 			writer.write(XMLSerialize.serialize(partida));
 			writer.close();
 		} catch (JAXBException e) {
 			error("Error en serializacion: " + e.getMessage(), request, response);
 			e.printStackTrace();
+		}
+	}
+
+	private void eliminarDatosOtrosJugadores(PartidaDTO partida, HttpServletRequest request) {
+		HttpSession session = request.getSession();
+		JugadorDTO jugador = (JugadorDTO) session.getAttribute("user");
+		if (!jugador.equals(partida.getTurnoActual())) {
+			partida.getTurnoActualCartasDisponibles().clear();
+		}
+		Iterator<CartasDisponiblesDTO> it = partida.getCartasDisponibles().iterator();
+		CartasDisponiblesDTO dto = null;
+		while (it.hasNext()) {
+			dto = it.next();
+			if (!jugador.equals(dto.getJugador())) {
+				it.remove();
+			}
 		}
 	}
 
@@ -230,7 +247,7 @@ public class PartidaServlet extends HttpServlet {
 	 */
 	private AccionTipo getTipoAccion(String idCartaStr, String idEnviteStr, String alMazoStr, String repartirCartas) {
 		if ((idCartaStr == null || idCartaStr.length() == 0) && (idEnviteStr == null || idEnviteStr.length() == 0)
-				&& (alMazoStr == null || alMazoStr.length() == 0)) {
+				&& (alMazoStr == null || alMazoStr.length() == 0) && (repartirCartas == null || repartirCartas.length() == 0)) {
 			return AccionTipo.DESCONOCIDO;
 		} else if (idCartaStr != null && idCartaStr.length() > 0) {
 			return AccionTipo.JUEGACARTA;
