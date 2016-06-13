@@ -198,45 +198,61 @@ public class Mano {
 		
 	}
 	
-	public List<Envite> getEnvidosDisponibles(int idEnviteEnvido, int idEnviteTruco){
-		if (idEnviteTruco == -1){
-//			TODO: corroborar si hace falta validar que sea turno jugador o si lo hace en otro lado.
-			//XXX PHC: Siempre hay que verificar que sea el turno actual del jugador, y el jugador debe llegar como parametro
-			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
-			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
-			List<Envite> posiblesEnvidos = null;  
-			for (Envite env: envitesDisponibles)
-				if(env instanceof EnvidoEnvite)
-					posiblesEnvidos.add(env);
-			return posiblesEnvidos;
-		}
-		else
+	public List<Envite> getEnvidosDisponibles(Jugador j){
+		if(esTurno(j)){
+			if(this.idEnviteTruco==-1){
+				List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+				List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteEnvido);
+				List<Envite> posiblesEnvidos = null;  
+				for (Envite env: envitesDisponibles)
+					if(env instanceof EnvidoEnvite)
+						posiblesEnvidos.add(env);
+					return posiblesEnvidos;
+			}else
+				return null;
+		}else
 			return null;
 	}
 	
-	public List<Envite> getTrucosDisponibles(int idEnviteTruco){
-//	TODO: corroborar si hace falta validar que sea turno jugador o si lo hace en otro lado.
-		List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
-		List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, idEnviteEnvido);
-		Envite posibleTruco = null;  
-		for (Envite env: envitesDisponibles)
-			if(env instanceof EnvidoEnvite)
-				posibleTruco=env;
+	public List<Envite> getTrucosDisponibles(Jugador j){
+		if(esTurno(j)){
+			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
+			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteTruco);
+			List<Envite> posiblesTruco = null;  
+			for (Envite truco: envitesDisponibles)
+				if(truco instanceof TrucoEnvite)
+					posiblesTruco.add(truco);
+				return posiblesTruco;
+		}else
 			return null;
-		
 	}
-
 
 	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
 		
-		Pareja parejaEnvite;
+		Pareja parejaEnvite = null;
 	
 		if(pareja1.contieneJugador(jugador))
 			parejaEnvite = pareja1;
 		else if (pareja2.contieneJugador(jugador))
 			parejaEnvite=pareja2;
-
+		if(esTurno(jugador)){
+			if(envite instanceof EnvidoEnvite){
+				this.idEnviteEnvido=envite.getIdTipoEnvite();
+			}
+			if(envite instanceof TrucoEnvite){
+				this.idEnviteTruco=envite.getIdTipoEnvite();
+			}
+			
+		if(envite.getIdTipoEnvite()>14){
+			boolean booleano=false;
+			if(envite.getNombreEnvite().contains("_Querido")){
+				booleano=true;
+			}
+			EnvitesManoPareja env = new EnvitesManoPareja(envite,this,booleano,envite.getPuntaje(),parejaEnvite);
+		}
+			
+		}
 		
 	}
 

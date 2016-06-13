@@ -38,10 +38,9 @@ public class EnvitesManoPareja {
 
 	} 
 		
-	public EnvitesManoPareja(int idEnviteParejaMano, Envite envite, Mano mano, boolean aceptado, int puntosObtenidos,
+	public EnvitesManoPareja(Envite envite, Mano mano, boolean aceptado, int puntosObtenidos,
 			Pareja pareja) {
 		super();
-		this.idEnviteParejaMano = idEnviteParejaMano;
 		this.envite = envite;
 		this.mano = mano;
 		this.aceptado = aceptado;
