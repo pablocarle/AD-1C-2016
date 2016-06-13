@@ -91,7 +91,8 @@ public class JuegoManager {
 		return partida;
 	}
 	
-	private List<Jugador> sortOrden(List<Pareja> parejas) {
+	public List<Jugador> sortOrden(List<Pareja> parejas) {
+		//TODO Cambiar esto luego de tests
 		List<Jugador> retList = new ArrayList<>(parejas.size() * 2);
 //		List<Jugador> listaAux = new ArrayList<>();
 //		Collections.shuffle(parejas);

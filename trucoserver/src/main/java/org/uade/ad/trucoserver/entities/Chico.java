@@ -83,6 +83,13 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver {
 		this.ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 	}
 	
+	public Chico(Partida partida, List<Jugador> primerOrdenJuego) {
+		super();
+		this.partida = partida;
+		this.primerOrdenJuego = primerOrdenJuego;
+		this.ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
+	}
+
 	public void cantar(Jugador j, Envite envite) throws Exception {
 		Mano manoActual = getManoActual();
 		manoActual.cantar(j, envite);

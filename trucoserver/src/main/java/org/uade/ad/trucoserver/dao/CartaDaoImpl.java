@@ -15,8 +15,4 @@ public class CartaDaoImpl extends GenericDaoImpl<Carta, Integer> implements Cart
 	private CartaDaoImpl() {
 		super();
 	}
-	
-
-	
-	
 }
