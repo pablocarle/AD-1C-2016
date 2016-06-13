@@ -48,9 +48,10 @@ public class Baza {
 	@Transient
 	private int numJugadores;
 	
-	public Baza(int numJugadores, List<Jugador> ordenJuego) {
+	Baza(Mano mano, int numJugadores, List<Jugador> ordenJuego) {
 		super();
 		assert(numJugadores == ordenJuego.size());
+		this.mano = mano;
 		this.numJugadores = numJugadores;
 		this.ordenJuego = ordenJuego;
 	}
