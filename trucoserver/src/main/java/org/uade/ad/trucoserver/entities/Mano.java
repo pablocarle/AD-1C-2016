@@ -21,11 +21,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
+import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
 @Entity
 @Table(name="manos")
-public class Mano {
+public class Mano implements ManoTerminadaObservable {
 	
 	public static final int BAZAS_MAX_SIZE = 3;
 	public static final int NUM_JUGADORES = 4;
@@ -59,6 +61,9 @@ public class Mano {
 	private int idEnviteTruco = -1;
 	@Column
 	private int idEnviteEnvido = -1;
+	
+	@Transient
+	private List<ManoTerminadaObserver> observers = new ArrayList<>();
 	
 	public Mano() {
 		super();
@@ -325,5 +330,17 @@ public class Mano {
 			}
 		}
 		return new ArrayList<>(cartasAsignadas);
+	}
+
+	@Override
+	public void agregarObserver(ManoTerminadaObserver observer) {
+		if (!observers.contains(observer)) {
+			observers.add(observer);
+		}
+	}
+
+	@Override
+	public void eliminarObserver(ManoTerminadaObserver observer) {
+		observers.remove(observer);
 	}
 }

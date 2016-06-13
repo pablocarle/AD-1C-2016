@@ -24,6 +24,8 @@ import javax.persistence.Transient;
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.CartasManager;
+import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
+import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 
 /**
  * Implementaciones de esta clase son las formas de juego disponibles.
@@ -34,7 +36,7 @@ import org.uade.ad.trucoserver.business.CartasManager;
  */
 @Entity
 @Table(name="chicos")
-public class Chico implements HasDTO<ChicoDTO> {
+public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver {
 	
 	@Id
 	private int idChico;
@@ -176,7 +178,9 @@ public class Chico implements HasDTO<ChicoDTO> {
 				ordenJuego = ordenJuegoActual;
 			}
 			Collections.rotate(ordenJuego, -1);
-			manos.add(new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego));
+			Mano mano = new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego);
+			manos.add(mano);
+			mano.agregarObserver(this);
 		}
 		
 		return cartas == null ? getManoActual().getCartasAsignadas() : cartas;
@@ -371,5 +375,10 @@ public class Chico implements HasDTO<ChicoDTO> {
 	public boolean hayTrucoEnCurso() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void manoTerminada(ManoTerminadaEvent event) {
+		// TODO Actualizar puntajes en el chico
 	}
 }
