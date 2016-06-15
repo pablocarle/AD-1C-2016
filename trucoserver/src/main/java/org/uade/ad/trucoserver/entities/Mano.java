@@ -200,7 +200,7 @@ public class Mano implements ManoTerminadaObservable {
 			if(this.idEnviteTruco==-1){
 				List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 				List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteEnvido);
-				List<Envite> posiblesEnvidos = null;  
+				List<Envite> posiblesEnvidos = new ArrayList<Envite>();  
 				for (Envite env: envitesDisponibles){
 					if(env instanceof EnvidoEnvite)
 						posiblesEnvidos.add(env);
@@ -229,7 +229,7 @@ public class Mano implements ManoTerminadaObservable {
 			//ya que no cambia durante el ciclo de vida de la aplicacion)
 			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteTruco);
-			List<Envite> posiblesTruco = null;  
+			List<Envite> posiblesTruco = new ArrayList<Envite>();  
 			for (Envite truco: envitesDisponibles){
 				if(truco instanceof TrucoEnvite)
 					posiblesTruco.add(truco);
@@ -254,7 +254,7 @@ public class Mano implements ManoTerminadaObservable {
 	 * Lo aclaro porque devolver null es un nullpointerexception en potencia.
 	 * */
 	private List<Envite> obtenerEnvitesDispo(List<Envite> envitesTot, int EnvitePrevio){
-		List<Envite> proxEnvites=null;
+		List<Envite> proxEnvites= new ArrayList<Envite>();
 		for(Envite env: envitesTot){
 			if(env.getEnviteAnterior()==EnvitePrevio){
 				proxEnvites.add(env);
