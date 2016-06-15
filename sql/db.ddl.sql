@@ -134,17 +134,6 @@ create table partidas_parejas (
     constraint partidas_parejas_fk2 foreign key ( idPareja ) references parejas ( idPareja )
 );
 
-create table manos (
-	idMano int not null auto_increment,
-    idChico int not null,
-    fechaInicio date not null,
-    fechaFin date null,
-    idEnviteTruco int,
-    idEnviteEnvido int,
-    constraint manos_pk primary key ( idMano ),
-    constraint manos_chicos_fk foreign key ( idChico ) references chicos ( idChico )
-);
-
 create table tipo_envites (
 	idTipoEnvite int not null,
 	nombreEnvite varchar(30) not null,
@@ -153,7 +142,6 @@ create table tipo_envites (
 	enviteAnterior int,
     constraint tipoEnvites_pk primary key (idTipoEnvite)
 );
-
 
 create table envites_pareja_mano (
 	idEnviteParejaMano int not null auto_increment,
@@ -165,10 +153,22 @@ create table envites_pareja_mano (
     constraint envites_pk primary key ( idEnviteParejaMano),
     constraint envites_manos_fk foreign key ( idMano ) references manos ( idMano ),
     constraint envites_manos_tipoEnvite foreign key (idTipoEnvite) references tipo_envites (idTipoEnvite)
-   
 );
 
 create unique index envites_parejas_idx on envites_pareja_mano ( idMano, idTipoEnvite );
+
+create table manos (
+	idMano int not null auto_increment,
+    idChico int not null,
+    fechaInicio date not null,
+    fechaFin date null,
+    idEnviteTruco int,
+    idEnviteEnvido int,
+    constraint manos_pk primary key ( idMano ),
+    constraint manos_chicos_fk foreign key ( idChico ) references chicos ( idChico ),
+    constraint manos_envites_fk1 foreign key ( idEnviteTruco ) references tipo_envites ( idTipoEnvite ),
+    constraint manos_envites_fk2 foreign key ( idEnviteEnvido ) references tipo_envites ( idTipoEnvite )
+);
 
 create table bazas (
 	idBaza int not null,

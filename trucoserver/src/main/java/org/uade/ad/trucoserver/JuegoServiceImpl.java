@@ -110,8 +110,8 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 
 	@Override
 	public void chicoTerminado(ChicoTerminadoEvent event) {
-		// TODO Auto-generated method stub
-		
+		agregarNotificaciones(new String[]{"Fin de chico con resultado " + event.getChico().getPareja1Score() + " a " + event.getChico().getPareja2Score(),
+											""}, event.getChico().getPartida().getIdPartida());
 	}
 
 	@Override
