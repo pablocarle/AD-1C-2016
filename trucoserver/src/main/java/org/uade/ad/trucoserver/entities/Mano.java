@@ -164,6 +164,7 @@ public class Mano implements ManoTerminadaObservable {
 	 * @return
 	 */
 	public Pareja getGanador() {
+		//TODO Considerar caso donde se fueron al mazo (puede haber solo una baza)
 		if (bazas != null && bazas.size() >= 2) {
 			int countPareja1 = 0;
 			int countPareja2 = 0;
