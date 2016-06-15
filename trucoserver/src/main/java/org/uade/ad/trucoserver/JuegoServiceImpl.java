@@ -11,7 +11,13 @@ import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucorepo.interfaces.JuegoService;
+import org.uade.ad.trucoserver.business.ChicoTerminadoEvent;
+import org.uade.ad.trucoserver.business.ChicoTerminadoObserver;
 import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
+import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
+import org.uade.ad.trucoserver.business.PartidaTerminadaEvent;
+import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Partida;
 
@@ -21,7 +27,7 @@ import org.uade.ad.trucoserver.entities.Partida;
  * @author Grupo9
  *
  */
-public class JuegoServiceImpl extends Context implements JuegoService {
+public class JuegoServiceImpl extends Context implements JuegoService, PartidaTerminadaObserver, ChicoTerminadoObserver, ManoTerminadaObserver {
 
 	private JuegoManager manager = JuegoManager.getManager();
 	
@@ -92,5 +98,25 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 	public PartidaDTO getPartida(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idPartida);
 		return getPartida(idPartida).getDTO();
+	}
+
+	@Override
+	public void manoTerminada(ManoTerminadaEvent event) {
+		
+		
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void chicoTerminado(ChicoTerminadoEvent event) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+		// TODO Auto-generated method stub
+		
 	}
 }

@@ -24,7 +24,10 @@ import javax.persistence.Transient;
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.CartasManager;
+import org.uade.ad.trucoserver.business.ChicoTerminadoObservable;
+import org.uade.ad.trucoserver.business.ChicoTerminadoObserver;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
+import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 
 /**
@@ -36,7 +39,7 @@ import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
  */
 @Entity
 @Table(name="chicos")
-public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver {
+public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTerminadaObservable, ChicoTerminadoObservable {
 	
 	@Id
 	private int idChico;
@@ -62,6 +65,11 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver {
 	private Date fechaInicio = Calendar.getInstance().getTime();
 	@Column
 	private Date fechaFin;
+	
+	@Transient
+	private List<ManoTerminadaObserver> manoTerminadaObservers = new ArrayList<>();
+	@Transient
+	private List<ChicoTerminadoObserver> chicoTerminadoObservers = new ArrayList<>();
 	
 	/**
 	 * Constructor vacio para hibernate (en v5 todavia necesita del constructor vacio sin argumentos?)
@@ -253,18 +261,24 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver {
 	}
 	
 	public Pareja getParejaPerdedora() {
-		//TODO Pareja perdedora (de la partida!)
+		//TODO Pareja perdedora (del chico!)
 		return null;
 	}
 	
 	@Override
 	public ChicoDTO getDTO() {
 		ChicoDTO dto = new ChicoDTO();
+		dto.setPuntosPareja1(pareja1Score);
+		dto.setPuntosPareja2(pareja2Score);
 		return dto;
 	}
 	
-	public ChicoDTO irseAlMazo(Jugador j) {
-		//TODO Irse al mazo
+	public ChicoDTO irseAlMazo(Jugador j) throws JuegoException {
+		Mano mano = getManoActual();
+		if (mano == null) {
+			throw new JuegoException("No hay mano en curso. No puede irse al mazo");
+		}
+		mano.irseAlMazo(j);
 		return getDTO();
 	}
 
@@ -387,5 +401,29 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver {
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) {
 		// TODO Actualizar puntajes en el chico
+	}
+
+	@Override
+	public void agregarObserver(ChicoTerminadoObserver observer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void eliminarObserver(ChicoTerminadoObserver observer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void agregarObserver(ManoTerminadaObserver observer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void eliminarObserver(ManoTerminadaObserver observer) {
+		// TODO Auto-generated method stub
+		
 	}
 }

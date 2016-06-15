@@ -27,14 +27,20 @@ import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.DTOUtil;
+import org.uade.ad.trucoserver.business.ChicoTerminadoEvent;
+import org.uade.ad.trucoserver.business.ChicoTerminadoObservable;
+import org.uade.ad.trucoserver.business.ChicoTerminadoObserver;
 import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
+import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
+import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
 @Entity
 @Table(name="partidas")
 @Inheritance(strategy=InheritanceType.JOINED)
-public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
+public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, ChicoTerminadoObserver, ManoTerminadaObserver, ChicoTerminadoObservable, ManoTerminadaObservable {
 
 	public static final transient Partida Null = new Partida(-1);
 	@Id
@@ -55,7 +61,12 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 	@JoinColumn(name="idTipoPartida")
 	protected TipoPartida tipoPartida;
 	@Transient
-	private List<PartidaTerminadaObserver> observers = new ArrayList<>();
+	private List<PartidaTerminadaObserver> partidaTerminadaObservers = new ArrayList<>();
+	@Transient
+	private List<ChicoTerminadoObserver> chicoTerminadoObservers = new ArrayList<>();
+	@Transient
+	private List<ManoTerminadaObserver> manoTerminadaObservers = new ArrayList<>();
+	
 	
 	private Partida(int idPartida) {
 		super();
@@ -245,7 +256,7 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	@Override
 	public void agregarObserver(PartidaTerminadaObserver observer) {
-		this.observers.add(observer);
+		this.partidaTerminadaObservers.add(observer);
 	}
 
 	public void cantarEnvite(Jugador j, Envite e) throws Exception {
@@ -277,5 +288,43 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 
 	public Jugador getTurnoActual() throws JuegoException {
 		return getChicoActual().getTurnoActual();
+	}
+
+	@Override
+	public void agregarObserver(ManoTerminadaObserver observer) {
+		if (!manoTerminadaObservers.contains(observer)) {
+			manoTerminadaObservers.add(observer);
+		}
+	}
+
+	@Override
+	public void eliminarObserver(ManoTerminadaObserver observer) {
+		manoTerminadaObservers.remove(observer);
+	}
+
+	@Override
+	public void agregarObserver(ChicoTerminadoObserver observer) {
+		if (!chicoTerminadoObservers.contains(observer)) {
+			chicoTerminadoObservers.add(observer);
+		}
+	}
+
+	@Override
+	public void eliminarObserver(ChicoTerminadoObserver observer) {
+		chicoTerminadoObservers.remove(observer);
+	}
+
+	@Override
+	public void manoTerminada(ManoTerminadaEvent event) {
+		for (ManoTerminadaObserver o : manoTerminadaObservers) {
+			o.manoTerminada(event);
+		}
+	}
+
+	@Override
+	public void chicoTerminado(ChicoTerminadoEvent event) {
+		for (ChicoTerminadoObserver o : chicoTerminadoObservers) {
+			o.chicoTerminado(event);
+		}
 	}
 }

@@ -63,6 +63,11 @@ public class Mano implements ManoTerminadaObservable {
 	private int idEnviteEnvido = -1;
 	
 	@Transient
+	private boolean envidoEnCurso = false;
+	@Transient
+	private boolean trucoEnCurso = false;
+	
+	@Transient
 	private List<ManoTerminadaObserver> observers = new ArrayList<>();
 	
 	public Mano() {
@@ -359,5 +364,13 @@ public class Mano implements ManoTerminadaObservable {
 	@Override
 	public void eliminarObserver(ManoTerminadaObserver observer) {
 		observers.remove(observer);
+	}
+
+	public boolean isEnvidoEnCurso() {
+		return envidoEnCurso;
+	}
+
+	public boolean isTrucoEnCurso() {
+		return trucoEnCurso;
 	}
 }
