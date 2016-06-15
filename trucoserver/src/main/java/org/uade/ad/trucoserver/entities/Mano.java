@@ -25,6 +25,13 @@ import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
+//TODO Notificar fin de mano, puede terminar en:
+/*
+ * Jugar una carta
+ * No aceptar un envido
+ * No aceptar un truco
+ * Se fue la pareja completa al mazo
+ * */
 @Entity
 @Table(name="manos")
 public class Mano implements ManoTerminadaObservable {
@@ -52,7 +59,11 @@ public class Mano implements ManoTerminadaObservable {
 	@Transient
 	private List<Jugador> ordenJuegoActual;
 	@Transient
+	private List<Jugador> ordenJuegoRespuestaEnvite = new ArrayList<>(); //XXX Usar para llevar el orden de respuesta a envite
+	@Transient
 	private int turnoActualIdx = 0;
+	@Transient
+	private int turnoJugadorCantoEnvite = 0;
 	@Transient
 	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
 	@Transient
@@ -208,8 +219,8 @@ public class Mano implements ManoTerminadaObservable {
 				if(!posiblesEnvidos.isEmpty())
 					return posiblesEnvidos;
 				else 
-					if(posiblesEnvidos.isEmpty())
-						throw new RuntimeException("No hay envidos disponibles para cantar");
+					if(posiblesEnvidos.isEmpty()) //XXX Fijarse aca cuales deben ser RuntimeException y cuales JuegoException
+						throw new RuntimeException("No hay envidos disponibles para cantar"); //P. Ej. esta es Runtime (no es una situación de juego el no tener envidos configurados)
 					else
 						throw new RuntimeException("Hay un error en envidos disponibles");
 			}

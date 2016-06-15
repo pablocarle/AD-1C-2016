@@ -36,6 +36,7 @@ import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
  * 
  * @author Grupo9
  *
+ *TODO Notificar fin de Chico
  */
 @Entity
 @Table(name="chicos")
@@ -120,22 +121,13 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	
 	public void jugarCarta(Jugador jugador, Carta carta) throws Exception {
 		if (!enCurso()) {
-			throw new Exception("Juego de carta con partida terminada!!");
+			throw new Exception("Juego de carta con chico terminado!!");
 		}
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada()) {
-			circularOrdenJuego();
 			throw new Exception("Mano terminada. Debe repartir cartas.");
 		} else {
 			manoActual.jugar(jugador, carta);
-			if (manoActual.terminada() && !manoActual.tieneEnvites()) {
-				Pareja ganador = manoActual.getGanador();
-				if (partida.getParejas().get(1).equals(ganador)){
-					pareja1Score += 1;
-				} else {
-					pareja2Score += 1;
-				}
-			}
 		}
 	}
 
@@ -389,41 +381,51 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	}
 
 	public boolean hayEnvidoEnCurso() {
-		// TODO Auto-generated method stub
+		Mano mano = getManoActual();
+		if (mano != null) {
+			return mano.isEnvidoEnCurso();
+		}
 		return false;
 	}
 
 	public boolean hayTrucoEnCurso() {
-		// TODO Auto-generated method stub
+		Mano mano = getManoActual();
+		if (mano != null) {
+			return mano.isTrucoEnCurso();
+		}
 		return false;
 	}
 
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) {
-		// TODO Actualizar puntajes en el chico
+		pareja1Score+=event.getPuntosObtenidosPareja1();
+		pareja2Score+=event.getPuntosObtenidosPareja2();
+		for (ManoTerminadaObserver o : manoTerminadaObservers) {
+			o.manoTerminada(event);
+		}
 	}
 
 	@Override
 	public void agregarObserver(ChicoTerminadoObserver observer) {
-		// TODO Auto-generated method stub
-		
+		if (!chicoTerminadoObservers.contains(observer)) {
+			chicoTerminadoObservers.add(observer);
+		}
 	}
 
 	@Override
 	public void eliminarObserver(ChicoTerminadoObserver observer) {
-		// TODO Auto-generated method stub
-		
+		chicoTerminadoObservers.remove(observer);
 	}
 
 	@Override
 	public void agregarObserver(ManoTerminadaObserver observer) {
-		// TODO Auto-generated method stub
-		
+		if (!manoTerminadaObservers.contains(observer)) {
+			manoTerminadaObservers.add(observer);
+		}
 	}
 
 	@Override
 	public void eliminarObserver(ManoTerminadaObserver observer) {
-		// TODO Auto-generated method stub
-		
+		manoTerminadaObservers.remove(observer);
 	}
 }
