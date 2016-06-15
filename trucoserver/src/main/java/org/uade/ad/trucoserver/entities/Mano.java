@@ -21,11 +21,13 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
+import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
 @Entity
 @Table(name="manos")
-public class Mano {
+public class Mano implements ManoTerminadaObservable {
 	
 	public static final int BAZAS_MAX_SIZE = 3;
 	public static final int NUM_JUGADORES = 4;
@@ -59,6 +61,9 @@ public class Mano {
 	private int idEnviteTruco = -1;
 	@Column
 	private int idEnviteEnvido = -1;
+	
+	@Transient
+	private List<ManoTerminadaObserver> observers = new ArrayList<>();
 	
 	public Mano() {
 		super();
@@ -94,7 +99,7 @@ public class Mano {
 		}
 		Baza bazaActual = null;
 		if (bazas.isEmpty()) {
-			bazaActual = new Baza(NUM_JUGADORES, ordenJuegoInicial);
+			bazaActual = new Baza(this, NUM_JUGADORES, ordenJuegoInicial);
 			bazas.add(bazaActual);
 			bazaActual.jugarCarta(jugador, carta);
 			turnoActualIdx = 1;
@@ -102,7 +107,7 @@ public class Mano {
 			Jugador ganadorAnterior = null;
 			bazaActual = bazas.get(bazas.size() - 1);
 			if (bazaActual.esCompleta() && getGanador() == Pareja.Null) {
-				bazaActual = new Baza(NUM_JUGADORES, ordenJuegoActual);
+				bazaActual = new Baza(this, NUM_JUGADORES, ordenJuegoActual);
 				bazaActual.jugarCarta(jugador, carta);
 				bazas.add(bazaActual);
 				turnoActualIdx++;
@@ -184,6 +189,16 @@ public class Mano {
 	}
 	
 	@SuppressWarnings("null")
+	//XXX: 2 cositas aca: proxEnvites es null y no cambia.
+	/*
+	 * Lo otro es recomendacion: Cuando se devuelve una coleccion debería esperarse 1 de 3
+	 * resultados:
+	 * 1) La coleccion vuelve y tiene elementos.
+	 * 2) La coleccion vuelve y no tiene elemnetos (lista vacia)
+	 * 3) Se arroja una excepcion (el estado no era el correcto, no se levanto la config, etc)
+	 * 
+	 * Lo aclaro porque devolver null es un nullpointerexception en potencia.
+	 * */
 	private List<Envite> obtenerEnvitesDispo(List<Envite> envitesTot, int EnvitePrevio){
 		List<Envite> proxEnvites=null;
 		for(Envite env: envitesTot){
@@ -198,6 +213,7 @@ public class Mano {
 		
 	}
 	
+	//XXX Ver aclaración en obtenerEnvitesDispo
 	public List<Envite> getEnvidosDisponibles(Jugador j){
 		if(esTurno(j)){
 			if(this.idEnviteTruco==-1){
@@ -214,8 +230,13 @@ public class Mano {
 			return null;
 	}
 	
+	//XXX Ver aclaración en obtenerEnvitesDispo
 	public List<Envite> getTrucosDisponibles(Jugador j){
 		if(esTurno(j)){
+			//FIXME Ojo llamar managers que inician transacciones desde aca (donde seguramente ya 
+			//nos encontremos en una transaccion), no hay soporte de transacciones anidadas.
+			//Buscar otra forma de darle a la mano los envites disponibles (puede ser una unica vez
+			//ya que no cambia durante el ciclo de vida de la aplicacion)
 			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteTruco);
 			List<Envite> posiblesTruco = null;  
@@ -298,6 +319,7 @@ public class Mano {
 	}
 	
 	public void irseAlMazo(Jugador jugador) {
+		//TODO Completar irse al mazo
 		List<Jugador> j = this.getJugadoresEnMazo();
 		for (int i = 0; i < j.size(); i++) {
 			// Si el jugador no está en la Lista, lo agrego para irse al mazo
@@ -325,5 +347,17 @@ public class Mano {
 			}
 		}
 		return new ArrayList<>(cartasAsignadas);
+	}
+
+	@Override
+	public void agregarObserver(ManoTerminadaObserver observer) {
+		if (!observers.contains(observer)) {
+			observers.add(observer);
+		}
+	}
+
+	@Override
+	public void eliminarObserver(ManoTerminadaObserver observer) {
+		observers.remove(observer);
 	}
 }

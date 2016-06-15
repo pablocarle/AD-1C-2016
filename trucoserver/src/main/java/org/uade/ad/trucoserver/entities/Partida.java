@@ -27,6 +27,7 @@ import org.uade.ad.trucorepo.dtos.EnviteDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.DTOUtil;
+import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
@@ -133,14 +134,17 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 						return c;
 					}
 				}
+				//Si llega aca, no hay chico en curso, crear nuevo (no termino la partida tampoco)
+				Chico nuevoChico = new Chico(this, JuegoManager.getManager().sortOrden(parejas));
+				chicos.add(nuevoChico);
+				return nuevoChico;
 			} else {
 				synchronized(this) {
 					chicos = new ArrayList<>();
-					chicos.add(new Chico());
+					chicos.add(new Chico(this, JuegoManager.getManager().sortOrden(parejas)));
 				}
 				return chicos.get(0);
 			}
-			throw new JuegoException("No se encontro chico en curso");
 		} else{
 			throw new JuegoException("La partida esta terminada");
 		}
