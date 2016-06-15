@@ -206,10 +206,13 @@ public class Mano implements ManoTerminadaObservable {
 				proxEnvites.add(env);
 			}
 		}
-		if(proxEnvites.isEmpty())
-			return null;
-		else
+		if(!proxEnvites.isEmpty())
 			return proxEnvites;
+		else 
+			if (proxEnvites.isEmpty())
+				throw new RuntimeException("no hay envites disponibles");
+			else 
+				throw new RuntimeException("Error en la funcion obtenerEnvitesdispo");
 		
 	}
 	
@@ -220,14 +223,20 @@ public class Mano implements ManoTerminadaObservable {
 				List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 				List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteEnvido);
 				List<Envite> posiblesEnvidos = null;  
-				for (Envite env: envitesDisponibles)
+				for (Envite env: envitesDisponibles){
 					if(env instanceof EnvidoEnvite)
 						posiblesEnvidos.add(env);
+				}
+				if(!posiblesEnvidos.isEmpty())
 					return posiblesEnvidos;
-			}else
-				return null;
-		}else
-			return null;
+				else
+					throw new RuntimeException("No envidos disponibles para cantar");
+			}
+			else
+				throw new RuntimeException("No se puede cantar envido luego del truco");
+		}
+		else
+			throw new RuntimeException("No es el turno del jugador");
 	}
 	
 	//XXX Ver aclaración en obtenerEnvitesDispo
@@ -240,12 +249,16 @@ public class Mano implements ManoTerminadaObservable {
 			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
 			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteTruco);
 			List<Envite> posiblesTruco = null;  
-			for (Envite truco: envitesDisponibles)
+			for (Envite truco: envitesDisponibles){
 				if(truco instanceof TrucoEnvite)
 					posiblesTruco.add(truco);
+			}
+			if(!posiblesTruco.isEmpty())
 				return posiblesTruco;
+			else
+				throw new RuntimeException("No trucos disponibles para cantar");
 		}else
-			return null;
+			throw new RuntimeException("No es el turno del jugador");
 	}
 
 	// TODO Terminar cantar envites. 
