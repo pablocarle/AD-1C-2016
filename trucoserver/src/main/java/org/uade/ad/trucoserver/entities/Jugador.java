@@ -53,7 +53,7 @@ public class Jugador implements HasDTO<JugadorDTO> {
 
 	@Override
 	public String toString() {
-		return "Jugador [idJugador=" + idJugador + ", email=" + email + ", apodo=" + apodo + "]";
+		return apodo;
 	}
 
 	@Override

@@ -229,10 +229,14 @@ public abstract class Context extends UnicastRemoteObject {
 			mapa = notificaciones.get(jugador.getApodo());
 			Calendar c = Calendar.getInstance();
 			Date now = c.getTime();
-			if (mapa.containsKey(now)) {
-				mapa.put(new Date(now.getTime() + 1), new NotificacionDTO(mensaje, idPartida));
-			} else {
-				mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));
+			boolean put = true;
+			while (put) {
+				if (mapa.containsKey(now)) {
+					now = new Date(now.getTime() + 1);
+				} else {
+					mapa.put(now, new NotificacionDTO(mensaje, idPartida));
+					put = false;
+				}
 			}
 		} else {
 			mapa = new HashMap<>();
@@ -258,25 +262,40 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 
 	public void agregarNotificaciones(String[] mensajes, int idPartida) {
-		//TODO COmpletar
 		Partida p = getPartida(idPartida);
 		List<Jugador> jugadores = p.getJugadores();
 		Map<Date, NotificacionDTO> mapa = null;
 		Calendar c = Calendar.getInstance();
 		Date now = c.getTime();
 		for (Jugador j : jugadores) {
+			now = c.getTime();
 			if (notificaciones.containsKey(j.getApodo())) {
 				mapa = notificaciones.get(j.getApodo());
-				int count = 1;
-			} else {
-				mapa = new HashMap<>();
-				int count = 1;
-				synchronized(notificaciones) {
-					for (String mensaje : mensajes) {
+				boolean put = true;
+				for (String mensaje : mensajes) {
+					put = true;
+					while (put) {
 						if (mapa.containsKey(now)) {
-							
+							now = new Date(now.getTime() + 1);
 						} else {
 							mapa.put(now, new NotificacionDTO(mensaje, idPartida));
+							put = false;
+						}
+					}
+				}
+			} else {
+				mapa = new HashMap<>();
+				synchronized(notificaciones) {
+					boolean put = true;
+					for (String mensaje : mensajes) {
+						put = true;
+						while (put) {
+							if (mapa.containsKey(now)) {
+								now = new Date(now.getTime() + 1);
+							} else {
+								mapa.put(now, new NotificacionDTO(mensaje, idPartida));
+								put = false;
+							}
 						}
 					}
 				}

@@ -2,6 +2,7 @@ package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -102,21 +103,20 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) {
-		
-		
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
 	public void chicoTerminado(ChicoTerminadoEvent event) {
 		agregarNotificaciones(new String[]{"Fin de chico con resultado " + event.getChico().getPareja1Score() + " a " + event.getChico().getPareja2Score(),
-											""}, event.getChico().getPartida().getIdPartida());
+											"Pareja ganadora: " + event.getParejaGanadora()}, event.getChico().getPartida().getIdPartida());
 	}
 
 	@Override
 	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
-		// TODO Auto-generated method stub
-		
+		agregarNotificaciones(new String[]{"Fin de la partida",
+											"Pareja ganadora: " + Arrays.toString(partida.getGanadores()),
+											"Puntos de jugador " + partida.getGanadores()[0] + ": " + partida.getPartida().getPuntosObtenidos(partida.getGanadores()[0]),
+											"Puntos de jugador " + partida.getGanadores()[1] +  ": " + partida.getPartida().getPuntosObtenidos(partida.getGanadores()[1])}, partida.getPartida().getIdPartida());
 	}
 }

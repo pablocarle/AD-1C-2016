@@ -72,6 +72,11 @@ public class Pareja implements HasDTO<ParejaDTO> {
 	}
 	
 	@Override
+	public String toString() {
+		return "[" + jugador1.getApodo() + " y " + jugador2.getApodo() + "]";
+	}
+	
+	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
