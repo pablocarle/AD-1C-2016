@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
@@ -106,8 +107,10 @@ public class Mano implements ManoTerminadaObservable {
 		return new ArrayList<>(bazas);
 	}
 	
-	public void jugar(Jugador jugador, Carta carta) {
+	public void jugar(Jugador jugador, Carta carta) throws JuegoException {
 		assertCartaValida(jugador, carta);
+		if (envidoEnCurso || trucoEnCurso)
+			throw new JuegoException("Hay truco o envido en curso. No se puede jugar carta " + envidoEnCurso + ", " + trucoEnCurso);
 		if (bazas == null) {
 			bazas = new ArrayList<>(BAZAS_MAX_SIZE);
 		} else if (bazas.size() == BAZAS_MAX_SIZE && bazas.get(bazas.size() - 1).esCompleta()) {

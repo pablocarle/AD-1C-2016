@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver.business;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.hibernate.Transaction;
@@ -92,27 +93,22 @@ public class JuegoManager {
 	}
 	
 	public List<Jugador> sortOrden(List<Pareja> parejas) {
-		//TODO Cambiar esto luego de tests
 		List<Jugador> retList = new ArrayList<>(parejas.size() * 2);
-//		List<Jugador> listaAux = new ArrayList<>();
-//		Collections.shuffle(parejas);
-//		List<Jugador> jugadoresAux = null;
-//		for (int i = 0; i < parejas.size(); i++) {
-//			jugadoresAux = parejas.get(i).getJugadores();
-//			Collections.shuffle(jugadoresAux);
-//			listaAux.addAll(jugadoresAux);
-//		}
-//		int jugadorIdx = 0;
-//		for (int i = 0; i < parejas.size(); i++) {
-//			jugadorIdx = i;
-//			retList.add(listaAux.get(jugadorIdx));
-//			jugadorIdx+=2;
-//			retList.add(listaAux.get(jugadorIdx));
-//		}
-		retList.add(parejas.get(0).getJugador1());
-		retList.add(parejas.get(1).getJugador2());
-		retList.add(parejas.get(0).getJugador1());
-		retList.add(parejas.get(1).getJugador2());
+		List<Jugador> listaAux = new ArrayList<>();
+		Collections.shuffle(parejas);
+		List<Jugador> jugadoresAux = null;
+		for (int i = 0; i < parejas.size(); i++) {
+			jugadoresAux = parejas.get(i).getJugadores();
+			Collections.shuffle(jugadoresAux);
+			listaAux.addAll(jugadoresAux);
+		}
+		int jugadorIdx = 0;
+		for (int i = 0; i < parejas.size(); i++) {
+			jugadorIdx = i;
+			retList.add(listaAux.get(jugadorIdx));
+			jugadorIdx+=2;
+			retList.add(listaAux.get(jugadorIdx));
+		}
 		return retList;
 	}
 
@@ -241,6 +237,7 @@ public class JuegoManager {
 		tr.commit();
 		context.actualizarPartida(p);
 		context.agregarNotificacion(apodo + " jugó carta " + CartasManager.getManager().getCarta(idCarta), idJuego);
+		context.agregarNotificacion("Turno de " + p.getTurnoActual(), idJuego);
 		return p;
 	}
 
@@ -255,6 +252,7 @@ public class JuegoManager {
 		context.actualizarPartida(p);
 		tr.commit();
 		context.agregarNotificacion(apodo + " se fue al mazo", idPartida);
+		context.agregarNotificacion("Turno de " + p.getTurnoActual(), idPartida);
 		return p;
 	}
 
@@ -274,6 +272,7 @@ public class JuegoManager {
 		context.actualizarPartida(p);
 		tr.commit();
 		context.agregarNotificacion(apodo + " cantó " + e.getNombreEnvite(), idJuego);
+		context.agregarNotificacion("Turno de " + p.getTurnoActual(), idJuego);
 		return p;
 	}
 

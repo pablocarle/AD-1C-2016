@@ -231,30 +231,40 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	 * cartas nuevamente
 	 * 
 	 * @return
+	 * @throws JuegoException 
 	 * @throws Exception 
 	 */
-	public boolean manoTerminada() {
+	public boolean manoTerminada() throws JuegoException {
 		Mano manoActual = getManoActual();
 		if (manoActual == null) {
-			return false;
+			throw new JuegoException("No hay mano en curso!");
 		} else {
 			return manoActual.terminada();
 		}
 	}
 
 	public Pareja getParejaGanadora() {
-		//FIXME La pareja ganadora debe ser para el chico
-		Mano manoActual = getManoActual();
-		if (manoActual != null) {
-			return manoActual.getGanador();
+		if (!enCurso()) {
+			if (pareja1Score > pareja2Score) {
+				return  partida.getParejas().get(0);
+			} else {
+				return partida.getParejas().get(1);
+			}
 		} else {
-			return null;
+			return Pareja.Null;
 		}
 	}
 	
 	public Pareja getParejaPerdedora() {
-		//TODO Pareja perdedora (del chico!)
-		return null;
+		if (!enCurso()) {
+			if (pareja1Score > pareja2Score) {
+				return  partida.getParejas().get(1);
+			} else {
+				return partida.getParejas().get(0);
+			}
+		} else {
+			return Pareja.Null;
+		}
 	}
 	
 	@Override

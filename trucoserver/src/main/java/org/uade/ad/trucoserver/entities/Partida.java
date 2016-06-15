@@ -267,7 +267,6 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 		if (chicos == null) {
 			chicos = new ArrayList<>();
 		}
-		//TODO Agregar alguna validacion
 		primerChico.setPartida(this);
 		chicos.add(primerChico);
 	}
