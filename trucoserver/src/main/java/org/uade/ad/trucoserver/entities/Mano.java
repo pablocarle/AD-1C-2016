@@ -188,33 +188,6 @@ public class Mano implements ManoTerminadaObservable {
 		throw new RuntimeException("El jugador " + jugador + " no pertenece a la partida");
 	}
 	
-	@SuppressWarnings("null")
-	//XXX: 2 cositas aca: proxEnvites es null y no cambia.
-	/*
-	 * Lo otro es recomendacion: Cuando se devuelve una coleccion debería esperarse 1 de 3
-	 * resultados:
-	 * 1) La coleccion vuelve y tiene elementos.
-	 * 2) La coleccion vuelve y no tiene elemnetos (lista vacia)
-	 * 3) Se arroja una excepcion (el estado no era el correcto, no se levanto la config, etc)
-	 * 
-	 * Lo aclaro porque devolver null es un nullpointerexception en potencia.
-	 * */
-	private List<Envite> obtenerEnvitesDispo(List<Envite> envitesTot, int EnvitePrevio){
-		List<Envite> proxEnvites=null;
-		for(Envite env: envitesTot){
-			if(env.getEnviteAnterior()==EnvitePrevio){
-				proxEnvites.add(env);
-			}
-		}
-		if(!proxEnvites.isEmpty())
-			return proxEnvites;
-		else 
-			if (proxEnvites.isEmpty())
-				throw new RuntimeException("no hay envites disponibles");
-			else 
-				throw new RuntimeException("Error en la funcion obtenerEnvitesdispo");
-		
-	}
 	
 	//XXX Ver aclaración en obtenerEnvitesDispo
 	public List<Envite> getEnvidosDisponibles(Jugador j){
@@ -229,8 +202,11 @@ public class Mano implements ManoTerminadaObservable {
 				}
 				if(!posiblesEnvidos.isEmpty())
 					return posiblesEnvidos;
-				else
-					throw new RuntimeException("No envidos disponibles para cantar");
+				else 
+					if(posiblesEnvidos.isEmpty())
+						throw new RuntimeException("No hay envidos disponibles para cantar");
+					else
+						throw new RuntimeException("Hay un error en envidos disponibles");
 			}
 			else
 				throw new RuntimeException("No se puede cantar envido luego del truco");
@@ -261,6 +237,36 @@ public class Mano implements ManoTerminadaObservable {
 			throw new RuntimeException("No es el turno del jugador");
 	}
 
+	@SuppressWarnings("null")
+	//XXX: 2 cositas aca: proxEnvites es null y no cambia.
+	/*
+	 * Lo otro es recomendacion: Cuando se devuelve una coleccion debería esperarse 1 de 3
+	 * resultados:
+	 * 1) La coleccion vuelve y tiene elementos.
+	 * 2) La coleccion vuelve y no tiene elemnetos (lista vacia)
+	 * 3) Se arroja una excepcion (el estado no era el correcto, no se levanto la config, etc)
+	 * 
+	 * Lo aclaro porque devolver null es un nullpointerexception en potencia.
+	 * */
+	private List<Envite> obtenerEnvitesDispo(List<Envite> envitesTot, int EnvitePrevio){
+		List<Envite> proxEnvites=null;
+		for(Envite env: envitesTot){
+			if(env.getEnviteAnterior()==EnvitePrevio){
+				proxEnvites.add(env);
+			}
+		}
+		if(!proxEnvites.isEmpty())
+			return proxEnvites;
+		else 
+			if (proxEnvites.isEmpty())
+				throw new RuntimeException("no hay envites disponibles");
+			else 
+				throw new RuntimeException("Error en la funcion obtenerEnvitesdispo");
+		
+	}
+
+	
+	
 	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
 		
