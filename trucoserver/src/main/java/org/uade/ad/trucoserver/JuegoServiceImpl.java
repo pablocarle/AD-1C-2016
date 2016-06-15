@@ -39,8 +39,6 @@ public class JuegoServiceImpl extends Context implements JuegoService {
 
 	@Override
 	public PartidaDTO crearPartidaAbiertaIndividual(JugadorDTO jugador) throws RemoteException, JuegoException {
-		//TODO Eliminar en produccion
-		addTestPlayers();
 		Partida partida = manager.crearPartidaAbiertaIndividual(jugador.getApodo(), this);
 		return partida.getDTO();
 	}

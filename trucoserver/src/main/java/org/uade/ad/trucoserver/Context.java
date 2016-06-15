@@ -42,7 +42,6 @@ public abstract class Context extends UnicastRemoteObject {
 		parejasDisponiblesModoLibre = new Vector<>();
 		jugadoresDisponiblesModoLibre = new Vector<>();
 		grupos = new Vector<>();
-		addTestPlayers();
 	}
 	
 	protected Context() throws RemoteException {

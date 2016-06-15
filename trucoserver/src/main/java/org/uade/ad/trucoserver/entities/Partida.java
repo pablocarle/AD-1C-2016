@@ -178,31 +178,33 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable {
 				dto.setPareja2(parejas.get(1).getDTO());
 			}
 		}
-		dto.setTipoPartida(tipoPartida.getDTO());
-		Chico chicoActual = null;
-		try {
-			chicoActual = getChicoActual();
-		} catch (JuegoException e) {
-			e.printStackTrace();
-		}
-		if (chicoActual != null) {
-			Jugador turnoActual = chicoActual.getTurnoActual();
-			if (turnoActual != null) {
-				dto.setTurnoActual(turnoActual.getDTO());
-				dto.setTurnoActualCartasDisponibles(DTOUtil.getDTOs(chicoActual.getCartasDisponibles(turnoActual), CartaDTO.class));
-				dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(turnoActual), EnviteDTO.class));
-				dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(turnoActual), EnviteDTO.class));
+		if (!dto.esNull()) {
+			dto.setTipoPartida(tipoPartida.getDTO());
+			Chico chicoActual = null;
+			try {
+				chicoActual = getChicoActual();
+			} catch (JuegoException e) {
+				e.printStackTrace();
 			}
-			List<CartasDisponiblesDTO> cartasDisponibles = new ArrayList<>();
-			List<CartaDTO> jCartasDisponibles;
-			List<Jugador> jugadores = getJugadores();
-			for (int i = 0; i < jugadores.size(); i++) {
-				jCartasDisponibles = DTOUtil.getDTOs(chicoActual.getCartasDisponibles(jugadores.get(i)), CartaDTO.class);
-				cartasDisponibles.add(new CartasDisponiblesDTO(jugadores.get(i).getDTO(), jCartasDisponibles));
+			if (chicoActual != null) {
+				Jugador turnoActual = chicoActual.getTurnoActual();
+				if (turnoActual != null) {
+					dto.setTurnoActual(turnoActual.getDTO());
+					dto.setTurnoActualCartasDisponibles(DTOUtil.getDTOs(chicoActual.getCartasDisponibles(turnoActual), CartaDTO.class));
+					dto.setTurnoActualEnvidos(DTOUtil.getDTOs(chicoActual.getEnvidosDisponibles(turnoActual), EnviteDTO.class));
+					dto.setTurnoActualTrucos(DTOUtil.getDTOs(chicoActual.getTrucosDisponibles(turnoActual), EnviteDTO.class));
+				}
+				List<CartasDisponiblesDTO> cartasDisponibles = new ArrayList<>();
+				List<CartaDTO> jCartasDisponibles;
+				List<Jugador> jugadores = getJugadores();
+				for (int i = 0; i < jugadores.size(); i++) {
+					jCartasDisponibles = DTOUtil.getDTOs(chicoActual.getCartasDisponibles(jugadores.get(i)), CartaDTO.class);
+					cartasDisponibles.add(new CartasDisponiblesDTO(jugadores.get(i).getDTO(), jCartasDisponibles));
+				}
+				dto.setCartasDisponibles(cartasDisponibles);
+				dto.setEnvidoEnCurso(chicoActual.hayEnvidoEnCurso());
+				dto.setTrucoEnCurso(chicoActual.hayTrucoEnCurso());
 			}
-			dto.setCartasDisponibles(cartasDisponibles);
-			dto.setEnvidoEnCurso(chicoActual.hayEnvidoEnCurso());
-			dto.setTrucoEnCurso(chicoActual.hayTrucoEnCurso());
 		}
 		return dto;
 	}

@@ -20,8 +20,6 @@
 
 fechaNotificaciones = null;
 
-//setInterval(checkNotificaciones, 10000);
-
 checkNotificaciones = function() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {
@@ -37,6 +35,8 @@ checkNotificaciones = function() {
 		}
 	}
 };
+
+setInterval(checkNotificaciones, 5000);
 
 procesarNotificacion = function(xml) {
 	var juego = document.getElementById("juegoLog");
@@ -99,8 +99,6 @@ parseNotificaciones = function(xml) {
 	return retArray;
 };
 
-//setInterval(asyncCheckTurno, 10000);
-
 asyncCheckTurno = function() {
 	//Busca si es el turno
 	var xhttp = new XMLHttpRequest();
@@ -117,6 +115,8 @@ asyncCheckTurno = function() {
 		}
 	}
 };
+
+setInterval(asyncCheckTurno, 5000);
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");

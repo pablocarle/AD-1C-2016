@@ -203,9 +203,12 @@ public class PartidaServlet extends HttpServlet {
 		}
 	}
 	
-	private void errorXML(String string, HttpServletRequest request, HttpServletResponse response) {
-		// TODO error xml
-		
+	private void errorXML(String string, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		response.setStatus(500);
+		response.setContentType("text/xml");
+		PrintWriter writer = response.getWriter();
+		writer.write("<error>" + string + "</error>");
+		writer.close();
 	}
 
 	private void xmlResponse(PartidaDTO partida, HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
