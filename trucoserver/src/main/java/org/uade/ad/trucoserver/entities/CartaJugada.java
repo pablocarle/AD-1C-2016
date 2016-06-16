@@ -28,6 +28,10 @@ public class CartaJugada {
 	@JoinColumn(name="idCarta")
 	private Carta carta;
 	
+	public CartaJugada() {
+		super();
+	}
+	
 	public CartaJugada(Jugador jugador, Carta carta) {
 		super();
 		this.jugador = jugador;

@@ -48,6 +48,10 @@ public class Baza {
 	@Transient
 	private int numJugadores;
 	
+	public Baza() {
+		super();
+	}
+	
 	Baza(Mano mano, int numJugadores, List<Jugador> ordenJuego) {
 		super();
 		assert(numJugadores == ordenJuego.size());

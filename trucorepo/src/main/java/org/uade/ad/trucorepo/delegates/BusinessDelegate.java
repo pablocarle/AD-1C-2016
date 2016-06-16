@@ -26,6 +26,6 @@ public abstract class BusinessDelegate {
 	}
 	
 	public BusinessDelegate() {
+		super();
 	}
-
 }

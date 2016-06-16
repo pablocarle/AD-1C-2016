@@ -106,6 +106,36 @@ public class GrupoDetalle {
 		public void setGrupo(Grupo grupo) {
 			this.grupo = grupo;
 		}
-	}
 
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + ((grupo == null) ? 0 : grupo.hashCode());
+			result = prime * result + ((pareja == null) ? 0 : pareja.hashCode());
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			GrupoDetallePk other = (GrupoDetallePk) obj;
+			if (grupo == null) {
+				if (other.grupo != null)
+					return false;
+			} else if (!grupo.equals(other.grupo))
+				return false;
+			if (pareja == null) {
+				if (other.pareja != null)
+					return false;
+			} else if (!pareja.equals(other.pareja))
+				return false;
+			return true;
+		}
+	}
 }

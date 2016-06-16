@@ -29,6 +29,11 @@
 			<artifactId>trucorepo</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>org.uade.ad</groupId>
+			<artifactId>trucoserver</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>trucoweb</finalName>
