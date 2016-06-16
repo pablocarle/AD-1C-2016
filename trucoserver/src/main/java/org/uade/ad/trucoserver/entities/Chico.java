@@ -24,6 +24,7 @@ import javax.persistence.Transient;
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.CartasManager;
+import org.uade.ad.trucoserver.business.ChicoTerminadoEvent;
 import org.uade.ad.trucoserver.business.ChicoTerminadoObservable;
 import org.uade.ad.trucoserver.business.ChicoTerminadoObserver;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
@@ -36,7 +37,6 @@ import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
  * 
  * @author Grupo9
  *
- *TODO Notificar fin de Chico
  */
 @Entity
 @Table(name="chicos")
@@ -407,11 +407,16 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	}
 
 	@Override
-	public void manoTerminada(ManoTerminadaEvent event) {
+	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
 		pareja1Score+=event.getPuntosObtenidosPareja1();
 		pareja2Score+=event.getPuntosObtenidosPareja2();
 		for (ManoTerminadaObserver o : manoTerminadaObservers) {
 			o.manoTerminada(event);
+		}
+		if (!enCurso()) {
+			for (ChicoTerminadoObserver o : chicoTerminadoObservers) {
+				o.chicoTerminado(new ChicoTerminadoEvent(this, getParejaGanadora()));
+			}
 		}
 	}
 
@@ -429,8 +434,10 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 
 	@Override
 	public void agregarObserver(ManoTerminadaObserver observer) {
-		if (!manoTerminadaObservers.contains(observer)) {
-			manoTerminadaObservers.add(observer);
+		if (!this.equals(observer)) {
+			if (!manoTerminadaObservers.contains(observer)) {
+				manoTerminadaObservers.add(observer);
+			}
 		}
 	}
 

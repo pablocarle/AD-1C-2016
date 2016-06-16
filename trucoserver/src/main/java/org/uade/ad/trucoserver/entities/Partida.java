@@ -34,6 +34,7 @@ import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
+import org.uade.ad.trucoserver.business.PartidaTerminadaEvent;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
 
@@ -185,6 +186,9 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 		PartidaDTO dto = new PartidaDTO();
 		dto.setIdPartida(idPartida);
 		dto.setChicos(DTOUtil.getDTOs(chicos, ChicoDTO.class));
+		if (this.partidaTerminada()) {
+			dto.setEstado("terminada");
+		}
 		if (parejas != null && !parejas.isEmpty()) {
 			if (parejas.size() == 1) {
 				dto.setPareja1(parejas.get(0).getDTO());
@@ -291,8 +295,10 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 
 	@Override
 	public void agregarObserver(ManoTerminadaObserver observer) {
-		if (!manoTerminadaObservers.contains(observer)) {
-			manoTerminadaObservers.add(observer);
+		if (!this.equals(observer)) {
+			if (!manoTerminadaObservers.contains(observer)) {
+				manoTerminadaObservers.add(observer);
+			}
 		}
 	}
 
@@ -303,8 +309,10 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 
 	@Override
 	public void agregarObserver(ChicoTerminadoObserver observer) {
-		if (!chicoTerminadoObservers.contains(observer)) {
-			chicoTerminadoObservers.add(observer);
+		if (!this.equals(observer)) {
+			if (!chicoTerminadoObservers.contains(observer)) {
+				chicoTerminadoObservers.add(observer);
+			}
 		}
 	}
 
@@ -314,16 +322,41 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 	}
 
 	@Override
-	public void manoTerminada(ManoTerminadaEvent event) {
+	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
 		for (ManoTerminadaObserver o : manoTerminadaObservers) {
 			o.manoTerminada(event);
 		}
 	}
 
 	@Override
-	public void chicoTerminado(ChicoTerminadoEvent event) {
+	public void chicoTerminado(ChicoTerminadoEvent event) throws JuegoException {
 		for (ChicoTerminadoObserver o : chicoTerminadoObservers) {
 			o.chicoTerminado(event);
 		}
+		if (partidaTerminada()) {
+			for (PartidaTerminadaObserver o : partidaTerminadaObservers) {
+				o.finPartida(new PartidaTerminadaEvent(this, getGanadores().toArray(new Jugador[0]), getPerdedores().toArray(new Jugador[0])));
+			}
+		}
+	}
+
+	public List<Jugador> getGanadores() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private List<Jugador> getPerdedores() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Pareja getPareja(Jugador jugador) {
+		if (parejas != null) {
+			for (Pareja p : parejas) {
+				if (p.contieneJugador(jugador))
+					return p;
+			}
+		}
+		return Pareja.Null;
 	}
 }

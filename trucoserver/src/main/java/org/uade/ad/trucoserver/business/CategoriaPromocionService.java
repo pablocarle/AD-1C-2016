@@ -3,6 +3,7 @@ package org.uade.ad.trucoserver.business;
 import java.util.List;
 
 import org.hibernate.Transaction;
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.entities.Categoria;
@@ -26,7 +27,7 @@ public class CategoriaPromocionService implements PartidaTerminadaObserver {
 	}
 
 	@Override
-	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		RankingItem rankingItem = null;
 		Categoria categoriaCalculada = null;
 		Transaction tr = jDao.getSession().beginTransaction();

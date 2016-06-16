@@ -4,6 +4,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import org.hibernate.Transaction;
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.dao.Juego_LogDao;
 import org.uade.ad.trucoserver.dao.Juego_LogDaoImpl;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -55,7 +56,7 @@ public class RankingService implements PartidaTerminadaObserver {
 	}
 
 	@Override
-	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		RankingItem item = null;
 		int puntosObtenidos = 0;
 		for (Jugador j : partida.getGanadores()) {

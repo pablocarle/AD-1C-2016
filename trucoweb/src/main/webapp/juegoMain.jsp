@@ -123,7 +123,7 @@ verificarTurno = function(xml) {
 	if (apodo && apodo.value && xml) {
 		var partida = parsePartida(xml);
 		if (partida.estado == "terminada") {
-			//TODO Que hacer si la partida terminó
+			finTurno();
 		} else {
 			if (partida.jugadorActual.apodo == apodo.value) {
 				habilitarTurno(partida);

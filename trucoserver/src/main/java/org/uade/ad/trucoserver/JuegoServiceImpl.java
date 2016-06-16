@@ -113,7 +113,7 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 	}
 
 	@Override
-	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		agregarNotificaciones(new String[]{"Fin de la partida",
 											"Pareja ganadora: " + Arrays.toString(partida.getGanadores()),
 											"Puntos de jugador " + partida.getGanadores()[0] + ": " + partida.getPartida().getPuntosObtenidos(partida.getGanadores()[0]),

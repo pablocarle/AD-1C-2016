@@ -3,6 +3,7 @@ package org.uade.ad.trucoserver.business;
 import java.util.Calendar;
 
 import org.hibernate.Transaction;
+import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.dao.Juego_LogDao;
 import org.uade.ad.trucoserver.dao.Juego_LogDaoImpl;
 import org.uade.ad.trucoserver.entities.Jugador;
@@ -27,7 +28,7 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 	}
 
 	@Override
-	public void finPartida(PartidaTerminadaEvent partida) throws Exception {
+	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		//Actualizar log
 		Transaction tr = dao.getSession().beginTransaction();
 		LogJuego entity = null;

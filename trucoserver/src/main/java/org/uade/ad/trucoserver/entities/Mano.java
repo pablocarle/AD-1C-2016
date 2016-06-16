@@ -3,6 +3,7 @@ package org.uade.ad.trucoserver.entities;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -22,6 +23,7 @@ import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
@@ -31,7 +33,7 @@ import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
  * Jugar una carta
  * No aceptar un envido
  * No aceptar un truco
- * Se fue la pareja completa al mazo
+ * Se fue la pareja completa al mazo (listo)
  * */
 @Entity
 @Table(name="manos")
@@ -68,7 +70,7 @@ public class Mano implements ManoTerminadaObservable {
 	@Transient
 	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
 	@Transient
-	private List<Jugador> jugadoresEnMazo;
+	private List<Jugador> jugadoresEnMazo = new ArrayList<>();
 	@Column
 	private int idEnviteTruco = -1;
 	@Column
@@ -78,6 +80,10 @@ public class Mano implements ManoTerminadaObservable {
 	private boolean envidoEnCurso = false;
 	@Transient
 	private boolean trucoEnCurso = false;
+	@Transient
+	private int puntosPareja1 = 0;
+	@Transient
+	private int puntosPareja2 = 0;
 	
 	@Transient
 	private List<ManoTerminadaObserver> observers = new ArrayList<>();
@@ -138,6 +144,9 @@ public class Mano implements ManoTerminadaObservable {
 					ordenJuegoActual = getNuevoOrdenJuego(ganadorAnterior, ordenJuegoInicial);
 					turnoActualIdx = 0;
 				}
+				if (terminada()) {
+					notificarObserversFinMano();
+				}
 			}
 		}
 	}
@@ -167,7 +176,21 @@ public class Mano implements ManoTerminadaObservable {
 	 * @return
 	 */
 	public Pareja getGanador() {
-		//TODO Considerar caso donde se fueron al mazo (puede haber solo una baza)
+		// Verifico si hay una pareja completa en mazo
+		List<Pareja> parejas = chico.getPartida().getParejas();
+		Iterator<Pareja> it = parejas.iterator();
+		Pareja p = null;
+		boolean alMazo = false;
+		while (it.hasNext()) {
+			p = it.next();
+			if (jugadoresEnMazo.contains(p.getJugador1()) && jugadoresEnMazo.contains(p.getJugador2())) {
+				//Gano la otra pareja la mano
+				it.remove();
+				alMazo = true;
+			}
+		}
+		if (alMazo)
+			return parejas.get(0);
 		if (bazas != null && bazas.size() >= 2) {
 			int countPareja1 = 0;
 			int countPareja2 = 0;
@@ -289,7 +312,7 @@ public class Mano implements ManoTerminadaObservable {
 	
 	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
-		
+		// TODO Usar trucoEnCurso y envidoEnCurso (validar que no haya un canto anterior, etc)
 		Pareja parejaEnvite = null;
 	
 		if(pareja1.contieneJugador(jugador))
@@ -357,21 +380,28 @@ public class Mano implements ManoTerminadaObservable {
 		return envites != null && !envites.isEmpty();
 	}
 	
-	public void irseAlMazo(Jugador jugador) {
-		//TODO Completar irse al mazo
-		List<Jugador> j = this.getJugadoresEnMazo();
-		for (int i = 0; i < j.size(); i++) {
-			// Si el jugador no está en la Lista, lo agrego para irse al mazo
-			if (j.get(i).getIdJugador() != jugador.getIdJugador()) {
-				j.add(jugador);
-			} else {
-				// Terminar la mano y dar por ganado al contrario
-			}
+	public void irseAlMazo(Jugador jugador) throws JuegoException {
+		if (getGanador() != Pareja.Null)
+			throw new JuegoException("La mano ya terminó, no puede irse al mazo!");
+		Pareja p = chico.getPartida().getPareja(jugador);
+		if (envidoEnCurso || trucoEnCurso) 
+			throw new JuegoException("Hay truco / envido en curso!");
+		if (p == Pareja.Null)
+			throw new JuegoException("No hay pareja");
+		
+		if (!jugadoresEnMazo.contains(p.getJugador1()) && !jugadoresEnMazo.contains(p.getJugador2())) {
+			jugadoresEnMazo.add(jugador);
+		} else {
+			// El otro ya estaba en el mazo
+			jugadoresEnMazo.add(jugador);
+			notificarObserversFinMano();
 		}
 	}
 
-	public List<Jugador> getJugadoresEnMazo() {
-		return jugadoresEnMazo;
+	private void notificarObserversFinMano() throws JuegoException {
+		for (ManoTerminadaObserver o : observers) {
+			o.manoTerminada(new ManoTerminadaEvent(this, puntosPareja1, puntosPareja2));
+		}
 	}
 
 	public List<Carta> getCartasDisponibles(Jugador j) {

@@ -1,4 +1,4 @@
-use modeloparcial;
+use jbossews;
 
 drop database trucodb;
 
@@ -143,6 +143,19 @@ create table tipo_envites (
     constraint tipoEnvites_pk primary key (idTipoEnvite)
 );
 
+create table manos (
+	idMano int not null auto_increment,
+    idChico int not null,
+    fechaInicio date not null,
+    fechaFin date null,
+    idEnviteTruco int,
+    idEnviteEnvido int,
+    constraint manos_pk primary key ( idMano ),
+    constraint manos_chicos_fk foreign key ( idChico ) references chicos ( idChico ),
+    constraint manos_envites_fk1 foreign key ( idEnviteTruco ) references tipo_envites ( idTipoEnvite ),
+    constraint manos_envites_fk2 foreign key ( idEnviteEnvido ) references tipo_envites ( idTipoEnvite )
+);
+
 create table envites_pareja_mano (
 	idEnviteParejaMano int not null auto_increment,
     idTipoEnvite int not null,
@@ -156,19 +169,6 @@ create table envites_pareja_mano (
 );
 
 create unique index envites_parejas_idx on envites_pareja_mano ( idMano, idTipoEnvite );
-
-create table manos (
-	idMano int not null auto_increment,
-    idChico int not null,
-    fechaInicio date not null,
-    fechaFin date null,
-    idEnviteTruco int,
-    idEnviteEnvido int,
-    constraint manos_pk primary key ( idMano ),
-    constraint manos_chicos_fk foreign key ( idChico ) references chicos ( idChico ),
-    constraint manos_envites_fk1 foreign key ( idEnviteTruco ) references tipo_envites ( idTipoEnvite ),
-    constraint manos_envites_fk2 foreign key ( idEnviteEnvido ) references tipo_envites ( idTipoEnvite )
-);
 
 create table bazas (
 	idBaza int not null,
@@ -194,4 +194,3 @@ create table bazas_cartas (
 );
 
 create unique index bazas_cartas_idx_u on bazas_cartas ( idBaza, idJugador );
-
