@@ -363,10 +363,7 @@ public class Mano implements ManoTerminadaObservable {
 	 * @return
 	 */
 	public boolean esTurno(Jugador jugador) {
-		if (turnoActualIdx >= ordenJuegoActual.size()) {
-			turnoActualIdx = 0;
-		}
-		return ordenJuegoActual.get(turnoActualIdx).equals(jugador);
+		return getTurnoActual().equals(jugador);
 	}
 	
 	public Jugador getTurnoActual() {
@@ -394,6 +391,7 @@ public class Mano implements ManoTerminadaObservable {
 		} else {
 			// El otro ya estaba en el mazo
 			jugadoresEnMazo.add(jugador);
+			//TODO Sumar puntos acumulados
 			notificarObserversFinMano();
 		}
 	}
