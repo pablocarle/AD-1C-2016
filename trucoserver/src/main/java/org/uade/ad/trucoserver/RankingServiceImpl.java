@@ -12,6 +12,10 @@ public class RankingServiceImpl extends Context implements RankingService {
 	protected RankingServiceImpl() throws RemoteException {
 		super();
 	}
+	
+	public RankingServiceImpl(int port) throws RemoteException {
+		super(port);
+	}
 
 	private static final long serialVersionUID = 1L;
 

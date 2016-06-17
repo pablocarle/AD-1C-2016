@@ -3,6 +3,7 @@ package org.uade.ad.trucoserver;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
+import java.rmi.AlreadyBoundException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -43,23 +44,36 @@ public final class Server {
 	private void init() {
 		try {
 			System.setSecurityManager(null);
+			Registry registry = null;
 			if (isOpenShift()) {
-				LocateRegistry.createRegistry(Integer.parseInt(getConfig("rmi.port")));
+				System.out.println("Set property java.rmi.server.hostname a " + System.getenv("OPENSHIFT_JBOSSEWS_IP"));
+				System.setProperty("java.rmi.server.hostname", System.getenv("OPENSHIFT_JBOSSEWS_IP"));
+				registry = LocateRegistry.createRegistry(Integer.parseInt(getConfig("rmi.port")));
+				//LocateRegistry.createRegistry(Integer.parseInt(getConfig("rmi.port")));
+				//registry = LocateRegistry.getRegistry(System.getenv("OPENSHIFT_JBOSSEWS_IP"), Integer.parseInt(getConfig("rmi.port")));
+				System.out.println("Registry: " + registry);
 			} else {
 				LocateRegistry.createRegistry(1099);
 			}
-				
-			JuegoService juegoManager = new JuegoServiceImpl();
-			JugadorService jugadorManager = new JugadorServiceImpl();
-			SesionService sessionManager = new SesionServiceImpl();
-			RankingService rankingService = new RankingServiceImpl();
 			if (isOpenShift()) {
-				String localhost = System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + getConfig("rmi.port");
-				Naming.rebind("//" + localhost + "/" + JuegoService.SERVICENAME, juegoManager);
-				Naming.rebind("//" + localhost + "/" + JugadorService.SERVICENAME, jugadorManager);
-				Naming.rebind("//" + localhost + "/" + SesionService.SERVICENAME, sessionManager);
-				Naming.rebind("//" + localhost + "/" + RankingService.SERVICENAME, rankingService);
+//				String localhost = System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + getConfig("rmi.port");
+				JuegoService juegoManager = new JuegoServiceImpl(21634);
+				JugadorService jugadorManager = new JugadorServiceImpl(21635);
+				SesionService sessionManager = new SesionServiceImpl(21636);
+				RankingService rankingService = new RankingServiceImpl(21637);
+				registry.bind(JuegoService.SERVICENAME, juegoManager);
+				registry.bind(JugadorService.SERVICENAME, jugadorManager);
+				registry.bind(SesionService.SERVICENAME, sessionManager);
+				registry.bind(RankingService.SERVICENAME, rankingService);
+//				Naming.rebind("//" + localhost + "/" + JuegoService.SERVICENAME, juegoManager);
+//				Naming.rebind("//" + localhost + "/" + JugadorService.SERVICENAME, jugadorManager);
+//				Naming.rebind("//" + localhost + "/" + SesionService.SERVICENAME, sessionManager);
+//				Naming.rebind("//" + localhost + "/" + RankingService.SERVICENAME, rankingService);
 			} else {
+				JuegoService juegoManager = new JuegoServiceImpl();
+				JugadorService jugadorManager = new JugadorServiceImpl();
+				SesionService sessionManager = new SesionServiceImpl();
+				RankingService rankingService = new RankingServiceImpl();
 				Naming.rebind("//localhost/" + JuegoService.SERVICENAME, juegoManager);
 				Naming.rebind("//localhost/" + JugadorService.SERVICENAME, jugadorManager);
 				Naming.rebind("//localhost/" + SesionService.SERVICENAME, sessionManager);
@@ -73,6 +87,9 @@ public final class Server {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		} catch (MalformedURLException e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		} catch (AlreadyBoundException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}

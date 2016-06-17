@@ -1,6 +1,8 @@
 package org.uade.ad.trucoserver;
 
 import java.rmi.RemoteException;
+import java.rmi.server.RMIClientSocketFactory;
+import java.rmi.server.RMIServerSocketFactory;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,6 +50,14 @@ public abstract class Context extends UnicastRemoteObject {
 		super();
 	}
 	
+	public Context(int port) throws RemoteException {
+		super(port);
+	}
+	
+	public Context(int port, RMIClientSocketFactory csf, RMIServerSocketFactory ssf) throws RemoteException {
+		super(port, csf, ssf);
+	}
+
 	protected static void addTestPlayers() {
 		Categoria novato = new Categoria(1, 1, "novato", 0, 0, 0);
 		Jugador b = new Jugador("b", "b", "b");

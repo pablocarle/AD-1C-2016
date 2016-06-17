@@ -15,10 +15,11 @@ public class SesionServiceImpl extends Context implements SesionService {
 	protected SesionServiceImpl() throws RemoteException {
 		super();
 	}
+	
+	public SesionServiceImpl(int port) throws RemoteException {
+		super(port);
+	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override

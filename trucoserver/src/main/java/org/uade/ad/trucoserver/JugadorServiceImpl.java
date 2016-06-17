@@ -18,10 +18,11 @@ public class JugadorServiceImpl extends Context implements JugadorService {
 	protected JugadorServiceImpl() throws RemoteException {
 		super();
 	}
+	
+	public JugadorServiceImpl(int port) throws RemoteException {
+		super(port);
+	}
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Override

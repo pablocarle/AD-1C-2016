@@ -35,6 +35,10 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 	protected JuegoServiceImpl() throws RemoteException {
 		super();
 	}
+	
+	public JuegoServiceImpl(int port) throws RemoteException {
+		super(port);
+	}
 
 	private static final long serialVersionUID = 1L;
 
