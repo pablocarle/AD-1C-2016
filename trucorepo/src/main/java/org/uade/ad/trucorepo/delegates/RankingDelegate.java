@@ -17,7 +17,11 @@ public class RankingDelegate extends BusinessDelegate {
 	public RankingDelegate() throws RankingException {
 		super();
 		try {
-			rankingService = (RankingService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + RankingService.SERVICENAME);
+			if (!isOpenShift()) {
+				rankingService = (RankingService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + RankingService.SERVICENAME);
+			} else {
+				rankingService = (RankingService) Naming.lookup("//" + System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + webServerProperties.getProperty("server.port") + "/" + RankingService.SERVICENAME);
+			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new RankingException(e);
 		} 

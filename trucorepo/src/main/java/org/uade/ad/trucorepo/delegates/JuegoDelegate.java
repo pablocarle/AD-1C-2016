@@ -21,7 +21,11 @@ public class JuegoDelegate extends BusinessDelegate {
 	public JuegoDelegate() throws JuegoException {
 		super();
 		try {
-			juegoService = (JuegoService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + JuegoService.SERVICENAME);
+			if (!isOpenShift()) {
+				juegoService = (JuegoService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + JuegoService.SERVICENAME);
+			} else {
+				juegoService = (JuegoService) Naming.lookup("//" + System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + webServerProperties.getProperty("server.port") + "/" + JuegoService.SERVICENAME);
+			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new JuegoException(e);
 		} 

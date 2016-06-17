@@ -25,7 +25,7 @@ public class EnvitesManoPareja {
 	@ManyToOne
 	@JoinColumn(name="idMano")
 	private Mano mano;
-	@Column
+	@Column(columnDefinition="bit")
 	private boolean aceptado;
 	@Column
 	private int puntosObtenidos;

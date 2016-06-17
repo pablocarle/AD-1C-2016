@@ -18,7 +18,7 @@ public class GrupoDetalle {
 
 	@EmbeddedId
 	private GrupoDetallePk pk;
-	@Column
+	@Column(columnDefinition="bit")
 	private boolean eliminado;
 	@Column
 	private Date fechaCreacion;

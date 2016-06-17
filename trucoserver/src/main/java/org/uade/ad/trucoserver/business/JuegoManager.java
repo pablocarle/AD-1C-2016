@@ -10,12 +10,16 @@ import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.Context;
 import org.uade.ad.trucoserver.dao.CartaDao;
 import org.uade.ad.trucoserver.dao.CartaDaoImpl;
+import org.uade.ad.trucoserver.dao.ChicoDao;
+import org.uade.ad.trucoserver.dao.ChicoDaoImpl;
 import org.uade.ad.trucoserver.dao.EnviteDao;
 import org.uade.ad.trucoserver.dao.EnviteDaoImpl;
 import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
+import org.uade.ad.trucoserver.dao.ManoDao;
+import org.uade.ad.trucoserver.dao.ManoDaoImpl;
 import org.uade.ad.trucoserver.dao.ParejaDao;
 import org.uade.ad.trucoserver.dao.ParejaDaoImpl;
 import org.uade.ad.trucoserver.dao.PartidaDao;
@@ -27,12 +31,13 @@ import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Envite;
 import org.uade.ad.trucoserver.entities.Grupo;
 import org.uade.ad.trucoserver.entities.Jugador;
+import org.uade.ad.trucoserver.entities.Mano;
 import org.uade.ad.trucoserver.entities.Pareja;
 import org.uade.ad.trucoserver.entities.Partida;
 import org.uade.ad.trucoserver.entities.PartidaCerrada;
 import org.uade.ad.trucoserver.entities.TipoPartida;
 
-public class JuegoManager {
+public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserver {
 
 	public static final String PARTIDA_ABIERTA_INDIVIDUAL = "Abierta Individual";
 	public static final String PARTIDA_ABIERTA_PAREJA = "Abierta en Pareja";
@@ -50,6 +55,8 @@ public class JuegoManager {
 	private GrupoDao gDao = GrupoDaoImpl.getDAO();
 	private ParejaDao parejaDao = ParejaDaoImpl.getDAO();
 	private PartidaDao pDao = PartidaDaoImpl.getDAO();
+	private ChicoDao chicoDao = ChicoDaoImpl.getDAO();
+	private ManoDao manoDao = ManoDaoImpl.getDAO();
 	private JugadorDao jDao = JugadorDaoImpl.getDAO();
 	private CartaDao cDao = CartaDaoImpl.getDAO();
 	private EnviteDao eDao = EnviteDaoImpl.getDAO();
@@ -297,5 +304,22 @@ public class JuegoManager {
 			e.printStackTrace();
 		}
 		return p.getDTO();
+	}
+
+	@Override
+	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
+		//Guardar en base de datos
+		Mano mano = event.getMano();
+		if (mano.getIdMano() <= 0) {
+			manoDao.guardar(mano);
+		}
+	}
+
+	@Override
+	public void chicoTerminado(ChicoTerminadoEvent event) throws JuegoException {
+		Chico chico = event.getChico();
+		if (chico.getIdChico() <= 0){
+			chicoDao.guardar(chico);
+		}
 	}
 }

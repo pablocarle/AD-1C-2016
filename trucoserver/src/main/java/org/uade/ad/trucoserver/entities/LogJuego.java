@@ -23,7 +23,7 @@ public class LogJuego {
 	@ManyToOne
 	@JoinColumn(name="idJugador")
 	private Jugador jugador;
-	@Column
+	@Column(columnDefinition="bit")
 	private boolean victoria;
 	@Column
 	private int puntos;

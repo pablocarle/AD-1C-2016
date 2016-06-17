@@ -6,6 +6,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
 import java.util.Properties;
 
 import org.uade.ad.trucorepo.delegates.BusinessDelegate;
@@ -41,16 +42,29 @@ public final class Server {
 
 	private void init() {
 		try {
-			//Integer.parseInt(getConfig("rmi.port"))
-			LocateRegistry.createRegistry(1099);
+			System.setSecurityManager(null);
+			if (isOpenShift()) {
+				LocateRegistry.createRegistry(Integer.parseInt(getConfig("rmi.port")));
+			} else {
+				LocateRegistry.createRegistry(1099);
+			}
+				
 			JuegoService juegoManager = new JuegoServiceImpl();
 			JugadorService jugadorManager = new JugadorServiceImpl();
 			SesionService sessionManager = new SesionServiceImpl();
 			RankingService rankingService = new RankingServiceImpl();
-			Naming.rebind("//localhost/" + JuegoService.SERVICENAME, juegoManager);
-			Naming.rebind("//localhost/" + JugadorService.SERVICENAME, jugadorManager);
-			Naming.rebind("//localhost/" + SesionService.SERVICENAME, sessionManager);
-			Naming.rebind("//localhost/" + RankingService.SERVICENAME, rankingService);
+			if (isOpenShift()) {
+				String localhost = System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + getConfig("rmi.port");
+				Naming.rebind("//" + localhost + "/" + JuegoService.SERVICENAME, juegoManager);
+				Naming.rebind("//" + localhost + "/" + JugadorService.SERVICENAME, jugadorManager);
+				Naming.rebind("//" + localhost + "/" + SesionService.SERVICENAME, sessionManager);
+				Naming.rebind("//" + localhost + "/" + RankingService.SERVICENAME, rankingService);
+			} else {
+				Naming.rebind("//localhost/" + JuegoService.SERVICENAME, juegoManager);
+				Naming.rebind("//localhost/" + JugadorService.SERVICENAME, jugadorManager);
+				Naming.rebind("//localhost/" + SesionService.SERVICENAME, sessionManager);
+				Naming.rebind("//localhost/" + RankingService.SERVICENAME, rankingService);
+			}
 			System.out.println("Jugador Manager: " + "//localhost/" + JugadorService.SERVICENAME);
 			System.out.println("Juego Manager: " + "//localhost/" + JuegoService.SERVICENAME);
 			System.out.println("Sesion Manager: " + "//localhost/" + SesionService.SERVICENAME);
@@ -66,5 +80,9 @@ public final class Server {
 	
 	public static String getConfig(String config) {
 		return p.getProperty(config);
+	}
+	
+	public static boolean isOpenShift() {
+		return System.getenv("OPENSHIFT_JBOSSEWS_IP") != null;
 	}
 }

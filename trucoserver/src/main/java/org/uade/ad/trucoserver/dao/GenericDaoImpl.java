@@ -17,10 +17,11 @@ public class GenericDaoImpl<T, ID extends Serializable> implements GenericDao<T,
 		return factory.getCurrentSession();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public T getPorId(Class<T> clasz, ID id) {
 		Session session = getSession();
-		return session.get(clasz, id);
+		return (T) session.get(clasz, id);
 	}
 
 	@SuppressWarnings("unchecked")

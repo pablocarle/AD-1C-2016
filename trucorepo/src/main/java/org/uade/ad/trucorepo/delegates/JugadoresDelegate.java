@@ -20,8 +20,13 @@ public class JugadoresDelegate extends BusinessDelegate {
 	public JugadoresDelegate() throws JugadorException, GrupoException {
 		super();
 		try {
-			service = (JugadorService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + JugadorService.SERVICENAME);
-			sessionService = (SesionService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + SesionService.SERVICENAME);
+			if (!isOpenShift()) {
+				service = (JugadorService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + JugadorService.SERVICENAME);
+				sessionService = (SesionService) Naming.lookup("//" + webServerProperties.getProperty("server.url") + "/" + SesionService.SERVICENAME);
+			} else {
+				service = (JugadorService) Naming.lookup("//" + System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + webServerProperties.getProperty("server.port") + "/" + JugadorService.SERVICENAME);
+				sessionService = (SesionService) Naming.lookup("//" + System.getenv("OPENSHIFT_JBOSSEWS_IP") + ":" + webServerProperties.getProperty("server.port") + "/" + SesionService.SERVICENAME);
+			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			throw new JugadorException("No se pudo obtener servicio remoto", e);
 		}

@@ -28,4 +28,8 @@ public abstract class BusinessDelegate {
 	public BusinessDelegate() {
 		super();
 	}
+	
+	protected static boolean isOpenShift() {
+		return System.getenv("OPENSHIFT_JBOSSEWS_IP") != null;
+	}
 }

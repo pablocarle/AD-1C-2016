@@ -435,4 +435,8 @@ public class Mano implements ManoTerminadaObservable {
 	public boolean isTrucoEnCurso() {
 		return trucoEnCurso;
 	}
+	
+	public int getIdMano() {
+		return idMano;
+	}
 }
