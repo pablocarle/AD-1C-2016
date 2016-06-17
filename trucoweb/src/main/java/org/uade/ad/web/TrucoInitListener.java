@@ -8,7 +8,6 @@ import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 import javax.xml.bind.JAXBException;
 
-import org.uade.ad.trucoserver.Server;
 import org.uade.ad.web.util.XMLSerialize;
 
 /**
@@ -59,13 +58,6 @@ public class TrucoInitListener implements ServletContextListener, HttpSessionLis
     public void contextInitialized(ServletContextEvent sce)  {
     	try {
 			XMLSerialize.init();
-			new Thread(new Runnable() {
-				
-				@Override
-				public void run() {
-					Server.main(null);
-				}
-			}).start();
 		} catch (JAXBException e) {
 			throw new RuntimeException("Fallo en inicializacion de contexto JAXB: ", e);
 		}

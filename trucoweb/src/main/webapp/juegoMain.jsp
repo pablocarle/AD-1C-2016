@@ -36,7 +36,7 @@ checkNotificaciones = function() {
 	}
 };
 
-setInterval(checkNotificaciones, 5000);
+setInterval(checkNotificaciones, 2000);
 
 procesarNotificacion = function(xml) {
 	var juego = document.getElementById("juegoLog");
@@ -116,7 +116,7 @@ asyncCheckTurno = function() {
 	}
 };
 
-setInterval(asyncCheckTurno, 5000);
+setInterval(asyncCheckTurno, 2000);
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
