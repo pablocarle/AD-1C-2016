@@ -498,7 +498,7 @@ try {
 					</td>
 				</tr>
 			</table>
-			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getAttribute("idPartida") %> />
+			<input type="hidden" name="idPartida" id="idPartidaField" value=<%=request.getParameter("idPartida") %> />
 			<input type="hidden" name="apodo" id="apodoField" value=<%= session.getAttribute("uid").toString() %> />
 		</form>
 	</div>

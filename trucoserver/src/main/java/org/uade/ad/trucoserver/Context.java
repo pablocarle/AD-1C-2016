@@ -188,7 +188,7 @@ public abstract class Context extends UnicastRemoteObject {
 		NotificacionDTO dto = new NotificacionDTO();
 		dto.setDescripcion("Nueva invitacion a partida");
 		dto.setIdPartida(idPartida);
-		dto.setUrl("/juegoMain.jsp?idPartida=" + idPartida);
+		dto.setUrl("/trucoweb/juegoMain.jsp?idPartida=" + idPartida);
 		dto.setTipoNotificacion("nueva_partida");
 		return dto;
 	}
