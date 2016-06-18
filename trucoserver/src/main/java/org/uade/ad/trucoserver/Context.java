@@ -10,6 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
@@ -173,7 +174,7 @@ public abstract class Context extends UnicastRemoteObject {
 			jugadorNotificaciones = notificaciones.get(j.getApodo());
 			if (jugadorNotificaciones == null) {
 				jugadorNotificaciones = new HashMap<>();
-				jugadorNotificaciones.put(now, Arrays.asList(getPartidaNotificacion(now, idPartida)));
+				jugadorNotificaciones.put(now, new LinkedList<>(Arrays.asList(getPartidaNotificacion(now, idPartida))));
 				notificaciones.put(j.getApodo(), jugadorNotificaciones);
 			} else {
 				//Si ya tiene la notificacion ignora, sino agrega
@@ -185,7 +186,7 @@ public abstract class Context extends UnicastRemoteObject {
 						System.out.println("ya tiene la notificacion");
 					}
 				} else {
-					jugadorNotificaciones.put(now, Arrays.asList(notificacion));
+					jugadorNotificaciones.put(now, new LinkedList<>(Arrays.asList(notificacion)));
 				}
 			}
 		}
@@ -266,11 +267,11 @@ public abstract class Context extends UnicastRemoteObject {
 				List<NotificacionDTO> n = mapa.get(now);
 				n.add(new NotificacionDTO(now, mensaje, idPartida));
 			} else {
-				mapa.put(now, Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
+				mapa.put(now, new LinkedList<>(Arrays.asList(new NotificacionDTO(now, mensaje, idPartida))));
 			}
 		} else {
 			mapa = new HashMap<>();
-			mapa.put(Calendar.getInstance().getTime(), Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
+			mapa.put(Calendar.getInstance().getTime(), new LinkedList<>(Arrays.asList(new NotificacionDTO(now, mensaje, idPartida))));
 			synchronized (notificaciones) {
 				notificaciones.put(jugador.getApodo(), mapa);
 			}
@@ -306,7 +307,7 @@ public abstract class Context extends UnicastRemoteObject {
 						n.add(new NotificacionDTO(now, mensaje, idPartida));
 					} else {
 						mapa = new HashMap<>();
-						mapa.put(now, Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
+						mapa.put(now, new LinkedList<>(Arrays.asList(new NotificacionDTO(now, mensaje, idPartida))));
 					}
 				}
 			} else {
@@ -318,7 +319,7 @@ public abstract class Context extends UnicastRemoteObject {
 							n.add(new NotificacionDTO(now, mensaje, idPartida));
 						} else {
 							mapa = new HashMap<>();
-							mapa.put(now, Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
+							mapa.put(now, new LinkedList<>(Arrays.asList(new NotificacionDTO(now, mensaje, idPartida))));
 						}
 					}
 					notificaciones.put(j.getApodo(), mapa);
@@ -356,7 +357,7 @@ public abstract class Context extends UnicastRemoteObject {
 		Date now = Calendar.getInstance().getTime();
 		if (jugadorNotificaciones == null) {
 			jugadorNotificaciones = new HashMap<>();
-			jugadorNotificaciones.put(now, Arrays.asList(getPartidaNotificacion(now, partida.getIdPartida())));
+			jugadorNotificaciones.put(now, new LinkedList<>(Arrays.asList(getPartidaNotificacion(now, partida.getIdPartida()))));
 			notificaciones.put(j.getApodo(), jugadorNotificaciones);
 		} else {
 			//Si ya tiene la notificacion ignora, sino agrega
@@ -366,7 +367,7 @@ public abstract class Context extends UnicastRemoteObject {
 					jugadorNotificaciones.get(now).add(notificacion);
 				}
 			} else {
-				jugadorNotificaciones.put(now, Arrays.asList(notificacion));
+				jugadorNotificaciones.put(now, new LinkedList<>(Arrays.asList(notificacion)));
 			}
 		}
 	}

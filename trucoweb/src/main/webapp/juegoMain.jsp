@@ -36,7 +36,7 @@ checkNotificaciones = function() {
 	}
 };
 
-setInterval(checkNotificaciones, 2000);
+notifCheckId = setInterval(checkNotificaciones, 2000);
 
 procesarNotificacion = function(xml) {
 	var juego = document.getElementById("juegoLog");
@@ -46,7 +46,7 @@ procesarNotificacion = function(xml) {
 			notificaciones.sort(function(a, b) {
 				return b.fechaNotificacion - a.fechaNotificacion;
 			});
-			for (var i = notificaciones.length - 1; i >= 0; i--) {
+			for (var i = 0; i < notificaciones.length; i++) {
 				var n = notificaciones[i];
 				if (n.tipoNotificacion != "nueva_partida") {
 					var html = "<p>";
@@ -118,7 +118,7 @@ asyncCheckTurno = function() {
 	}
 };
 
-setInterval(asyncCheckTurno, 2000);
+turnoCheckId = setInterval(asyncCheckTurno, 2000);
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
@@ -225,6 +225,7 @@ habilitarTurno = function(partida) {
 			selectTrucos.removeAttribute("disabled");
 		}
 	}
+	clearInterval(turnoCheckId);
 };
 
 function removeOptions(selectbox)
@@ -257,6 +258,8 @@ finTurno = function() {
 
 	selectEnvidos.setAttribute("disabled", "disabled");
 	selectTrucos.setAttribute("disabled", "disabled");
+
+	turnoCheckId = setInterval(asyncCheckTurno, 2000);
 };
 
 parsePartida = function(xml) {

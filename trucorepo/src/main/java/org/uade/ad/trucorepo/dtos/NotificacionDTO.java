@@ -27,6 +27,10 @@ public class NotificacionDTO implements Serializable {
 	@XmlElement
 	private Date fechaNotificacion;
 	
+	public NotificacionDTO() {
+		super();
+	}
+	
 	public NotificacionDTO(Date fechaNotificacion) {
 		super();
 		this.fechaNotificacion = fechaNotificacion;
