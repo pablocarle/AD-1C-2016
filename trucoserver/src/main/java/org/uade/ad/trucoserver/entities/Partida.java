@@ -149,11 +149,16 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 				//Si llega aca, no hay chico en curso, crear nuevo (no termino la partida tampoco)
 				Chico nuevoChico = new Chico(this, JuegoManager.getManager().sortOrden(parejas));
 				chicos.add(nuevoChico);
+				nuevoChico.agregarObserver((ChicoTerminadoObserver)this);
+				nuevoChico.agregarObserver((ManoTerminadaObserver)this);
 				return nuevoChico;
 			} else {
 				synchronized(this) {
 					chicos = new ArrayList<>();
-					chicos.add(new Chico(this, JuegoManager.getManager().sortOrden(parejas)));
+					Chico nuevoChico = new Chico(this, JuegoManager.getManager().sortOrden(parejas));
+					nuevoChico.agregarObserver((ChicoTerminadoObserver)this);
+					nuevoChico.agregarObserver((ManoTerminadaObserver)this);
+					chicos.add(nuevoChico);
 				}
 				return chicos.get(0);
 			}

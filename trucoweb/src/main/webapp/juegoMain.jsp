@@ -5,7 +5,8 @@
     pageEncoding="UTF-8"%>
 <!DOCTYPE >
 <html>
-<!--  Esta es la vista principal del juego (unica para todas las modalidades) -->
+<!--  Esta es la vista principal del jue//Parsea el DOM xml y genera un objeto javascript con la informacion "cocinada"
+go (unica para todas las modalidades) -->
 <head>
 
 <style type="text/css">
@@ -119,6 +120,7 @@ asyncCheckTurno = function() {
 };
 
 turnoCheckId = setInterval(asyncCheckTurno, 2000);
+restoreTimerTurno = false;
 
 verificarTurno = function(xml) {
 	var apodo = document.getElementById("apodoField");
@@ -226,6 +228,7 @@ habilitarTurno = function(partida) {
 		}
 	}
 	clearInterval(turnoCheckId);
+	restoreTimerTurno = true;
 };
 
 function removeOptions(selectbox)
@@ -258,8 +261,10 @@ finTurno = function() {
 
 	selectEnvidos.setAttribute("disabled", "disabled");
 	selectTrucos.setAttribute("disabled", "disabled");
-
-	turnoCheckId = setInterval(asyncCheckTurno, 2000);
+	if (restoreTimerTurno) {
+		turnoCheckId = setInterval(asyncCheckTurno, 2000);
+		restoreTimerTurno = false;
+	}
 };
 
 parsePartida = function(xml) {

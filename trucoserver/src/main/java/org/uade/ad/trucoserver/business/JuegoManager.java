@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver.business;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -92,7 +93,9 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 			partida.agregarObserver((ManoTerminadaObserver)this);
 			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
 			juegoContext.agregarJuego(partida);
-			juegoContext.agregarNotificacion("Turno de " + partida.getTurnoActual().getApodo(), partida.getIdPartida());
+			juegoContext.agregarNotificaciones(new String[]{
+					"Parejas: " + Arrays.toString(partida.getParejas().get(0).getJugadores().toArray()) + " VS " + Arrays.toString(partida.getParejas().get(1).getJugadores().toArray()),
+					"Turno de " + partida.getTurnoActual().getApodo()}, partida.getIdPartida());
 		} catch (Exception e) {
 			System.out.println("transaction rollback");
 			tr.rollback();
@@ -150,7 +153,9 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 				partida.agregarObserver((ChicoTerminadoObserver)this);
 				partida.agregarObserver((ManoTerminadaObserver)this);
 				juegoContext.agregarJuego(partida);
-				juegoContext.agregarNotificacion("Turno de " + partida.getTurnoActual().getApodo(), partida.getIdPartida());
+				juegoContext.agregarNotificaciones(new String[]{
+						"Parejas: " + Arrays.toString(partida.getParejas().get(0).getJugadores().toArray()) + " VS " + Arrays.toString(partida.getParejas().get(1).getJugadores().toArray()),
+						"Turno de " + partida.getTurnoActual().getApodo()}, partida.getIdPartida());
 				return partida;
 			}
 		} else {
@@ -201,7 +206,9 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 				partida.agregarObserver((ChicoTerminadoObserver)this);
 				partida.agregarObserver((ManoTerminadaObserver)this);
 				juegoContext.agregarJuego(partida);
-				juegoContext.agregarNotificacion("Turno de " + partida.getTurnoActual().getApodo(), partida.getIdPartida());
+				juegoContext.agregarNotificaciones(new String[]{
+						"Parejas: " + Arrays.toString(partida.getParejas().get(0).getJugadores().toArray()) + " VS " + Arrays.toString(partida.getParejas().get(1).getJugadores().toArray()),
+						"Turno de " + partida.getTurnoActual().getApodo()}, partida.getIdPartida());
 				return partida;
 			}
 		} else{
@@ -249,8 +256,8 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		}
 		tr.commit();
 		context.actualizarPartida(p);
-		context.agregarNotificacion(apodo + " jugó carta " + CartasManager.getManager().getCarta(idCarta), idJuego);
-		context.agregarNotificacion("Turno de " + p.getTurnoActual(), idJuego);
+		context.agregarNotificaciones(new String[]{apodo + " jugó carta " + CartasManager.getManager().getCarta(idCarta),
+				"Turno de " + p.getTurnoActual()}, idJuego);
 		return p;
 	}
 
@@ -264,8 +271,9 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		p.irAlMazo(j);
 		context.actualizarPartida(p);
 		tr.commit();
-		context.agregarNotificacion(apodo + " se fue al mazo", idPartida);
-		context.agregarNotificacion("Turno de " + p.getTurnoActual(), idPartida);
+		context.agregarNotificaciones(new String[]{apodo + " se fue al mazo",
+				"Turno de " + p.getTurnoActual()
+		}, idPartida);
 		return p;
 	}
 
