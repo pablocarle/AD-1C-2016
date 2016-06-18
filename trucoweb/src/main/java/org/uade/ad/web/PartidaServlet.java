@@ -92,6 +92,9 @@ public class PartidaServlet extends HttpServlet {
 					//Obtener la partida que solicita
 					consultarPartida(request, response);
 					break;
+				case "Unirse":
+					handleUnirsePartida(request, response);
+					break;
 				default: 
 					throw new ServletException("No se identifica que operacion realizar");
 			}
@@ -101,8 +104,39 @@ public class PartidaServlet extends HttpServlet {
 			case "Jugar":
 				handleJuego(request, response);
 				break;
+			case "Unirse":
+				handleUnirsePartida(request, response);
+				break;
 			case "Verificar":
 				break;
+			}
+		}
+	}
+
+	private void handleUnirsePartida(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		String idPartidaStr = request.getParameter("idPartida");
+		if (idPartidaStr == null || idPartidaStr.length() == 0) {
+			error("Falta idPartida", request, response);
+			return;
+		}
+		HttpSession session = request.getSession();
+		if (session == null) {
+			error("No hay sesion", request, response);
+			return;
+		} else {
+			JugadorDTO user = (JugadorDTO) session.getAttribute("user");
+			if (user == null) {
+				error("No hay usuario logueado", request, response);
+				return;
+			} else {
+				try {
+					PartidaDTO dto = delegate.getPartida(user, Integer.parseInt(idPartidaStr));
+					agregarPartidaSesion(session, dto);
+					response.sendRedirect("/trucoweb/juegoMain.jsp?idPartida=" + dto.getIdPartida());
+				} catch (NumberFormatException | JuegoException e) {
+					e.printStackTrace();
+					error(e.getMessage(), request, response);
+				}
 			}
 		}
 	}
@@ -285,7 +319,7 @@ public class PartidaServlet extends HttpServlet {
 							request.getRequestDispatcher("/main.jsp").forward(request, response);
 						} else {
 							agregarPartidaSesion(session, partida);
-							response.sendRedirect("/juegoMain.jsp?idPartida=" + partida.getIdPartida());
+							response.sendRedirect("/trucoweb/juegoMain.jsp?idPartida=" + partida.getIdPartida());
 						}
 					} catch (JuegoException e) {
 						error("Ocurrio un error iniciando la partida: " + e.getMessage(), request, response);
@@ -321,7 +355,7 @@ public class PartidaServlet extends HttpServlet {
 								error("No fue posible crear la partida en grupo. Contacte admin", request, response); 
 							} else {
 								agregarPartidaSesion(session, partida);
-								response.sendRedirect("/juegoMain.jsp?idPartida=" + partida.getIdPartida());
+								response.sendRedirect("/trucoweb/juegoMain.jsp?idPartida=" + partida.getIdPartida());
 							}
 						} catch (JuegoException e) {
 							error("Ocurrio un error al crear la partida cerrada: " + e.getMessage(), request, response);
@@ -352,7 +386,7 @@ public class PartidaServlet extends HttpServlet {
 						request.getRequestDispatcher("/main.jsp").forward(request, response);
 					} else {
 						agregarPartidaSesion(session, dto);
-						response.sendRedirect("/juegoMain.jsp?idPartida=" + dto.getIdPartida());
+						response.sendRedirect("/trucoweb/juegoMain.jsp?idPartida=" + dto.getIdPartida());
 					}
 				} catch (JuegoException e) {
 					error("Ocurrio un problema en la creacion de partida: " + e.getMessage(), request, response);

@@ -188,7 +188,7 @@ public abstract class Context extends UnicastRemoteObject {
 		NotificacionDTO dto = new NotificacionDTO();
 		dto.setDescripcion("Nueva invitacion a partida");
 		dto.setIdPartida(idPartida);
-		dto.setUrl("/trucoweb/juegoMain.jsp?idPartida=" + idPartida);
+		dto.setUrl("/trucoweb/PartidaServlet/Unirse?idPartida=" + idPartida);
 		dto.setTipoNotificacion("nueva_partida");
 		return dto;
 	}
@@ -213,7 +213,7 @@ public abstract class Context extends UnicastRemoteObject {
 				entry = it.next();
 				if (entry.getKey().after(ultimaFecha) && (idPartida == null || idPartida.equals(entry.getValue().getIdPartida()))) {
 					retMap.put(entry.getKey(), entry.getValue());
-				} else if (entry.getKey().before(ultimaFecha)) {
+				} else if (entry.getKey().before(ultimaFecha) || entry.getKey().equals(ultimaFecha)) {
 					if (entry.getValue().getTipoNotificacion().equals("nueva_partida")) {
 						it.remove();
 					} else if (entry.getValue().getTipoNotificacion().equals("mensaje") && entry.getValue().getIdPartida() == idPartida) {

@@ -56,6 +56,8 @@ procesarNotificacion = function(xml) {
 						var d1 = Date.parse(fechaNotificaciones);
 						if (n.fechaNotificacion > d1) {
 							fechaNotificaciones = n.fechaNotificacionStr;
+						} else {
+							continue;
 						}
 					}
 					html = html + "<b>" + n.fechaNotificacionStr + ":</b> " + n.descripcion + "</p>";
@@ -454,8 +456,11 @@ cantartruco = function() {
 JugadorDTO user = (JugadorDTO)session.getAttribute("user");
 String title = "Juego de Test [Modalidad Partida Abierta Individual]";
 try {
-	int idPartida = Integer.parseInt(request.getAttribute("idPartida").toString());
+	int idPartida = Integer.parseInt(request.getParameter("idPartida").toString());
 	List<PartidaDTO> partidas = (List<PartidaDTO>)session.getAttribute("partidas");
+	if (partidas == null || partidas.isEmpty()) {
+		throw new Exception("No hay partidas en sesion de usuario");
+	}
 	PartidaDTO partida = null;
 	for (PartidaDTO p : partidas) {
 		if (p.getIdPartida() == idPartida) {
@@ -464,9 +469,12 @@ try {
 		}
 	}
 	
+	if (partida == null)
+		throw new Exception("No se encontro la partida solicitada del usuario");
 	title = "Juego de " + user.getApodo() + " [" + "Modalidad " + partida.getTipoPartida().getNombre() + "]";
 } catch (Exception e) {
-	e.printStackTrace();	
+	e.printStackTrace();
+	throw e;
 }
 %>
 <h1><%=title %></h1>

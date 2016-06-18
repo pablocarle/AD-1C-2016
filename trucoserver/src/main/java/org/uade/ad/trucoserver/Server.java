@@ -15,6 +15,10 @@ import org.uade.ad.trucorepo.interfaces.JuegoService;
 import org.uade.ad.trucorepo.interfaces.JugadorService;
 import org.uade.ad.trucorepo.interfaces.RankingService;
 import org.uade.ad.trucorepo.interfaces.SesionService;
+import org.uade.ad.trucoserver.business.CartasManager;
+import org.uade.ad.trucoserver.business.JuegoLogManager;
+import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.JugadorManager;
 
 public final class Server {
 
@@ -79,6 +83,10 @@ public final class Server {
 				Naming.rebind("//localhost/" + SesionService.SERVICENAME, sessionManager);
 				Naming.rebind("//localhost/" + RankingService.SERVICENAME, rankingService);
 			}
+			CartasManager.getManager();
+			JuegoManager.getManager();
+			JugadorManager.getManager();
+			JuegoLogManager.getManager();
 			System.out.println("Jugador Manager: " + "//localhost/" + JugadorService.SERVICENAME);
 			System.out.println("Juego Manager: " + "//localhost/" + JuegoService.SERVICENAME);
 			System.out.println("Sesion Manager: " + "//localhost/" + SesionService.SERVICENAME);
