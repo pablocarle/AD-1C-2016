@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
 import org.uade.ad.trucorepo.dtos.JugadorDTO;
+import org.uade.ad.trucorepo.dtos.NotificacionDTO;
 import org.uade.ad.trucorepo.dtos.NotificacionesDTO;
 import org.uade.ad.trucorepo.dtos.PartidaDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
@@ -68,7 +70,12 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 
 	@Override
 	public NotificacionesDTO getNotificaciones(JugadorDTO jugador, Date fechaReferencia, Integer idPartida) throws RemoteException, JuegoException {
-		return new NotificacionesDTO(new ArrayList<>(Context.getInvitaciones(jugador.getApodo(), fechaReferencia, idPartida).values()));
+		Map<Date, List<NotificacionDTO>> notificaciones = Context.getInvitaciones(jugador.getApodo(), fechaReferencia, idPartida);
+		List<NotificacionDTO> nList = new ArrayList<>();
+		for (Map.Entry<Date, List<NotificacionDTO>> entry : notificaciones.entrySet()) {
+			nList.addAll(entry.getValue());
+		}
+		return new NotificacionesDTO(nList);
 	}
 
 	@Override

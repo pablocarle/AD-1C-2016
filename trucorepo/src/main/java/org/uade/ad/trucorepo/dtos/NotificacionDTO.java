@@ -1,7 +1,6 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,9 +27,9 @@ public class NotificacionDTO implements Serializable {
 	@XmlElement
 	private Date fechaNotificacion;
 	
-	public NotificacionDTO() {
+	public NotificacionDTO(Date fechaNotificacion) {
 		super();
-		this.fechaNotificacion = Calendar.getInstance().getTime();
+		this.fechaNotificacion = fechaNotificacion;
 	}
 	
 	public NotificacionDTO(String url, String descripcion, int idPartida, PartidaDTO partida, String tipoNotificacion,
@@ -44,15 +43,17 @@ public class NotificacionDTO implements Serializable {
 		this.fechaNotificacion = fechaNotificacion;
 	}
 
-	public NotificacionDTO(String mensaje) {
+	public NotificacionDTO(Date fechaNotificacion, String mensaje) {
+		super();
 		this.descripcion = mensaje;
-		this.fechaNotificacion = Calendar.getInstance().getTime();
 		this.tipoNotificacion = "mensaje";
+		this.fechaNotificacion = fechaNotificacion;
 	}
 
-	public NotificacionDTO(String mensaje, Integer idPartida) {
+	public NotificacionDTO(Date fechaNotificacion, String mensaje, Integer idPartida) {
+		super();
 		this.descripcion = mensaje;
-		this.fechaNotificacion = Calendar.getInstance().getTime();
+		this.fechaNotificacion = fechaNotificacion;
 		this.tipoNotificacion = "mensaje";
 		if (idPartida != null) {
 			this.idPartida = idPartida;

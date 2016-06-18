@@ -56,7 +56,7 @@ procesarNotificacion = function(xml) {
 						var d1 = Date.parse(fechaNotificaciones);
 						if (n.fechaNotificacion > d1) {
 							fechaNotificaciones = n.fechaNotificacionStr;
-						} else {
+						} else if (n.fechaNotificacion < d1) {
 							continue;
 						}
 					}

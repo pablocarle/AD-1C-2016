@@ -36,7 +36,7 @@ public abstract class Context extends UnicastRemoteObject {
 	private static List<Pareja> parejasDisponiblesModoLibre;
 	private static List<Grupo> grupos;
 	
-	private static Map<String, Map<Date, NotificacionDTO>> notificaciones = new HashMap<>();
+	private static Map<String, Map<Date, List<NotificacionDTO>>> notificaciones = new HashMap<>();
 	
 	static {
 		juegos = new Vector<>();
@@ -165,27 +165,34 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 	
 	public void agregarInvitaciones(int idPartida, List<Jugador> jugadoresNoAdmin) {
-		Map<Date, NotificacionDTO> jugadorNotificaciones = null;
+		Map<Date, List<NotificacionDTO>> jugadorNotificaciones = null;
 		NotificacionDTO notificacion = null;
+		Date now = Calendar.getInstance().getTime();
 		
 		for (Jugador j : jugadoresNoAdmin) {
 			jugadorNotificaciones = notificaciones.get(j.getApodo());
 			if (jugadorNotificaciones == null) {
 				jugadorNotificaciones = new HashMap<>();
-				jugadorNotificaciones.put(Calendar.getInstance().getTime(), getPartidaNotificacion(idPartida));
+				jugadorNotificaciones.put(now, Arrays.asList(getPartidaNotificacion(now, idPartida)));
 				notificaciones.put(j.getApodo(), jugadorNotificaciones);
 			} else {
 				//Si ya tiene la notificacion ignora, sino agrega
-				notificacion = getPartidaNotificacion(idPartida);
-				if (!jugadorNotificaciones.containsValue(notificacion)) {
-					jugadorNotificaciones.put(Calendar.getInstance().getTime(), notificacion);
+				notificacion = getPartidaNotificacion(now, idPartida);
+				if (jugadorNotificaciones.containsKey(now)) {
+					if (!jugadorNotificaciones.get(now).contains(notificacion)) {
+						jugadorNotificaciones.get(now).add(notificacion);
+					} else {
+						System.out.println("ya tiene la notificacion");
+					}
+				} else {
+					jugadorNotificaciones.put(now, Arrays.asList(notificacion));
 				}
 			}
 		}
 	}
 	
-	private NotificacionDTO getPartidaNotificacion(int idPartida) {
-		NotificacionDTO dto = new NotificacionDTO();
+	private NotificacionDTO getPartidaNotificacion(Date fechaNotificacion, int idPartida) {
+		NotificacionDTO dto = new NotificacionDTO(fechaNotificacion);
 		dto.setDescripcion("Nueva invitacion a partida");
 		dto.setIdPartida(idPartida);
 		dto.setUrl("/trucoweb/PartidaServlet/Unirse?idPartida=" + idPartida);
@@ -201,22 +208,39 @@ public abstract class Context extends UnicastRemoteObject {
 	 * @param idPartida 
 	 * @return
 	 */
-	public static Map<Date, NotificacionDTO> getInvitaciones(String apodoJugador, Date ultimaFecha, Integer idPartida) {
-		Map<Date, NotificacionDTO> retMap = new HashMap<>();
+	public static Map<Date, List<NotificacionDTO>> getInvitaciones(String apodoJugador, Date ultimaFecha, Integer idPartida) {
+		Map<Date, List<NotificacionDTO>> retMap = new HashMap<>();
 		if (ultimaFecha == null)
 			ultimaFecha = new Date(0L);
-		Map<Date, NotificacionDTO> map = notificaciones.get(apodoJugador);
+		Map<Date, List<NotificacionDTO>> map = notificaciones.get(apodoJugador);
 		if (map != null && !map.isEmpty()) {
-			Iterator<Map.Entry<Date, NotificacionDTO>> it = map.entrySet().iterator();
-			Map.Entry<Date, NotificacionDTO> entry = null;
+			Iterator<Map.Entry<Date, List<NotificacionDTO>>> it = map.entrySet().iterator();
+			Iterator<NotificacionDTO> it2 = null;
+			Map.Entry<Date, List<NotificacionDTO>> entry = null;
+			List<NotificacionDTO> list = null;
+			NotificacionDTO nEntry = null;
 			while (it.hasNext()) {
 				entry = it.next();
-				if (entry.getKey().after(ultimaFecha) && (idPartida == null || idPartida.equals(entry.getValue().getIdPartida()))) {
-					retMap.put(entry.getKey(), entry.getValue());
+				//  && (idPartida == null || idPartida.equals(entry.getValue().getIdPartida()))
+				if (entry.getKey().after(ultimaFecha)) {
+					list = new ArrayList<>();
+					for (NotificacionDTO n : entry.getValue()) {
+						if (idPartida == null || idPartida.equals(n.getIdPartida())) {
+							list.add(n);
+						}
+					}
+					retMap.put(entry.getKey(), list);
 				} else if (entry.getKey().before(ultimaFecha) || entry.getKey().equals(ultimaFecha)) {
-					if (entry.getValue().getTipoNotificacion().equals("nueva_partida")) {
-						it.remove();
-					} else if (entry.getValue().getTipoNotificacion().equals("mensaje") && entry.getValue().getIdPartida() == idPartida) {
+					it2 = entry.getValue().iterator();
+					while (it2.hasNext()) {
+						nEntry = it2.next();
+						if ("nueva_partida".equals(nEntry.getTipoNotificacion())) {
+							it2.remove();
+						} else if ("mensaje".equals(nEntry.getTipoNotificacion()) && idPartida != null && nEntry.getIdPartida() == idPartida) {
+							it2.remove();
+						}
+					}
+					if (entry.getValue().isEmpty()) {
 						it.remove();
 					}
 				}
@@ -234,23 +258,19 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 	
 	public void agregarNotificacion(String mensaje, Integer idPartida, Jugador jugador) {
-		Map<Date, NotificacionDTO> mapa = null;
+		Map<Date, List<NotificacionDTO>> mapa = null;
+		Date now = Calendar.getInstance().getTime();
 		if (notificaciones.containsKey(jugador.getApodo())) {
 			mapa = notificaciones.get(jugador.getApodo());
-			Calendar c = Calendar.getInstance();
-			Date now = c.getTime();
-			boolean put = true;
-			while (put) {
-				if (mapa.containsKey(now)) {
-					now = new Date(now.getTime() + 1);
-				} else {
-					mapa.put(now, new NotificacionDTO(mensaje, idPartida));
-					put = false;
-				}
+			if (mapa.containsKey(now)) {
+				List<NotificacionDTO> n = mapa.get(now);
+				n.add(new NotificacionDTO(now, mensaje, idPartida));
+			} else {
+				mapa.put(now, Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
 			}
 		} else {
 			mapa = new HashMap<>();
-			mapa.put(Calendar.getInstance().getTime(), new NotificacionDTO(mensaje, idPartida));
+			mapa.put(Calendar.getInstance().getTime(), Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
 			synchronized (notificaciones) {
 				notificaciones.put(jugador.getApodo(), mapa);
 			}
@@ -274,40 +294,34 @@ public abstract class Context extends UnicastRemoteObject {
 	public void agregarNotificaciones(String[] mensajes, int idPartida) {
 		Partida p = getPartida(idPartida);
 		List<Jugador> jugadores = p.getJugadores();
-		Map<Date, NotificacionDTO> mapa = null;
-		Calendar c = Calendar.getInstance();
-		Date now = c.getTime();
+		Map<Date, List<NotificacionDTO>> mapa = null;
+		List<NotificacionDTO> n = null;
+		Date now = Calendar.getInstance().getTime();
 		for (Jugador j : jugadores) {
-			now = c.getTime();
 			if (notificaciones.containsKey(j.getApodo())) {
 				mapa = notificaciones.get(j.getApodo());
-				boolean put = true;
 				for (String mensaje : mensajes) {
-					put = true;
-					while (put) {
-						if (mapa.containsKey(now)) {
-							now = new Date(now.getTime() + 1);
-						} else {
-							mapa.put(now, new NotificacionDTO(mensaje, idPartida));
-							put = false;
-						}
+					if (mapa.containsKey(now)) {
+						n = mapa.get(now);
+						n.add(new NotificacionDTO(now, mensaje, idPartida));
+					} else {
+						mapa = new HashMap<>();
+						mapa.put(now, Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
 					}
 				}
 			} else {
 				mapa = new HashMap<>();
 				synchronized(notificaciones) {
-					boolean put = true;
 					for (String mensaje : mensajes) {
-						put = true;
-						while (put) {
-							if (mapa.containsKey(now)) {
-								now = new Date(now.getTime() + 1);
-							} else {
-								mapa.put(now, new NotificacionDTO(mensaje, idPartida));
-								put = false;
-							}
+						if (mapa.containsKey(now)) {
+							n = mapa.get(now);
+							n.add(new NotificacionDTO(now, mensaje, idPartida));
+						} else {
+							mapa = new HashMap<>();
+							mapa.put(now, Arrays.asList(new NotificacionDTO(now, mensaje, idPartida)));
 						}
 					}
+					notificaciones.put(j.getApodo(), mapa);
 				}
 			}
 		}
@@ -338,16 +352,21 @@ public abstract class Context extends UnicastRemoteObject {
 	}
 	
 	public void agregarInvitacion(Partida partida, Jugador j) {
-		Map<Date, NotificacionDTO> jugadorNotificaciones = notificaciones.get(j.getApodo());
+		Map<Date, List<NotificacionDTO>> jugadorNotificaciones = notificaciones.get(j.getApodo());
+		Date now = Calendar.getInstance().getTime();
 		if (jugadorNotificaciones == null) {
 			jugadorNotificaciones = new HashMap<>();
-			jugadorNotificaciones.put(Calendar.getInstance().getTime(), getPartidaNotificacion(partida.getIdPartida()));
+			jugadorNotificaciones.put(now, Arrays.asList(getPartidaNotificacion(now, partida.getIdPartida())));
 			notificaciones.put(j.getApodo(), jugadorNotificaciones);
 		} else {
 			//Si ya tiene la notificacion ignora, sino agrega
-			NotificacionDTO notificacion = getPartidaNotificacion(partida.getIdPartida());
-			if (!jugadorNotificaciones.containsValue(notificacion)) {
-				jugadorNotificaciones.put(Calendar.getInstance().getTime(), notificacion);
+			NotificacionDTO notificacion = getPartidaNotificacion(now, partida.getIdPartida());
+			if (jugadorNotificaciones.containsKey(now)) {
+				if (!jugadorNotificaciones.get(now).contains(notificacion)) {
+					jugadorNotificaciones.get(now).add(notificacion);
+				}
+			} else {
+				jugadorNotificaciones.put(now, Arrays.asList(notificacion));
 			}
 		}
 	}
