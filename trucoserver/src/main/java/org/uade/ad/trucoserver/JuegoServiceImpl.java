@@ -114,7 +114,9 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) {
-		// TODO Auto-generated method stub
+		agregarNotificaciones(new String[]{
+				"Fin de mano con resultado parcial " + event.getPuntosObtenidosPareja1() + " a " + event.getPuntosObtenidosPareja2()
+		}, event.getIdPartida());
 	}
 
 	@Override

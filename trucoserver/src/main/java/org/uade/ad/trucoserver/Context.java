@@ -213,6 +213,7 @@ public abstract class Context extends UnicastRemoteObject {
 		Map<Date, List<NotificacionDTO>> retMap = new HashMap<>();
 		if (ultimaFecha == null)
 			ultimaFecha = new Date(0L);
+		System.out.println("Obtener notificaciones / invitaciones de jugador " + apodoJugador + " posteriores a fecha " + ultimaFecha);
 		Map<Date, List<NotificacionDTO>> map = notificaciones.get(apodoJugador);
 		if (map != null && !map.isEmpty()) {
 			Iterator<Map.Entry<Date, List<NotificacionDTO>>> it = map.entrySet().iterator();
@@ -237,7 +238,7 @@ public abstract class Context extends UnicastRemoteObject {
 						nEntry = it2.next();
 						if ("nueva_partida".equals(nEntry.getTipoNotificacion())) {
 							it2.remove();
-						} else if ("mensaje".equals(nEntry.getTipoNotificacion()) && idPartida != null && nEntry.getIdPartida() == idPartida) {
+						} else if ("mensaje".equals(nEntry.getTipoNotificacion()) && nEntry.getIdPartida() > 0 && idPartida != null && nEntry.getIdPartida() == idPartida) {
 							it2.remove();
 						}
 					}
@@ -306,7 +307,6 @@ public abstract class Context extends UnicastRemoteObject {
 						n = mapa.get(now);
 						n.add(new NotificacionDTO(now, mensaje, idPartida));
 					} else {
-						mapa = new HashMap<>();
 						mapa.put(now, new LinkedList<>(Arrays.asList(new NotificacionDTO(now, mensaje, idPartida))));
 					}
 				}

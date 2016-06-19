@@ -292,8 +292,11 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		}
 		context.actualizarPartida(p);
 		tr.commit();
-		context.agregarNotificacion(apodo + " cantó " + e.getNombreEnvite(), idJuego);
-		context.agregarNotificacion("Turno de " + p.getTurnoActual(), idJuego);
+		context.agregarNotificaciones(new String[]{
+				apodo + " cantó " + e.getNombreEnvite(),
+				"Turno de " + p.getTurnoActual()
+		}
+		, idJuego);
 		return p;
 	}
 
@@ -309,8 +312,10 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		} catch (Exception e) {
 			throw new JuegoException(e);
 		}
-		context.agregarNotificacion("Jugador " + apodo + " repartio cartas", idJuego);
-		context.agregarNotificacion("Turno de " + p.getTurnoActual().getApodo(), p.getIdPartida());
+		context.agregarNotificaciones(new String[]{
+				"Jugador " + apodo + " repartio cartas",
+				"Turno de " + p.getTurnoActual().getApodo()
+		}, idJuego);
 		context.actualizarPartida(p);
 		try {
 			tr.commit();

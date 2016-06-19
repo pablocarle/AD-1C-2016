@@ -391,6 +391,11 @@ public class Mano implements ManoTerminadaObservable {
 		} else {
 			// El otro ya estaba en el mazo
 			jugadoresEnMazo.add(jugador);
+			if (p.equals(pareja1)) {
+				
+			} else if (p.equals(pareja2)) {
+				
+			}
 			//TODO Sumar puntos acumulados
 			notificarObserversFinMano();
 		}
@@ -398,7 +403,7 @@ public class Mano implements ManoTerminadaObservable {
 
 	private void notificarObserversFinMano() throws JuegoException {
 		for (ManoTerminadaObserver o : observers) {
-			o.manoTerminada(new ManoTerminadaEvent(this, puntosPareja1, puntosPareja2));
+			o.manoTerminada(new ManoTerminadaEvent(this.chico.getPartida().idPartida, this, puntosPareja1, puntosPareja2));
 		}
 	}
 
