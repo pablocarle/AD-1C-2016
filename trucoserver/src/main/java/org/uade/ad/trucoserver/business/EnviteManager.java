@@ -6,6 +6,7 @@ import java.util.List;
 import org.hibernate.Transaction;
 import org.uade.ad.trucoserver.dao.EnviteDao;
 import org.uade.ad.trucoserver.dao.EnviteDaoImpl;
+import org.uade.ad.trucoserver.entities.EnvidoEnvite;
 import org.uade.ad.trucoserver.entities.Envite;
 
 public class EnviteManager {
@@ -31,11 +32,6 @@ public class EnviteManager {
 		super();
 	}
 
-	public List<Envite> getEnvitesPosteriores(Envite envite) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * Obtener envidos (primer nivel)
 	 * 
@@ -46,7 +42,11 @@ public class EnviteManager {
 		if (envites == null || envites.isEmpty()) {
 			throw new RuntimeException("No hay envites configurados!!");
 		}
-		
+		for (Envite e : envites) {
+			if (!e.tieneEnviteAnterior() && e instanceof EnvidoEnvite) {
+				retList.add(e);
+			}
+		}
 		return retList;
 	}
 
@@ -59,5 +59,4 @@ public class EnviteManager {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
 }

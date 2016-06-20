@@ -35,7 +35,7 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 	@ManyToOne(optional=true)
 	@JoinColumn(name="enviteAnterior", nullable=true)
 	protected Envite enviteAnterior;
-	@OneToMany(mappedBy="enviteAnterior", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="enviteAnterior", fetch=FetchType.EAGER)
 	protected Set<Envite> envitesPosteriores;
 	
 	public Envite() {
@@ -58,7 +58,7 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 		return false;
 	}
 	
-	public boolean esQuerido() {
+	public boolean isQuerido() {
 		return nombreEnvite.contains("_Querido");
 	}
 	
@@ -148,5 +148,9 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 		dto.setIdEnvite(idTipoEnvite);
 		dto.setNombre(nombreEnvite);
 		return dto;
+	}
+
+	public boolean tieneEnviteAnterior() {
+		return enviteAnterior != null;
 	}
 }

@@ -20,6 +20,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.sql.ordering.antlr.GeneratedOrderByFragmentParser;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.EnviteManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
@@ -286,7 +287,7 @@ public class Mano implements ManoTerminadaObservable {
 			} else {
 				EnvitesManoPareja ultimoEnvido = getUltimoEnvidoCantado();
 				if (!ultimoEnvido.getPareja().contieneJugador(j)) {
-					retList.addAll(EnviteManager.getManager().getEnvitesPosteriores(ultimoEnvido.getEnvite()));
+					retList.addAll(ultimoEnvido.getEnvite().getEnvitesPosteriores());
 				}
 			}
 		}
@@ -299,7 +300,7 @@ public class Mano implements ManoTerminadaObservable {
 			if (trucoEnCurso) {
 				EnvitesManoPareja ultimoTruco = getUltimoTrucoCantado();
 				if (!ultimoTruco.getPareja().contieneJugador(j)) {
-					retList.addAll(EnviteManager.getManager().getEnvitesPosteriores(ultimoTruco.getEnvite()));
+					retList.addAll(ultimoTruco.getEnvite().getEnvitesPosteriores());
 				}
 			} else {
 				retList.addAll(EnviteManager.getManager().getTrucos());
@@ -344,11 +345,27 @@ public class Mano implements ManoTerminadaObservable {
 		
 	}
 
-	private void cantarTruco(Jugador jugador, TrucoEnvite envite) {
+	private void cantarTruco(Jugador jugador, TrucoEnvite envite) throws JuegoException {
+		if (envidoEnCurso) {
+			throw new JuegoException("Hay envido en curso");
+		}
+		if (!getTrucosDisponibles(jugador).contains(envite)) {
+			throw new JuegoException("El envite que quiso cantar no esta disponible para el jugador");
+		}
+		Pareja p = chico.getPartida().getPareja(jugador);
 		if (trucoEnCurso) {
-			
+			if (envite.isNoQuerido()) {
+				//TODO Fin mano
+			} else if (envite.isQuerido()) {
+				//TODO Ver que se hace (puede cantar despues?)
+			} else {
+				
+			}
 		} else {
-			
+			trucoEnCurso = true;
+			if (envites == null)
+				envites = new ArrayList<>();
+			envites.add(new EnvitesManoPareja(envite, this, false, 0, p));
 		}
 	}
 
