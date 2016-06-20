@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -38,7 +39,7 @@ public class Baza {
 	@Column
 	private int rondaBaza;
 	@Column
-	private Date fechaInicio;
+	private Date fechaInicio = Calendar.getInstance().getTime();
 	@Column
 	private Date fechaFin;
 	@OneToMany(mappedBy="baza", cascade=CascadeType.ALL)

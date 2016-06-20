@@ -53,18 +53,27 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 	@Override
 	public PartidaDTO crearPartidaAbiertaIndividual(JugadorDTO jugador) throws RemoteException, JuegoException {
 		Partida partida = manager.crearPartidaAbiertaIndividual(jugador.getApodo(), this);
+		partida.agregarObserver((ChicoTerminadoObserver)this);
+		partida.agregarObserver((ManoTerminadaObserver)this);
+		partida.agregarObserver((PartidaTerminadaObserver)this);
 		return partida.getDTO();
 	}
 
 	@Override
 	public PartidaDTO crearPartidaAbiertaPareja(JugadorDTO user, int idPareja) throws RemoteException, JuegoException {
 		Partida partida = manager.crearPartidaAbiertaPareja(user.getApodo(), idPareja, this);
+		partida.agregarObserver((ChicoTerminadoObserver)this);
+		partida.agregarObserver((ManoTerminadaObserver)this);
+		partida.agregarObserver((PartidaTerminadaObserver)this);
 		return partida.getDTO();
 	}
 	
 	@Override
 	public PartidaDTO crearPartidaCerrada(JugadorDTO user, GrupoDTO grupo) throws RemoteException, JuegoException {
 		Partida partida = manager.crearPartidaCerrada(user.getApodo(), grupo.getIdGrupo(), this);
+		partida.agregarObserver((ChicoTerminadoObserver)this);
+		partida.agregarObserver((ManoTerminadaObserver)this);
+		partida.agregarObserver((PartidaTerminadaObserver)this);
 		return partida.getDTO();
 	}
 

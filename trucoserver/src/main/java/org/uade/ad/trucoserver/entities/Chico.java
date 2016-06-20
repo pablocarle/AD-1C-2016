@@ -457,7 +457,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
 		pareja1Score+=event.getPuntosObtenidosPareja1();
 		pareja2Score+=event.getPuntosObtenidosPareja2();
-		for (ManoTerminadaObserver o : manoTerminadaObservers) { //FIXME No hay nadie observando
+		for (ManoTerminadaObserver o : manoTerminadaObservers) {
 			o.manoTerminada(event);
 		}
 		if (!enCurso()) {

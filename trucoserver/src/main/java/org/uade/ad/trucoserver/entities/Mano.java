@@ -1,6 +1,8 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -44,6 +47,11 @@ public class Mano implements ManoTerminadaObservable {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idMano;
+	
+	@Column(name="fechaInicio")
+	private Date fechaInicio = Calendar.getInstance().getTime();
+	@Column(name="fechaFin")
+	private Date fechaFin;
 	
 	@ManyToOne
 	@JoinColumn(name="idChico")

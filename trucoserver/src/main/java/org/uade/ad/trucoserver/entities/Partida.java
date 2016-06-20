@@ -305,7 +305,11 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 
 	@Override
 	public void agregarObserver(PartidaTerminadaObserver observer) {
-		this.partidaTerminadaObservers.add(observer);
+		if (!this.equals(observer)) {
+			if (!partidaTerminadaObservers.contains(observer)) {
+				this.partidaTerminadaObservers.add(observer);
+			}
+		}
 	}
 
 	public void cantarEnvite(Jugador j, Envite e) throws Exception {
