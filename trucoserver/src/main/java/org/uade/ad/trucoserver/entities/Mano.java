@@ -52,7 +52,7 @@ public class Mano implements ManoTerminadaObservable {
 	private Pareja pareja1;
 	@Transient
 	private Pareja pareja2;
-	@OneToMany(mappedBy="mano", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@OneToMany(mappedBy="mano", cascade=CascadeType.ALL)
 	private List<EnvitesManoPareja> envites;
 	@OneToMany(mappedBy="mano", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Baza> bazas;
@@ -231,26 +231,53 @@ public class Mano implements ManoTerminadaObservable {
 	}
 	
 	private List<Envite> getEnvidosCantados() {
-		// TODO Obtener los envites cantados en esta mano
-		return null;
+		List<Envite> retList = new ArrayList<>();
+		if (envites != null) {
+			for (EnvitesManoPareja e : envites) {
+				if (e.isEnvido()) {
+					retList.add(e.getEnvite());
+				}
+			}
+		}
+		return retList;
 	}
 	
+	@SuppressWarnings("unused")
 	private List<Envite> getTrucosCantados() {
-		// TODO Obtener los trucos cantados en esta mano
-		return null;
+		List<Envite> retList = new ArrayList<>();
+		if (envites != null) {
+			for (EnvitesManoPareja e : envites) {
+				if (e.isTruco()) {
+					retList.add(e.getEnvite());
+				}
+			}
+		}
+		return retList;
 	}
 	
 	private EnvitesManoPareja getUltimoEnvidoCantado() {
-		// TODO
+		if (envites != null) {
+			for (int i = envites.size() - 1; i >= 0; i--) {
+				if (envites.get(i).isEnvido()) {
+					return envites.get(i);
+				}
+			}
+		}
 		return null;
 	}
 	
 	private EnvitesManoPareja getUltimoTrucoCantado() {
-		// TODO
+		if (envites != null) {
+			for (int i = envites.size() - 1; i >= 0; i--) {
+				if (envites.get(i).isTruco()) {
+					return envites.get(i);
+				}
+			}
+		}
 		return null;
 	}
 	
-	public List<Envite> getEnvidosDisponibles(Jugador j) throws JuegoException {
+	public List<Envite> getEnvidosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
 		if(esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
 			List<Envite> cantados = getEnvidosCantados();
@@ -266,7 +293,7 @@ public class Mano implements ManoTerminadaObservable {
 		return retList;
 	}
 	
-	public List<Envite> getTrucosDisponibles(Jugador j){
+	public List<Envite> getTrucosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
 		if (esTurno(j) && !envidoEnCurso) {
 			if (trucoEnCurso) {
@@ -318,13 +345,19 @@ public class Mano implements ManoTerminadaObservable {
 	}
 
 	private void cantarTruco(Jugador jugador, TrucoEnvite envite) {
-		// TODO Auto-generated method stub
-		
+		if (trucoEnCurso) {
+			
+		} else {
+			
+		}
 	}
 
 	private void cantarEnvido(Jugador jugador, EnvidoEnvite envite) {
-		// TODO Auto-generated method stub
-		
+		if (envidoEnCurso) {
+			
+		} else {
+			
+		}
 	}
 
 	public boolean terminada() {

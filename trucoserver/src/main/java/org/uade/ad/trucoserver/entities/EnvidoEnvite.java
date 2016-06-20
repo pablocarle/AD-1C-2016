@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
 
 @Entity
-@DiscriminatorValue ("C")
+@DiscriminatorValue ("E")
 public class EnvidoEnvite extends Envite {
 
 	public EnvidoEnvite() {
@@ -14,7 +14,7 @@ public class EnvidoEnvite extends Envite {
 	}
 
 	public EnvidoEnvite(int idTipoEnvite, String nombreEnvite, int puntajeQuerido,
-			int puntajeNoQuerido, int enviteAnterior) {
+			int puntajeNoQuerido, Envite enviteAnterior) {
 		super(idTipoEnvite, nombreEnvite, puntajeQuerido, puntajeNoQuerido, enviteAnterior);
 	}
 	

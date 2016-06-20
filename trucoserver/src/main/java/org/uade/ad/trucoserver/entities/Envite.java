@@ -1,15 +1,20 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.Set;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
@@ -27,8 +32,11 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 	protected String nombreEnvite;
 	@Column
 	protected int puntaje;
-	@ManyToOne
+	@ManyToOne(optional=true)
+	@JoinColumn(name="enviteAnterior", nullable=true)
 	protected Envite enviteAnterior;
+	@OneToMany(mappedBy="enviteAnterior", fetch=FetchType.LAZY)
+	protected Set<Envite> envitesPosteriores;
 	
 	public Envite() {
 		super();
@@ -48,6 +56,14 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 			// TODO Completar recursividad
 		} while (!root);
 		return false;
+	}
+	
+	public boolean esQuerido() {
+		return nombreEnvite.contains("_Querido");
+	}
+	
+	public boolean isNoQuerido() {
+		return nombreEnvite.contains("_NoQuerido");
 	}
 	
 	@Override
@@ -112,6 +128,18 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 	}
 	public void setEnviteAnterior(Envite enviteAnterior) {
 		this.enviteAnterior = enviteAnterior;
+	}
+	public void agregarEnvitePosterior(Envite envitePosterior) {
+		if (envitesPosteriores != null) {
+			envitesPosteriores.add(envitePosterior);
+		}
+	}
+	public Set<Envite> getEnvitesPosteriores() {
+		return envitesPosteriores;
+	}
+
+	public void setEnvitesPosteriores(Set<Envite> envitesPosteriores) {
+		this.envitesPosteriores = envitesPosteriores;
 	}
 
 	@Override

@@ -347,7 +347,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 		return retList;
 	}
 
-	public List<Envite> getEnvidosDisponibles(Jugador j) throws JuegoException {
+	public List<Envite> getEnvidosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
 		Mano mano = getManoActual();
 		if (mano != null) {
@@ -356,7 +356,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 		return retList;
 	}
 
-	public List<Envite> getTrucosDisponibles(Jugador j) throws JuegoException {
+	public List<Envite> getTrucosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
 		Mano mano = getManoActual();
 		if (mano != null) {

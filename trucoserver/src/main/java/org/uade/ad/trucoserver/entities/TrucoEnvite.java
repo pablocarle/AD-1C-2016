@@ -14,7 +14,7 @@ public class TrucoEnvite extends Envite {
 	}
 
 	public TrucoEnvite(int idTipoEnvite, String nombreEnvite, int puntajeQuerido,
-			int puntajeNoQuerido, int enviteAnterior) {
+			int puntajeNoQuerido, Envite enviteAnterior) {
 		super(idTipoEnvite, nombreEnvite, puntajeQuerido, puntajeNoQuerido, enviteAnterior);
 	}
 	

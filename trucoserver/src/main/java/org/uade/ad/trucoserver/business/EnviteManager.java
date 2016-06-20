@@ -1,5 +1,6 @@
 package org.uade.ad.trucoserver.business;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Transaction;
@@ -35,11 +36,25 @@ public class EnviteManager {
 		return null;
 	}
 
+	/**
+	 * Obtener envidos (primer nivel)
+	 * 
+	 * @return
+	 */
 	public List<Envite> getEnvidos() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Envite> retList = new ArrayList<>();
+		if (envites == null || envites.isEmpty()) {
+			throw new RuntimeException("No hay envites configurados!!");
+		}
+		
+		return retList;
 	}
 
+	/**
+	 * Obtener trucos (primer nivel)
+	 * 
+	 * @return
+	 */
 	public List<Envite> getTrucos() {
 		// TODO Auto-generated method stub
 		return null;
