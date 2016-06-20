@@ -1,6 +1,5 @@
 package org.uade.ad.trucoserver.dao;
 
-import org.uade.ad.trucoserver.entities.Carta;
 import org.uade.ad.trucoserver.entities.Envite;
 
 public class EnviteDaoImpl extends GenericDaoImpl<Envite, Integer>  implements EnviteDao {

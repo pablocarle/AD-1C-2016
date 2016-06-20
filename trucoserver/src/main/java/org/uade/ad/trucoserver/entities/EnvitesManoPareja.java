@@ -1,6 +1,5 @@
 package org.uade.ad.trucoserver.entities;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -48,6 +47,14 @@ public class EnvitesManoPareja {
 		this.pareja = pareja;
 	}
 
+	public boolean isTruco() {
+		return envite instanceof TrucoEnvite;
+	}
+	
+	public boolean isEnvido() {
+		return envite instanceof EnvidoEnvite;
+	}
+	
 	public int getIdEnviteParejaMano() {
 		return idEnviteParejaMano;
 	}

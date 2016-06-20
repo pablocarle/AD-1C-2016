@@ -83,9 +83,49 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 		this.parejas = parejas;
 		this.chicos = new ArrayList<>();
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fechaInicio == null) ? 0 : fechaInicio.hashCode());
+		result = prime * result + ((parejas == null) ? 0 : parejas.hashCode());
+		result = prime * result + ((tipoPartida == null) ? 0 : tipoPartida.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Partida other = (Partida) obj;
+		if (fechaInicio == null) {
+			if (other.fechaInicio != null)
+				return false;
+		} else if (!fechaInicio.equals(other.fechaInicio))
+			return false;
+		if (parejas == null) {
+			if (other.parejas != null)
+				return false;
+		} else if (!parejas.equals(other.parejas))
+			return false;
+		if (tipoPartida == null) {
+			if (other.tipoPartida != null)
+				return false;
+		} else if (!tipoPartida.equals(other.tipoPartida))
+			return false;
+		return true;
+	}
 
 	public int getPuntosObtenidos(Jugador j) {
-		// TODO Obtener los puntos segun que pareja gano la partida (gano 2 chicos)
+		List<Jugador> ganadores = getGanadores();
+		if (ganadores.contains(j)) {
+			return tipoPartida.getPuntosVictoria();
+		}
 		return 0;
 	}
 
@@ -346,13 +386,19 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 	}
 
 	public List<Jugador> getGanadores() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Jugador> retList = new ArrayList<>();
+		if (partidaTerminada()) {
+			// TODO Buscar la pareja ganadora
+		}
+		return retList;
 	}
 
-	private List<Jugador> getPerdedores() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Jugador> getPerdedores() {
+		List<Jugador> retList = new ArrayList<>();
+		if (partidaTerminada()) {
+			// TODO Buscar la pareja perdedora
+		}
+		return retList;
 	}
 
 	public Pareja getPareja(Jugador jugador) {

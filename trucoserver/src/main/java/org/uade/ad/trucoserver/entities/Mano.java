@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -22,7 +21,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.exceptions.JuegoException;
-import org.uade.ad.trucoserver.business.JuegoManager;
+import org.uade.ad.trucoserver.business.EnviteManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
@@ -53,7 +52,7 @@ public class Mano implements ManoTerminadaObservable {
 	private Pareja pareja1;
 	@Transient
 	private Pareja pareja2;
-	@OneToMany(mappedBy="mano")
+	@OneToMany(mappedBy="mano", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<EnvitesManoPareja> envites;
 	@OneToMany(mappedBy="mano", fetch=FetchType.EAGER, cascade=CascadeType.ALL)
 	private List<Baza> bazas;
@@ -71,10 +70,12 @@ public class Mano implements ManoTerminadaObservable {
 	private Map<Jugador, Set<Carta>> cartasAsignadas = new HashMap<>();
 	@Transient
 	private List<Jugador> jugadoresEnMazo = new ArrayList<>();
-	@Column
-	private int idEnviteTruco = -1;
-	@Column
-	private int idEnviteEnvido = -1;
+	@ManyToOne
+	@JoinColumn(name="idEnviteTruco")
+	private Envite enviteTruco;
+	@ManyToOne
+	@JoinColumn(name="idEnviteEnvido")
+	private Envite enviteEnvido;
 	
 	@Transient
 	private boolean envidoEnCurso = false;
@@ -100,15 +101,13 @@ public class Mano implements ManoTerminadaObservable {
 		this.ordenJuegoInicial = ordenJuegoInicial;
 		this.ordenJuegoActual = ordenJuegoInicial;
 		this.cartasAsignadas = cartasAsignadas;
-		this.idEnviteEnvido=-1;
-		this.idEnviteTruco=-1;
 	}
 	
 	Mano(Chico c) {
 		super();
 		this.chico = c;
 	}
-	
+
 	public List<Baza> getBazas() {
 		return new ArrayList<>(bazas);
 	}
@@ -231,87 +230,66 @@ public class Mano implements ManoTerminadaObservable {
 		throw new RuntimeException("El jugador " + jugador + " no pertenece a la partida");
 	}
 	
+	private List<Envite> getEnvidosCantados() {
+		// TODO Obtener los envites cantados en esta mano
+		return null;
+	}
 	
-	//XXX Ver aclaración en obtenerEnvitesDispo
-	public List<Envite> getEnvidosDisponibles(Jugador j){
-		if(esTurno(j)){
-			if(this.idEnviteTruco==-1){
-				List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
-				List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteEnvido);
-				List<Envite> posiblesEnvidos = new ArrayList<Envite>();  
-				for (Envite env: envitesDisponibles){
-					if(env instanceof EnvidoEnvite)
-						posiblesEnvidos.add(env);
+	private List<Envite> getTrucosCantados() {
+		// TODO Obtener los trucos cantados en esta mano
+		return null;
+	}
+	
+	private EnvitesManoPareja getUltimoEnvidoCantado() {
+		// TODO
+		return null;
+	}
+	
+	private EnvitesManoPareja getUltimoTrucoCantado() {
+		// TODO
+		return null;
+	}
+	
+	public List<Envite> getEnvidosDisponibles(Jugador j) throws JuegoException {
+		List<Envite> retList = new ArrayList<>();
+		if(esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
+			List<Envite> cantados = getEnvidosCantados();
+			if (cantados.isEmpty()) {
+				retList.addAll(EnviteManager.getManager().getEnvidos());
+			} else {
+				EnvitesManoPareja ultimoEnvido = getUltimoEnvidoCantado();
+				if (!ultimoEnvido.getPareja().contieneJugador(j)) {
+					retList.addAll(EnviteManager.getManager().getEnvitesPosteriores(ultimoEnvido.getEnvite()));
 				}
-				if(!posiblesEnvidos.isEmpty())
-					return posiblesEnvidos;
-				else 
-					if(posiblesEnvidos.isEmpty()) //XXX Fijarse aca cuales deben ser RuntimeException y cuales JuegoException
-						throw new RuntimeException("No hay envidos disponibles para cantar"); //P. Ej. esta es Runtime (no es una situación de juego el no tener envidos configurados)
-					else
-						throw new RuntimeException("Hay un error en envidos disponibles");
 			}
-			else
-				throw new RuntimeException("No se puede cantar envido luego del truco");
 		}
-		else
-			throw new RuntimeException("No es el turno del jugador");
+		return retList;
 	}
 	
-	//XXX Ver aclaración en obtenerEnvitesDispo
 	public List<Envite> getTrucosDisponibles(Jugador j){
-		if(esTurno(j)){
-			//FIXME Ojo llamar managers que inician transacciones desde aca (donde seguramente ya 
-			//nos encontremos en una transaccion), no hay soporte de transacciones anidadas.
-			//Buscar otra forma de darle a la mano los envites disponibles (puede ser una unica vez
-			//ya que no cambia durante el ciclo de vida de la aplicacion)
-			List<Envite> envitetotales = JuegoManager.getManager().getEnvites();
-			List<Envite> envitesDisponibles = this.obtenerEnvitesDispo(envitetotales, this.idEnviteTruco);
-			List<Envite> posiblesTruco = new ArrayList<Envite>();  
-			for (Envite truco: envitesDisponibles){
-				if(truco instanceof TrucoEnvite)
-					posiblesTruco.add(truco);
-			}
-			if(!posiblesTruco.isEmpty())
-				return posiblesTruco;
-			else
-				throw new RuntimeException("No trucos disponibles para cantar");
-		}else
-			throw new RuntimeException("No es el turno del jugador");
-	}
-
-	@SuppressWarnings("null")
-	//XXX: 2 cositas aca: proxEnvites es null y no cambia.
-	/*
-	 * Lo otro es recomendacion: Cuando se devuelve una coleccion debería esperarse 1 de 3
-	 * resultados:
-	 * 1) La coleccion vuelve y tiene elementos.
-	 * 2) La coleccion vuelve y no tiene elemnetos (lista vacia)
-	 * 3) Se arroja una excepcion (el estado no era el correcto, no se levanto la config, etc)
-	 * 
-	 * Lo aclaro porque devolver null es un nullpointerexception en potencia.
-	 * */
-	private List<Envite> obtenerEnvitesDispo(List<Envite> envitesTot, int EnvitePrevio){
-		List<Envite> proxEnvites= new ArrayList<Envite>();
-		for(Envite env: envitesTot){
-			if(env.getEnviteAnterior()==EnvitePrevio){
-				proxEnvites.add(env);
+		List<Envite> retList = new ArrayList<>();
+		if (esTurno(j) && !envidoEnCurso) {
+			if (trucoEnCurso) {
+				EnvitesManoPareja ultimoTruco = getUltimoTrucoCantado();
+				if (!ultimoTruco.getPareja().contieneJugador(j)) {
+					retList.addAll(EnviteManager.getManager().getEnvitesPosteriores(ultimoTruco.getEnvite()));
+				}
+			} else {
+				retList.addAll(EnviteManager.getManager().getTrucos());
 			}
 		}
-		if(!proxEnvites.isEmpty())
-			return proxEnvites;
-		else 
-			if (proxEnvites.isEmpty())
-				throw new RuntimeException("no hay envites disponibles");
-			else 
-				throw new RuntimeException("Error en la funcion obtenerEnvitesdispo");
-		
+		return retList;
 	}
 
-	
-	
 	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) {
+		if (envite instanceof EnvidoEnvite) {
+			cantarEnvido(jugador, (EnvidoEnvite) envite);
+		} else if (envite instanceof TrucoEnvite) {
+			cantarTruco(jugador, (TrucoEnvite) envite);
+		} else {
+			throw new RuntimeException("No se identifica que hacer con envite " + envite);
+		}
 		// TODO Usar trucoEnCurso y envidoEnCurso (validar que no haya un canto anterior, etc)
 		Pareja parejaEnvite = null;
 	
@@ -320,12 +298,12 @@ public class Mano implements ManoTerminadaObservable {
 		else if (pareja2.contieneJugador(jugador))
 			parejaEnvite=pareja2;
 		if(esTurno(jugador)){
-			if(envite instanceof EnvidoEnvite){
-				this.idEnviteEnvido=envite.getIdTipoEnvite();
-			}
-			if(envite instanceof TrucoEnvite){
-				this.idEnviteTruco=envite.getIdTipoEnvite();
-			}
+//			if(envite instanceof EnvidoEnvite){
+//				this.idEnviteEnvido=envite.getIdTipoEnvite();
+//			}
+//			if(envite instanceof TrucoEnvite){
+//				this.idEnviteTruco=envite.getIdTipoEnvite();
+//			}
 			
 		if(envite.getIdTipoEnvite()>14){
 			boolean booleano=false;
@@ -336,6 +314,16 @@ public class Mano implements ManoTerminadaObservable {
 		}
 			
 		}
+		
+	}
+
+	private void cantarTruco(Jugador jugador, TrucoEnvite envite) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void cantarEnvido(Jugador jugador, EnvidoEnvite envite) {
+		// TODO Auto-generated method stub
 		
 	}
 

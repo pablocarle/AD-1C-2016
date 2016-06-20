@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.ParejaDTO;
@@ -28,6 +29,8 @@ public class Pareja implements HasDTO<ParejaDTO> {
 	@ManyToOne
 	@JoinColumn(name="idJugador2")
 	private Jugador jugador2;
+	@OneToMany(mappedBy="pk.pareja")
+	private List<GrupoDetalle> grupos;
 
 	public Pareja() {
 		super();
@@ -133,6 +136,14 @@ public class Pareja implements HasDTO<ParejaDTO> {
 
 	public void setJugador2(Jugador jugador2) {
 		this.jugador2 = jugador2;
+	}
+	
+	public List<GrupoDetalle> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<GrupoDetalle> grupos) {
+		this.grupos = grupos;
 	}
 
 	@Override

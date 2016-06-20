@@ -98,10 +98,51 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 		this.primerOrdenJuego = primerOrdenJuego;
 		this.ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 	}
+	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((fechaInicio == null) ? 0 : fechaInicio.hashCode());
+		result = prime * result + ((partida == null) ? 0 : partida.hashCode());
+		result = prime * result + ((primerOrdenJuego == null) ? 0 : primerOrdenJuego.hashCode());
+		return result;
+	}
 
-	public void cantar(Jugador j, Envite envite) throws Exception {
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Chico other = (Chico) obj;
+		if (fechaInicio == null) {
+			if (other.fechaInicio != null)
+				return false;
+		} else if (!fechaInicio.equals(other.fechaInicio))
+			return false;
+		if (partida == null) {
+			if (other.partida != null)
+				return false;
+		} else if (!partida.equals(other.partida))
+			return false;
+		if (primerOrdenJuego == null) {
+			if (other.primerOrdenJuego != null)
+				return false;
+		} else if (!primerOrdenJuego.equals(other.primerOrdenJuego))
+			return false;
+		return true;
+	}
+
+	public void cantar(Jugador j, Envite envite) throws JuegoException {
 		Mano manoActual = getManoActual();
-		manoActual.cantar(j, envite);
+		if (manoActual != null) {
+			manoActual.cantar(j, envite);
+		} else {
+			throw new JuegoException("No hay mano en curso");
+		}
 	}
 	
 	/**
@@ -306,15 +347,21 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 		return retList;
 	}
 
-	public List<Envite> getEnvidosDisponibles(Jugador j) {
+	public List<Envite> getEnvidosDisponibles(Jugador j) throws JuegoException {
 		List<Envite> retList = new ArrayList<>();
-		// TODO envidos disponibles para el jugador
+		Mano mano = getManoActual();
+		if (mano != null) {
+			return mano.getEnvidosDisponibles(j);
+		}
 		return retList;
 	}
 
-	public List<Envite> getTrucosDisponibles(Jugador j) {
+	public List<Envite> getTrucosDisponibles(Jugador j) throws JuegoException {
 		List<Envite> retList = new ArrayList<>();
-		// TODO trucos disponibles para el jugador
+		Mano mano = getManoActual();
+		if (mano != null) {
+			return mano.getTrucosDisponibles(j);
+		}
 		return retList;
 	}
 

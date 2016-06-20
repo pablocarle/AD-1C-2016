@@ -1,5 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
@@ -35,7 +37,10 @@ public class PartidaCerrada extends Partida {
 	
 	@Override
 	public int getPuntosObtenidos(Jugador j) {
-		// TODO Auto-generated method stub
-		return super.getPuntosObtenidos(j);
+		List<Jugador> ganadores = getGanadores();
+		if (ganadores.contains(j)) {
+			return tipoPartida.getPuntosVictoria();
+		}
+		return 0;
 	}
 }

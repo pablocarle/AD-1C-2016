@@ -57,11 +57,6 @@ public class PartidaDTO implements Serializable {
 		return idPartida == -1;
 	}
 	
-	public ChicoDTO getChicoActual() {
-		//TODO Obtener el chico actual
-		return null;
-	}
-
 	public int getIdPartida() {
 		return idPartida;
 	}

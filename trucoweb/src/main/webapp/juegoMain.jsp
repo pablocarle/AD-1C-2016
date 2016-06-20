@@ -345,18 +345,6 @@ parsePartida = function(xml) {
 	}
 };
 
-validarForm = function() {
-	var form = document.getElementById("juegoForm");
-	if (form) {
-		//TODO Verificar que solo se carga una accion
-		return true;
-	} else {
-		return false;
-	}
-};
-
-//TODO Quitar todos los submit. Todos deben ser onclicks ajax, sino tengo que hacer forward a la vista y es un bardo que se refresque la pantalla
-
 irAlMazo = function() {
 	var xhttp = new XMLHttpRequest();
 	xhttp.onreadystatechange = function() {

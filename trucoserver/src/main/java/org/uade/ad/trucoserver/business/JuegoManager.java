@@ -231,8 +231,7 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 	}
 	private EnviteDao dao = EnviteDaoImpl.getDAO();
 	
-	public List<Envite> getEnvites()
-	{
+	public List<Envite> getEnvites() {
 		List<Envite> envites;
 		Transaction tr = dao.getSession().beginTransaction();
 		envites = dao.getTodos(Envite.class);
