@@ -24,8 +24,8 @@ public class EnvitesManoPareja {
 	@ManyToOne
 	@JoinColumn(name="idMano")
 	private Mano mano;
-	@Column(columnDefinition="bit")
-	private boolean aceptado;
+	@Column(columnDefinition="bit", nullable=true)
+	private Boolean aceptado;
 	@Column
 	private int puntosObtenidos;
 	@OneToOne
@@ -37,7 +37,7 @@ public class EnvitesManoPareja {
 
 	} 
 		
-	public EnvitesManoPareja(Envite envite, Mano mano, boolean aceptado, int puntosObtenidos,
+	public EnvitesManoPareja(Envite envite, Mano mano, Boolean aceptado, int puntosObtenidos,
 			Pareja pareja) {
 		super();
 		this.envite = envite;
@@ -95,11 +95,11 @@ public class EnvitesManoPareja {
 		this.pareja = pareja;
 	}
 
-	public boolean isAceptado() {
-		return aceptado;
+	public Boolean isAceptado() {
+		return aceptado != null && aceptado;
 	}
 
-	public void setAceptado(boolean aceptado) {
+	public void setAceptado(Boolean aceptado) {
 		this.aceptado = aceptado;
 	} 
 }

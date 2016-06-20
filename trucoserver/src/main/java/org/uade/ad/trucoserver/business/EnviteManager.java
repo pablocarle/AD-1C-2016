@@ -8,6 +8,7 @@ import org.uade.ad.trucoserver.dao.EnviteDao;
 import org.uade.ad.trucoserver.dao.EnviteDaoImpl;
 import org.uade.ad.trucoserver.entities.EnvidoEnvite;
 import org.uade.ad.trucoserver.entities.Envite;
+import org.uade.ad.trucoserver.entities.TrucoEnvite;
 
 public class EnviteManager {
 	
@@ -56,7 +57,15 @@ public class EnviteManager {
 	 * @return
 	 */
 	public List<Envite> getTrucos() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Envite> retList = new ArrayList<>();
+		if (envites == null || envites.isEmpty()) {
+			throw new RuntimeException("No hay envites configurados!!");
+		}
+		for (Envite e : envites) {
+			if (!e.tieneEnviteAnterior() && e instanceof TrucoEnvite) {
+				retList.add(e);
+			}
+		}
+		return retList;
 	}
 }

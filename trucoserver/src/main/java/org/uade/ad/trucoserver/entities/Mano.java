@@ -20,7 +20,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.hibernate.sql.ordering.antlr.GeneratedOrderByFragmentParser;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
 import org.uade.ad.trucoserver.business.EnviteManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
@@ -78,6 +77,8 @@ public class Mano implements ManoTerminadaObservable {
 	@JoinColumn(name="idEnviteEnvido")
 	private Envite enviteEnvido;
 	
+	@Transient
+	private int puntosTrucoEnJuego = 1;
 	@Transient
 	private boolean envidoEnCurso = false;
 	@Transient
@@ -145,6 +146,12 @@ public class Mano implements ManoTerminadaObservable {
 					turnoActualIdx = 0;
 				}
 				if (terminada()) {
+					Pareja ganador = getGanador();
+					if (ganador.equals(pareja1)) {
+						puntosPareja1+=puntosTrucoEnJuego;
+					} else {
+						puntosPareja2+=puntosTrucoEnJuego;
+					}
 					notificarObserversFinMano();
 				}
 			}
@@ -310,7 +317,10 @@ public class Mano implements ManoTerminadaObservable {
 	}
 
 	// TODO Terminar cantar envites. 
-	public void cantar(Jugador jugador, Envite envite) {
+	public void cantar(Jugador jugador, Envite envite) throws JuegoException {
+		if (!esTurno(jugador)) {
+			throw new JuegoException("No es el turno del jugador");
+		}
 		if (envite instanceof EnvidoEnvite) {
 			cantarEnvido(jugador, (EnvidoEnvite) envite);
 		} else if (envite instanceof TrucoEnvite) {
@@ -318,31 +328,6 @@ public class Mano implements ManoTerminadaObservable {
 		} else {
 			throw new RuntimeException("No se identifica que hacer con envite " + envite);
 		}
-		// TODO Usar trucoEnCurso y envidoEnCurso (validar que no haya un canto anterior, etc)
-		Pareja parejaEnvite = null;
-	
-		if(pareja1.contieneJugador(jugador))
-			parejaEnvite = pareja1;
-		else if (pareja2.contieneJugador(jugador))
-			parejaEnvite=pareja2;
-		if(esTurno(jugador)){
-//			if(envite instanceof EnvidoEnvite){
-//				this.idEnviteEnvido=envite.getIdTipoEnvite();
-//			}
-//			if(envite instanceof TrucoEnvite){
-//				this.idEnviteTruco=envite.getIdTipoEnvite();
-//			}
-			
-		if(envite.getIdTipoEnvite()>14){
-			boolean booleano=false;
-			if(envite.getNombreEnvite().contains("_Querido")){
-				booleano=true;
-			}
-			EnvitesManoPareja env = new EnvitesManoPareja(envite,this,booleano,envite.getPuntaje(),parejaEnvite);
-		}
-			
-		}
-		
 	}
 
 	private void cantarTruco(Jugador jugador, TrucoEnvite envite) throws JuegoException {
@@ -355,25 +340,62 @@ public class Mano implements ManoTerminadaObservable {
 		Pareja p = chico.getPartida().getPareja(jugador);
 		if (trucoEnCurso) {
 			if (envite.isNoQuerido()) {
-				//TODO Fin mano
+				envites.add(new EnvitesManoPareja(envite, this, false, 0, p));
+				Pareja p2 = p.equals(pareja1) ? pareja2 : pareja1;
+				envites.add(new EnvitesManoPareja(envite, this, null, envite.getPuntaje(), p2));
+				if (p2.equals(pareja1))
+					puntosPareja1+=envite.getPuntaje();
+				else
+					puntosPareja2+=envite.getPuntaje();
+				notificarObserversFinMano();
 			} else if (envite.isQuerido()) {
-				//TODO Ver que se hace (puede cantar despues?)
-			} else {
-				
+				trucoEnCurso = false;
+				puntosTrucoEnJuego = envite.getPuntaje();
+				envites.add(new EnvitesManoPareja(envite, this, true, 0, p));
+			} else { //Es un subir apuesta
+				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 			}
 		} else {
 			trucoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
-			envites.add(new EnvitesManoPareja(envite, this, false, 0, p));
 		}
 	}
 
-	private void cantarEnvido(Jugador jugador, EnvidoEnvite envite) {
+	private void cantarEnvido(Jugador jugador, EnvidoEnvite envite) throws JuegoException {
+		if (trucoEnCurso) {
+			throw new JuegoException("Hay truco en curso");
+		}
+		if (!getEnvidosDisponibles(jugador).contains(envite)) {
+			throw new JuegoException("El envite que quiso cantar no esta disponible para el jugador");
+		}
+		Pareja p = chico.getPartida().getPareja(jugador);
 		if (envidoEnCurso) {
-			
+			if (envite.isNoQuerido()) {
+				envites.add(new EnvitesManoPareja(envite, this, false, 0, p));
+				if (p.equals(pareja2)) {
+					puntosPareja1+=envite.getPuntaje();
+				} else {
+					puntosPareja2+=envite.getPuntaje();
+				}
+				envidoEnCurso = false;
+			} else if (envite.isQuerido()) {
+				envites.add(new EnvitesManoPareja(envite, this, true, 0, p));
+				Jugador jugadorGanador = envite.calcular(cartasAsignadas, ordenJuegoInicial);
+				Pareja parejaGanadora = chico.getPartida().getPareja(jugadorGanador);
+				if (parejaGanadora.equals(pareja1)) {
+					puntosPareja1+=envite.getPuntaje();
+				} else {
+					puntosPareja2+=envite.getPuntaje();
+				}
+				envidoEnCurso = false;
+			} else {
+				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
+			}
 		} else {
-			
+			envidoEnCurso = true;
+			if (envites == null)
+				envites = new ArrayList<>();
 		}
 	}
 
@@ -430,11 +452,10 @@ public class Mano implements ManoTerminadaObservable {
 			// El otro ya estaba en el mazo
 			jugadoresEnMazo.add(jugador);
 			if (p.equals(pareja1)) {
-				
+				puntosPareja2+=puntosTrucoEnJuego;
 			} else if (p.equals(pareja2)) {
-				
+				puntosPareja1+=puntosTrucoEnJuego;
 			}
-			//TODO Sumar puntos acumulados
 			notificarObserversFinMano();
 		}
 	}

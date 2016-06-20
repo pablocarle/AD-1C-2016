@@ -301,7 +301,7 @@ parsePartida = function(xml) {
 			for (var i = 0; i < trucosTurnoActualElements.length; i++) {
 				jugadorActual.trucos.push({
 					idEnvite: trucosTurnoActualElements[i].getAttribute("idEnvite"),
-					nombreEnvite: envidosTurnoActualElements[i].getAttribute("nombre")
+					nombreEnvite: trucosTurnoActualElements[i].getAttribute("nombre")
 				});
 			}
 		}
@@ -315,7 +315,7 @@ parsePartida = function(xml) {
 				});
 			}
 		} else if (cartasJugadorElements && cartasJugadorElements.length > 0) {
-			var children = cartasJugadorElements[i].children;
+			var children = cartasJugadorElements[0].children;
 			if (children) {
 				for (var j = 0; j < children.length; j++) {
 					if (children[j].tagName == "cartas") {

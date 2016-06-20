@@ -89,6 +89,8 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 			partida.agregarChico(primerChico);
 			pDao.guardar(partida);
 			tr.commit();
+			primerChico.agregarObserver((ManoTerminadaObserver)partida);
+			primerChico.agregarObserver((ChicoTerminadoObserver)partida);
 			partida.agregarObserver((ChicoTerminadoObserver)this);
 			partida.agregarObserver((ManoTerminadaObserver)this);
 			juegoContext.agregarInvitaciones(partida.getIdPartida(), grupo.getJugadoresNoAdmin());
@@ -150,6 +152,8 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 					}
 				}
 				tr.commit();
+				primerChico.agregarObserver((ChicoTerminadoObserver)partida);
+				primerChico.agregarObserver((ManoTerminadaObserver)partida);
 				partida.agregarObserver((ChicoTerminadoObserver)this);
 				partida.agregarObserver((ManoTerminadaObserver)this);
 				juegoContext.agregarJuego(partida);
