@@ -200,6 +200,7 @@ public class Mano implements ManoTerminadaObservable {
 		if (alMazo)
 			return parejas.get(0);
 		if (bazas != null && bazas.size() >= 2) {
+			//TODO Incorporar cuando es parda la mejor (gana el que gane la segunda baza, a menos que vuelva a ser parda)
 			int countPareja1 = 0;
 			int countPareja2 = 0;
 			boolean todasCompletas = true;
