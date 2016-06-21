@@ -398,7 +398,7 @@ public abstract class Context extends UnicastRemoteObject {
 	 */
 	protected boolean assertJugadorPartida(String apodoJugador, int idPartida) throws JuegoException {
 		for (Partida p : juegos) {
-			if (p.contieneJugador(apodoJugador)) {
+			if (idPartida == p.getIdPartida() && p.contieneJugador(apodoJugador)) {
 				return true;
 			}
 		}
