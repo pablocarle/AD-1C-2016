@@ -360,6 +360,7 @@ public class Mano implements ManoTerminadaObservable {
 			trucoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
+			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 		}
 	}
 
@@ -397,6 +398,7 @@ public class Mano implements ManoTerminadaObservable {
 			envidoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
+			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 		}
 	}
 
