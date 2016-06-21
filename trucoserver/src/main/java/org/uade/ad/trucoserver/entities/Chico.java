@@ -184,7 +184,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 			ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 		}
 		Mano manoActual = getManoActual();
-		if (manoActual != null && manoActual.terminada()) {
+		if (manoActual == null && manos != null && manos.size() > 0) {
 			Collections.rotate(ordenJuegoActual, -1);
 		} else if (manoActual != null) {
 			throw new Exception("La mano actual no ha terminado. No se puede modificar el orden de juego");

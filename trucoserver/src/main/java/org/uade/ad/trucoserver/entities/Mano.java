@@ -209,6 +209,7 @@ public class Mano implements ManoTerminadaObservable {
 		if (alMazo)
 			return parejas.get(0);
 		if (bazas != null && bazas.size() >= 2) {
+			//TODO Incorporar cuando es parda la mejor (gana el que gane la segunda baza, a menos que vuelva a ser parda)
 			int countPareja1 = 0;
 			int countPareja2 = 0;
 			boolean todasCompletas = true;
@@ -299,7 +300,7 @@ public class Mano implements ManoTerminadaObservable {
 		List<Envite> retList = new ArrayList<>();
 		if(!terminada() && esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
 			List<Envite> cantados = getEnvidosCantados();
-			if (cantados.isEmpty()) {
+			if (cantados.isEmpty() && bazas.get(0).getNumCartasJugadas() >= 2) {
 				retList.addAll(EnviteManager.getManager().getEnvidos());
 			} else {
 				EnvitesManoPareja ultimoEnvido = getUltimoEnvidoCantado();
@@ -368,6 +369,7 @@ public class Mano implements ManoTerminadaObservable {
 			trucoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
+			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 		}
 	}
 
@@ -405,6 +407,7 @@ public class Mano implements ManoTerminadaObservable {
 			envidoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
+			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 		}
 	}
 
