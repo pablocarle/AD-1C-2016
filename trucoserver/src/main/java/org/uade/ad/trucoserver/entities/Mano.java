@@ -291,7 +291,7 @@ public class Mano implements ManoTerminadaObservable {
 		List<Envite> retList = new ArrayList<>();
 		if(!terminada() && esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
 			List<Envite> cantados = getEnvidosCantados();
-			if (cantados.isEmpty()) {
+			if (cantados.isEmpty() && bazas.get(0).getNumCartasJugadas() >= 2) {
 				retList.addAll(EnviteManager.getManager().getEnvidos());
 			} else {
 				EnvitesManoPareja ultimoEnvido = getUltimoEnvidoCantado();

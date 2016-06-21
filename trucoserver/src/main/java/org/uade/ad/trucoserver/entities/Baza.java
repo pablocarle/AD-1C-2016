@@ -175,4 +175,11 @@ public class Baza {
 			return resultado.equals(Resultado.Parda);
 		}
 	}
+
+	public int getNumCartasJugadas() {
+		if (cartasJugadas != null) {
+			return cartasJugadas.size();
+		}
+		return 0;
+	}
 }
