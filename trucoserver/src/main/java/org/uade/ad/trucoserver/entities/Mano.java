@@ -184,8 +184,17 @@ public class Mano implements ManoTerminadaObservable {
 	 * @return
 	 */
 	public Pareja getGanador() {
+		EnvitesManoPareja ultimoTruco = getUltimoTrucoCantado();
+		if (ultimoTruco != null && ultimoTruco.getEnvite().isNoQuerido()) {
+			if (ultimoTruco.getPareja().equals(pareja1)) {
+				return pareja2;
+			} else {
+				return pareja1;
+			}
+		}
+		
 		// Verifico si hay una pareja completa en mazo
-		List<Pareja> parejas = chico.getPartida().getParejas();
+		List<Pareja> parejas = new ArrayList<>(chico.getPartida().getParejas());
 		Iterator<Pareja> it = parejas.iterator();
 		Pareja p = null;
 		boolean alMazo = false;
