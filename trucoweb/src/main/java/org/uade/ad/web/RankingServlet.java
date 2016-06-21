@@ -74,7 +74,7 @@ public class RankingServlet extends HttpServlet {
 		try {
 			RankingDTO ranking = delegate.getRankingGeneral();
 			request.setAttribute("ranking", ranking);
-			request.getRequestDispatcher("/ranking.jsp").forward(request, response);
+			request.getRequestDispatcher("/trucoweb/ranking.jsp").forward(request, response);
 		} catch (RankingException e) {
 			error(e.getLocalizedMessage(), request, response);
 			e.printStackTrace();
@@ -90,7 +90,7 @@ public class RankingServlet extends HttpServlet {
 			try {
 				ranking = delegate.getRankingGrupo(Integer.parseInt(idGrupo), jugador);
 				request.setAttribute("ranking", ranking);
-				request.getRequestDispatcher("/ranking.jsp").forward(request, response);
+				request.getRequestDispatcher("/trucoweb/ranking.jsp").forward(request, response);
 			} catch (NumberFormatException | RankingException e) {
 				error(e.getLocalizedMessage(), request, response);
 				e.printStackTrace();

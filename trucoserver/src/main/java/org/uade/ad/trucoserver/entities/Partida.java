@@ -372,6 +372,7 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
+		System.out.println("Partida notificada de fin de Mano");
 		for (ManoTerminadaObserver o : manoTerminadaObservers) {
 			o.manoTerminada(event);
 		}
@@ -379,6 +380,7 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 
 	@Override
 	public void chicoTerminado(ChicoTerminadoEvent event) throws JuegoException {
+		System.out.println("Partida notificada de fin de Chico");
 		for (ChicoTerminadoObserver o : chicoTerminadoObservers) {
 			o.chicoTerminado(event);
 		}

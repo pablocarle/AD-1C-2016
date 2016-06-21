@@ -213,7 +213,7 @@ public abstract class Context extends UnicastRemoteObject {
 		Map<Date, List<NotificacionDTO>> retMap = new HashMap<>();
 		if (ultimaFecha == null)
 			ultimaFecha = new Date(0L);
-		System.out.println("Obtener notificaciones / invitaciones de jugador " + apodoJugador + " posteriores a fecha " + ultimaFecha);
+		//System.out.println("Obtener notificaciones / invitaciones de jugador " + apodoJugador + " posteriores a fecha " + ultimaFecha);
 		Map<Date, List<NotificacionDTO>> map = notificaciones.get(apodoJugador);
 		if (map != null && !map.isEmpty()) {
 			Iterator<Map.Entry<Date, List<NotificacionDTO>>> it = map.entrySet().iterator();

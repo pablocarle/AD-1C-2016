@@ -186,6 +186,7 @@ habilitarTurno = function(partida) {
 			var option = document.createElement("option");
 			option.value = partida.jugadorActual.trucos[i].idEnvite;
 			option.text = partida.jugadorActual.trucos[i].nombreEnvite;
+			selectTrucos.appendChild(option);
 		}
 	}
 	if (partida.jugadorActual.envidos) {
@@ -193,6 +194,7 @@ habilitarTurno = function(partida) {
 			var option = document.createElement("option");
 			option.value = partida.jugadorActual.envidos[i].idEnvite;
 			option.text = partida.jugadorActual.envidos[i].nombreEnvite;
+			selectEnvidos.appendChild(option);
 		}
 	}
 	

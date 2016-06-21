@@ -1,5 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -32,19 +34,40 @@ public class EnvidoEnvite extends Envite {
 		int maxEnvido = Integer.MIN_VALUE;
 		Jugador ganador = null;
 		int envido = 0;
-		Set<Carta> cartas = null;
+		List<Carta> cartas = null;
 		for (Jugador j : ordenJuegoInicial) {
-			cartas = cartasAsignadas.get(j);
-			envido = calcularEnvido(cartas);
-			if (envido > maxEnvido) {
-				maxEnvido = envido;
-				ganador = j;
+			cartas = new ArrayList<>(cartasAsignadas.get(j));
+			if (cartas.size() == 3) {
+				envido = calcularEnvido(cartas.get(0), cartas.get(1), cartas.get(2));
+				if (envido > maxEnvido) {
+					maxEnvido = envido;
+					ganador = j;
+				}
+			} else {
+				throw new RuntimeException("Debe haber 3 cartas para verificar envido");
 			}
 		}
 		return ganador;
 	}
 	
-	private int calcularEnvido(Set<Carta> cartas) {
-		return 0;
+	private int calcularEnvido(final Carta c1, final Carta c2, final Carta c3) {
+		//TODO Verificar orden dado por comparador
+		Carta[] cartas = new Carta[]{c1, c2, c3};
+		if (!c1.getPalo().equals(c2.getPalo()) && !c1.getPalo().equals(c3.getPalo()) && !c2.getPalo().equals(c3.getPalo())) {
+			Arrays.sort(cartas, new Carta.ValorEnvidoComparador(-1));
+			return cartas[0].getPesoEnvido();
+		} else if (c1.getPalo().equals(c2.getPalo()) && c2.getPalo().equals(c3.getPalo())) {
+			Arrays.sort(cartas, new Carta.ValorEnvidoComparador(-1));
+			return cartas[0].getPesoEnvido() + cartas[1].getPesoEnvido() + 20;
+		} else {
+			if (c1.getPalo().equals(c2.getPalo())) {
+				return c1.getPesoEnvido() + c2.getPesoEnvido() + 20;
+			} else if (c2.getPalo().equals(c3.getPalo())) {
+				return c2.getPesoEnvido() + c3.getPesoEnvido() + 20;
+			} else if (c1.getPalo().equals(c3.getPalo())) {
+				return c1.getPesoEnvido() + c3.getPesoEnvido() + 20;
+			}
+			return 0;
+		}
 	}
 }

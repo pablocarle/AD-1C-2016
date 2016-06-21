@@ -156,6 +156,32 @@ public class Carta implements Comparable<Carta>, HasDTO<CartaDTO> {
 			return 0;
 		}
 	}
+	
+	public static final class ValorEnvidoComparador implements Comparator<Carta> {
+		
+		private int order;
+
+		public ValorEnvidoComparador(int order) {
+			super();
+			if (order < 0) {
+				this.order = -1;
+			} else if (order > 0) {
+				this.order = 1;
+			} else {
+				throw new RuntimeException("Order debe ser -1 o 1");
+			}
+		}
+		
+		@Override
+		public int compare(Carta o1, Carta o2) {
+			if (o1.pesoEnvido < o2.pesoEnvido) {
+				return -1 * order;
+			} else if (o1.pesoEnvido < o2.pesoEnvido) {
+				return 1 * order;
+			}
+			return 0;
+		}
+	}
 
 	@Override
 	public CartaDTO getDTO() {

@@ -153,7 +153,9 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	 */
 	private Mano getManoActual() {
 		if (manos != null && !manos.isEmpty()) {
-			return manos.get(manos.size() - 1);
+			if (!manos.get(manos.size() - 1).terminada()) {
+				return manos.get(manos.size() - 1);
+			}
 		} else if (manos == null) {
 			manos = new ArrayList<>();
 		}
@@ -177,7 +179,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	 * 
 	 * @throws Exception 
 	 */
-	private void circularOrdenJuego() throws Exception {
+	private void circularOrdenJuego() throws Exception { // TODO Modificar aca, buscar la ultima mano que estuvo en curso
 		if (ordenJuegoActual == null) {
 			ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 		}
@@ -455,8 +457,14 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
+		System.out.println("Chico notificado de Mano terminada");
 		pareja1Score+=event.getPuntosObtenidosPareja1();
 		pareja2Score+=event.getPuntosObtenidosPareja2();
+		try {
+			circularOrdenJuego();
+		} catch (Exception e) {
+			throw new JuegoException(e);
+		}
 		for (ManoTerminadaObserver o : manoTerminadaObservers) {
 			o.manoTerminada(event);
 		}

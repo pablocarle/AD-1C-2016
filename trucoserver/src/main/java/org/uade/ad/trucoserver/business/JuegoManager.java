@@ -330,6 +330,7 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
+		System.out.println("JuegoManager notificado de fin de Mano");
 		//Guardar en base de datos
 		Mano mano = event.getMano();
 		if (mano.getIdMano() <= 0) {
@@ -339,6 +340,7 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 
 	@Override
 	public void chicoTerminado(ChicoTerminadoEvent event) throws JuegoException {
+		System.out.println("JuegoManager notificado de fin de Chico");
 		Chico chico = event.getChico();
 		if (chico.getIdChico() <= 0){
 			chicoDao.guardar(chico);

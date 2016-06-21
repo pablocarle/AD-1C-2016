@@ -30,13 +30,6 @@ import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
-//TODO Notificar fin de mano, puede terminar en:
-/*
- * Jugar una carta
- * No aceptar un envido
- * No aceptar un truco
- * Se fue la pareja completa al mazo (listo)
- * */
 @Entity
 @Table(name="manos")
 public class Mano implements ManoTerminadaObservable {
@@ -69,7 +62,7 @@ public class Mano implements ManoTerminadaObservable {
 	@Transient
 	private List<Jugador> ordenJuegoActual;
 	@Transient
-	private List<Jugador> ordenJuegoRespuestaEnvite = new ArrayList<>(); //XXX Usar para llevar el orden de respuesta a envite
+	private List<Jugador> ordenJuegoRespuestaEnvite = new ArrayList<>(); //XXX Usar para llevar el orden de respuesta a envite TODO Falta esto en el control de turno actual
 	@Transient
 	private int turnoActualIdx = 0;
 	@Transient
@@ -295,7 +288,7 @@ public class Mano implements ManoTerminadaObservable {
 	
 	public List<Envite> getEnvidosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
-		if(esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
+		if(!terminada() && esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
 			List<Envite> cantados = getEnvidosCantados();
 			if (cantados.isEmpty()) {
 				retList.addAll(EnviteManager.getManager().getEnvidos());
@@ -311,7 +304,7 @@ public class Mano implements ManoTerminadaObservable {
 	
 	public List<Envite> getTrucosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
-		if (esTurno(j) && !envidoEnCurso) {
+		if (!terminada() && esTurno(j) && !envidoEnCurso) {
 			if (trucoEnCurso) {
 				EnvitesManoPareja ultimoTruco = getUltimoTrucoCantado();
 				if (!ultimoTruco.getPareja().contieneJugador(j)) {
@@ -324,7 +317,6 @@ public class Mano implements ManoTerminadaObservable {
 		return retList;
 	}
 
-	// TODO Terminar cantar envites. 
 	public void cantar(Jugador jugador, Envite envite) throws JuegoException {
 		if (!esTurno(jugador)) {
 			throw new JuegoException("No es el turno del jugador");
