@@ -3,10 +3,7 @@ package org.uade.ad.trucoservice;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,7 +14,6 @@ import org.uade.ad.trucoserver.entities.Jugador;
 import org.uade.ad.trucoserver.entities.Pareja;
 
 /**
- * TODO Poder asignar cartas y crear juegos mas controlados
  */
 public class JuegoTest {
 

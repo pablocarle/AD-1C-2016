@@ -18,6 +18,7 @@ public class PartidaAbiertaParejaMatcher extends PartidaMatcher {
 	@Override
 	public Pareja[] match() {
 		// TODO Auto-generated method stub
+		
 		return null;
 	}
 }

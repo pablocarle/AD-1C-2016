@@ -64,7 +64,6 @@ public class EnvidoEnvite extends Envite {
 	}
 	
 	private int calcularEnvido(final Carta c1, final Carta c2, final Carta c3) {
-		//TODO Verificar orden dado por comparador
 		Carta[] cartas = new Carta[]{c1, c2, c3};
 		if (!c1.getPalo().equals(c2.getPalo()) && !c1.getPalo().equals(c3.getPalo()) && !c2.getPalo().equals(c3.getPalo())) {
 			Arrays.sort(cartas, new Carta.ValorEnvidoComparador(-1));

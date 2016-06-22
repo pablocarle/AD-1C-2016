@@ -12,14 +12,14 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.uade.ad.trucoserver.dao.CategoriaDaoImpl;
+import org.uade.ad.trucoserver.dao.ChicoDao;
+import org.uade.ad.trucoserver.dao.ChicoDaoImpl;
 import org.uade.ad.trucoserver.dao.GrupoDao;
 import org.uade.ad.trucoserver.dao.GrupoDaoImpl;
 import org.uade.ad.trucoserver.dao.JugadorDao;
 import org.uade.ad.trucoserver.dao.JugadorDaoImpl;
 import org.uade.ad.trucoserver.dao.ParejaDao;
 import org.uade.ad.trucoserver.dao.ParejaDaoImpl;
-import org.uade.ad.trucoserver.dao.ChicoDao;
-import org.uade.ad.trucoserver.dao.ChicoDaoImpl;
 import org.uade.ad.trucoserver.entities.Categoria;
 import org.uade.ad.trucoserver.entities.Chico;
 import org.uade.ad.trucoserver.entities.Grupo;
@@ -100,7 +100,6 @@ public class PersistanceTest {
 	 * Eliminaciones en bd
 	 */
 	private void deleteAll() {
-		// TODO Auto-generated method stub
 		
 	}
 

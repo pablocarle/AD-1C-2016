@@ -210,12 +210,19 @@ public class Mano implements ManoTerminadaObservable {
 		}
 		if (alMazo)
 			return parejas.get(0);
-		if (bazas != null && bazas.size() >= 2) {
-			//TODO Incorporar cuando es parda la mejor (gana el que gane la segunda baza, a menos que vuelva a ser parda)
+		
+		if (bazas != null && bazas.size() >= 2 && bazas.get(0).getResultado().isParda()) {
+			if (bazas.get(1).getResultado().isParda() && bazas.size() == 3 && bazas.get(2).esCompleta()) {
+				return chico.getPartida().getPareja(bazas.get(2).getResultado().getJugador());
+			} else if (bazas.get(1).esCompleta()) {
+				return chico.getPartida().getPareja(bazas.get(1).getResultado().getJugador());
+			}
+		} else if (bazas != null && bazas.size() >= 2) {
 			int countPareja1 = 0;
 			int countPareja2 = 0;
 			boolean todasCompletas = true;
 			BazaResultado resultado = null;
+			
 			for (Baza baza : bazas) {
 				resultado = baza.getResultado();
 				if (baza.esCompleta()) {

@@ -25,7 +25,6 @@ public class SeleccionPareja extends HttpServlet {
      */
     public SeleccionPareja() {
         super();
-        // TODO Auto-generated constructor stub
     }
     
     @Override
