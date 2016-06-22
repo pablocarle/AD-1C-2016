@@ -31,6 +31,8 @@ import org.uade.ad.trucoserver.business.ChicoTerminadoObserver;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
+import org.uade.ad.trucoserver.business.OnEnvidoEvaluado;
+import org.uade.ad.trucoserver.business.OnEnvidoQuerido;
 
 /**
  * Implementaciones de esta clase son las formas de juego disponibles.
@@ -137,10 +139,10 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 		return true;
 	}
 
-	public void cantar(Jugador j, Envite envite) throws JuegoException {
+	public void cantar(Jugador j, Envite envite, OnEnvidoEvaluado onEnvidoEvaluado, OnEnvidoQuerido onEnvidoQuerido) throws JuegoException {
 		Mano manoActual = getManoActual();
 		if (manoActual != null) {
-			manoActual.cantar(j, envite);
+			manoActual.cantar(j, envite, onEnvidoEvaluado, onEnvidoQuerido);
 		} else {
 			throw new JuegoException("No hay mano en curso");
 		}

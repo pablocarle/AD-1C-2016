@@ -280,8 +280,8 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		return p;
 	}
 
-	public Partida cantarEnvite(int idJuego, String apodo, int idEnvite, Context context) throws JuegoException {
-		Partida p = context.getPartida(idJuego);
+	public Partida cantarEnvite(int idJuego, String apodo, int idEnvite, final Context context) throws JuegoException {
+		final Partida p = context.getPartida(idJuego);
 		if (p == null) {
 			throw new JuegoException("No existe partida en curso con id " + idJuego);
 		}
@@ -289,7 +289,21 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		Jugador j = jDao.getPorApodo(apodo);
 		Envite e = eDao.getPorId(Envite.class, idEnvite);
 		try {
-			p.cantarEnvite(j, e);
+			p.cantarEnvite(j, e, 
+			new OnEnvidoEvaluado() {
+				
+				@Override
+				public void ejecutar(Jugador j, int envido) {
+					context.agregarNotificaciones(new String[]{j + " tiene " + envido + " de envido"}, p.getIdPartida());
+				}
+			},
+			new OnEnvidoQuerido() {
+
+				@Override
+				public void ejecutar(Jugador jugadorGanador, int puntaje) {
+					context.agregarNotificaciones(new String[]{jugadorGanador + " gano. La pareja gana " + puntaje + " puntos"}, p.getIdPartida());
+				}
+			});
 		} catch (Exception e1) {
 			throw new JuegoException(e1);
 		}

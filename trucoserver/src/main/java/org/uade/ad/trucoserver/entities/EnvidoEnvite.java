@@ -10,6 +10,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import org.uade.ad.trucorepo.dtos.EnviteDTO;
+import org.uade.ad.trucoserver.business.OnEnvidoEvaluado;
 
 @Entity
 @DiscriminatorValue ("E")
@@ -30,7 +31,7 @@ public class EnvidoEnvite extends Envite {
 		return dto;
 	}
 
-	public Jugador calcular(Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuegoInicial) {
+	public Jugador calcular(Map<Jugador, Set<Carta>> cartasAsignadas, List<Jugador> ordenJuegoInicial, OnEnvidoEvaluado callback) {
 		int maxEnvido = Integer.MIN_VALUE;
 		Jugador ganador = null;
 		int envido = 0;
@@ -39,6 +40,9 @@ public class EnvidoEnvite extends Envite {
 			cartas = new ArrayList<>(cartasAsignadas.get(j));
 			if (cartas.size() == 3) {
 				envido = calcularEnvido(cartas.get(0), cartas.get(1), cartas.get(2));
+				if (callback != null) {
+					callback.ejecutar(j, envido);
+				}
 				if (envido > maxEnvido) {
 					maxEnvido = envido;
 					ganador = j;
@@ -48,6 +52,15 @@ public class EnvidoEnvite extends Envite {
 			}
 		}
 		return ganador;
+	}
+	
+	public int calcular(Map.Entry<Jugador, Set<Carta>> cartasAsignadas) {
+		if (cartasAsignadas.getValue().size() == 3) {
+			Carta[] cartas = cartasAsignadas.getValue().toArray(new Carta[0]);
+			return calcularEnvido(cartas[0], cartas[1], cartas[2]);
+		} else {
+			throw new RuntimeException("Debe haber 3 cartas para verificar envido");
+		}
 	}
 	
 	private int calcularEnvido(final Carta c1, final Carta c2, final Carta c3) {

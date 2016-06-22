@@ -34,6 +34,8 @@ import org.uade.ad.trucoserver.business.JuegoManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
+import org.uade.ad.trucoserver.business.OnEnvidoEvaluado;
+import org.uade.ad.trucoserver.business.OnEnvidoQuerido;
 import org.uade.ad.trucoserver.business.PartidaTerminadaEvent;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObservable;
 import org.uade.ad.trucoserver.business.PartidaTerminadaObserver;
@@ -312,8 +314,8 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 		}
 	}
 
-	public void cantarEnvite(Jugador j, Envite e) throws Exception {
-		getChicoActual().cantar(j, e);
+	public void cantarEnvite(Jugador j, Envite e, OnEnvidoEvaluado onEnvidoEvaluado, OnEnvidoQuerido onEnvidoQuerido) throws Exception {
+		getChicoActual().cantar(j, e, onEnvidoEvaluado, onEnvidoQuerido);
 	}
 
 	public void agregarChico(Chico primerChico) {

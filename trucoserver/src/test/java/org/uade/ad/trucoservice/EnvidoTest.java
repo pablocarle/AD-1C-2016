@@ -49,7 +49,7 @@ public class EnvidoTest {
 		mapa.put(j3, c3);
 		mapa.put(j4, c4);
 		
-		Jugador ganador = envido.calcular(mapa, j);
+		Jugador ganador = envido.calcular(mapa, j, null);
 		assertTrue(ganador.equals(j1));
 	}
 }

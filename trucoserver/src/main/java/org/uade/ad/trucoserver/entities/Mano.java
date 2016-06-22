@@ -28,6 +28,8 @@ import org.uade.ad.trucoserver.business.EnviteManager;
 import org.uade.ad.trucoserver.business.ManoTerminadaEvent;
 import org.uade.ad.trucoserver.business.ManoTerminadaObservable;
 import org.uade.ad.trucoserver.business.ManoTerminadaObserver;
+import org.uade.ad.trucoserver.business.OnEnvidoEvaluado;
+import org.uade.ad.trucoserver.business.OnEnvidoQuerido;
 import org.uade.ad.trucoserver.entities.Baza.BazaResultado;
 
 @Entity
@@ -327,12 +329,12 @@ public class Mano implements ManoTerminadaObservable {
 		return retList;
 	}
 
-	public void cantar(Jugador jugador, Envite envite) throws JuegoException {
+	public void cantar(Jugador jugador, Envite envite, OnEnvidoEvaluado onEnvidoEvaluado, OnEnvidoQuerido onEnvidoQuerido) throws JuegoException {
 		if (!esTurno(jugador)) {
 			throw new JuegoException("No es el turno del jugador");
 		}
 		if (envite instanceof EnvidoEnvite) {
-			cantarEnvido(jugador, (EnvidoEnvite) envite);
+			cantarEnvido(jugador, (EnvidoEnvite) envite, onEnvidoEvaluado, onEnvidoQuerido);
 		} else if (envite instanceof TrucoEnvite) {
 			cantarTruco(jugador, (TrucoEnvite) envite);
 		} else {
@@ -378,7 +380,7 @@ public class Mano implements ManoTerminadaObservable {
 		}
 	}
 
-	private void cantarEnvido(Jugador jugador, EnvidoEnvite envite) throws JuegoException {
+	private void cantarEnvido(Jugador jugador, EnvidoEnvite envite, OnEnvidoEvaluado onEnvidoEvaluado, OnEnvidoQuerido onEnvidoQuerido) throws JuegoException {
 		if (trucoEnCurso) {
 			throw new JuegoException("Hay truco en curso");
 		}
@@ -399,7 +401,7 @@ public class Mano implements ManoTerminadaObservable {
 				turnoActualIdx++;
 			} else if (envite.isQuerido()) {
 				envites.add(new EnvitesManoPareja(envite, this, true, 0, p));
-				Jugador jugadorGanador = envite.calcular(cartasAsignadas, ordenJuegoInicial);
+				Jugador jugadorGanador = envite.calcular(cartasAsignadas, ordenJuegoInicial, onEnvidoEvaluado);
 				Pareja parejaGanadora = chico.getPartida().getPareja(jugadorGanador);
 				if (parejaGanadora.equals(pareja1)) {
 					puntosPareja1+=envite.getPuntaje();
@@ -409,6 +411,9 @@ public class Mano implements ManoTerminadaObservable {
 				envidoEnCurso = false;
 				this.turnoActualIdx = turnoJugadorCantoEnvite;
 				turnoActualIdx++;
+				if (onEnvidoQuerido != null) {
+					onEnvidoQuerido.ejecutar(jugadorGanador, envite.getPuntaje());
+				}
 			} else {
 				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 			}
