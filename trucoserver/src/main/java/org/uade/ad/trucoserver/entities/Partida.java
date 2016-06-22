@@ -394,7 +394,20 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 	public List<Jugador> getGanadores() {
 		List<Jugador> retList = new ArrayList<>();
 		if (partidaTerminada()) {
-			// TODO Buscar la pareja ganadora
+			int count1 = 0;
+			int count2 = 0;
+			for (Chico c : chicos) {
+				if (c.getParejaGanadora().equals(parejas.get(0))) {
+					count1++;
+				} else {
+					count2++;
+				}
+			}
+			if (count1 > count2) {
+				return parejas.get(0).getJugadores();
+			} else {
+				return parejas.get(1).getJugadores();
+			}
 		}
 		return retList;
 	}
@@ -402,7 +415,20 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 	public List<Jugador> getPerdedores() {
 		List<Jugador> retList = new ArrayList<>();
 		if (partidaTerminada()) {
-			// TODO Buscar la pareja perdedora
+			int count1 = 0;
+			int count2 = 0;
+			for (Chico c : chicos) {
+				if (c.getParejaPerdedora().equals(parejas.get(0))) {
+					count1++;
+				} else {
+					count2++;
+				}
+			}
+			if (count1 > count2) {
+				return parejas.get(0).getJugadores();
+			} else {
+				return parejas.get(1).getJugadores();
+			}
 		}
 		return retList;
 	}

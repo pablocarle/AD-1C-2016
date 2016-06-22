@@ -62,7 +62,7 @@ public class Mano implements ManoTerminadaObservable {
 	@Transient
 	private List<Jugador> ordenJuegoActual;
 	@Transient
-	private List<Jugador> ordenJuegoRespuestaEnvite = new ArrayList<>(); //XXX Usar para llevar el orden de respuesta a envite TODO Falta esto en el control de turno actual
+	private List<Jugador> ordenJuegoRespuestaEnvite = new ArrayList<>();
 	@Transient
 	private int turnoActualIdx = 0;
 	@Transient
@@ -219,7 +219,7 @@ public class Mano implements ManoTerminadaObservable {
 				if (baza.esCompleta()) {
 					if (pareja1.contieneJugador(resultado.getJugador())) {
 						countPareja1++;
-					} else  if (pareja2.contieneJugador(resultado.getJugador())) {
+					} else if (pareja2.contieneJugador(resultado.getJugador())) {
 						countPareja2++;
 					}
 				} else {
@@ -302,7 +302,7 @@ public class Mano implements ManoTerminadaObservable {
 			List<Envite> cantados = getEnvidosCantados();
 			if (cantados.isEmpty() && bazas.get(0).getNumCartasJugadas() >= 2) {
 				retList.addAll(EnviteManager.getManager().getEnvidos());
-			} else {
+			} else if (!cantados.isEmpty()) {
 				EnvitesManoPareja ultimoEnvido = getUltimoEnvidoCantado();
 				if (!ultimoEnvido.getPareja().contieneJugador(j)) {
 					retList.addAll(ultimoEnvido.getEnvite().getEnvitesPosteriores());
@@ -352,7 +352,6 @@ public class Mano implements ManoTerminadaObservable {
 			if (envite.isNoQuerido()) {
 				envites.add(new EnvitesManoPareja(envite, this, false, 0, p));
 				Pareja p2 = p.equals(pareja1) ? pareja2 : pareja1;
-				envites.add(new EnvitesManoPareja(envite, this, null, envite.getPuntaje(), p2));
 				if (p2.equals(pareja1))
 					puntosPareja1+=envite.getPuntaje();
 				else
@@ -369,6 +368,7 @@ public class Mano implements ManoTerminadaObservable {
 			trucoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
+			//TODO Usar nuevo orden
 			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 		}
 	}
@@ -439,6 +439,12 @@ public class Mano implements ManoTerminadaObservable {
 	}
 	
 	public Jugador getTurnoActual() {
+		if (envidoEnCurso || trucoEnCurso) {
+			if (turnoActualIdx >= ordenJuegoActual.size()) {
+				turnoActualIdx = 0;
+			}
+			return ordenJuegoRespuestaEnvite.get(turnoActualIdx);
+		}
 		if (turnoActualIdx >= ordenJuegoActual.size()) {
 			turnoActualIdx = 0;
 		}

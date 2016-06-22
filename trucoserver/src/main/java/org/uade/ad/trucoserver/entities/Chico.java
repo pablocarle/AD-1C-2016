@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
@@ -179,13 +180,15 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	 * 
 	 * @throws Exception 
 	 */
-	private void circularOrdenJuego() throws Exception { // TODO Modificar aca, buscar la ultima mano que estuvo en curso
+	private void circularOrdenJuego() throws Exception {
 		if (ordenJuegoActual == null) {
 			ordenJuegoActual = new ArrayList<>(primerOrdenJuego);
 		}
 		Mano manoActual = getManoActual();
 		if (manoActual == null && manos != null && manos.size() > 0) {
+			System.out.println("Orden juego actual pre rotate: " + Arrays.toString(ordenJuegoActual.toArray()));
 			Collections.rotate(ordenJuegoActual, -1);
+			System.out.println("Orden juego actual post rotate: " + Arrays.toString(ordenJuegoActual.toArray()));
 		} else if (manoActual != null) {
 			throw new Exception("La mano actual no ha terminado. No se puede modificar el orden de juego");
 		}
@@ -228,7 +231,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 				ordenJuego = ordenJuegoActual;
 			}
 			Collections.rotate(ordenJuego, -1);
-			Mano mano = new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego);
+			Mano mano = new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, new ArrayList<>(ordenJuego));
 			manos.add(mano);
 			mano.agregarObserver(this);
 		}

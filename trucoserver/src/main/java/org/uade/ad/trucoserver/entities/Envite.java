@@ -50,14 +50,6 @@ public abstract class Envite implements HasDTO<EnviteDTO> {
 		this.enviteAnterior = enviteAnterior;
 	}
 	
-	public boolean posteriorA(Envite envite) {
-		boolean root = enviteAnterior == null;
-		do {
-			// TODO Completar recursividad
-		} while (!root);
-		return false;
-	}
-	
 	public boolean isQuerido() {
 		return nombreEnvite.contains("_Querido");
 	}
