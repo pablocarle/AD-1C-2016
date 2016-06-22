@@ -334,7 +334,7 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		//Guardar en base de datos
 		Mano mano = event.getMano();
 		if (mano.getIdMano() <= 0) {
-			//manoDao.guardar(mano); TODO Despues rehabilitar
+			manoDao.guardar(mano);
 		}
 	}
 

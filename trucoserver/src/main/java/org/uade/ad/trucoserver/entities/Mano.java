@@ -361,6 +361,9 @@ public class Mano implements ManoTerminadaObservable {
 				trucoEnCurso = false;
 				puntosTrucoEnJuego = envite.getPuntaje();
 				envites.add(new EnvitesManoPareja(envite, this, true, 0, p));
+				envidoEnCurso = false;
+				this.turnoActualIdx = turnoJugadorCantoEnvite;
+				turnoActualIdx++;
 			} else { //Es un subir apuesta
 				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 			}
@@ -368,8 +371,10 @@ public class Mano implements ManoTerminadaObservable {
 			trucoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
-			//TODO Usar nuevo orden
 			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
+			this.turnoJugadorCantoEnvite = turnoActualIdx;
+			this.ordenJuegoRespuestaEnvite = new ArrayList<>(ordenJuegoActual);
+			turnoActualIdx++;
 		}
 	}
 
@@ -390,6 +395,8 @@ public class Mano implements ManoTerminadaObservable {
 					puntosPareja2+=envite.getPuntaje();
 				}
 				envidoEnCurso = false;
+				this.turnoActualIdx = turnoJugadorCantoEnvite;
+				turnoActualIdx++;
 			} else if (envite.isQuerido()) {
 				envites.add(new EnvitesManoPareja(envite, this, true, 0, p));
 				Jugador jugadorGanador = envite.calcular(cartasAsignadas, ordenJuegoInicial);
@@ -400,6 +407,8 @@ public class Mano implements ManoTerminadaObservable {
 					puntosPareja2+=envite.getPuntaje();
 				}
 				envidoEnCurso = false;
+				this.turnoActualIdx = turnoJugadorCantoEnvite;
+				turnoActualIdx++;
 			} else {
 				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 			}
@@ -408,6 +417,9 @@ public class Mano implements ManoTerminadaObservable {
 			if (envites == null)
 				envites = new ArrayList<>();
 			envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
+			this.turnoJugadorCantoEnvite = turnoActualIdx;
+			this.ordenJuegoRespuestaEnvite = new ArrayList<>(ordenJuegoActual);
+			turnoActualIdx++;
 		}
 	}
 
