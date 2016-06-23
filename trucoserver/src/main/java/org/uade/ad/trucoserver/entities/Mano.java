@@ -476,12 +476,27 @@ public class Mano implements ManoTerminadaObservable {
 			if (turnoActualIdx >= ordenJuegoActual.size()) {
 				turnoActualIdx = 0;
 			}
-			return ordenJuegoRespuestaEnvite.get(turnoActualIdx);
+			Jugador turno = ordenJuegoRespuestaEnvite.get(turnoActualIdx);
+			while (jugadoresEnMazo.contains(turno)) {
+				turnoActualIdx++;
+				if (turnoActualIdx >= ordenJuegoActual.size()) {
+					turnoActualIdx = 0;
+				}
+				turno = ordenJuegoRespuestaEnvite.get(turnoActualIdx);
+			}
+			return turno;
 		}
 		if (turnoActualIdx >= ordenJuegoActual.size()) {
 			turnoActualIdx = 0;
 		}
-		return ordenJuegoActual.get(turnoActualIdx);
+		Jugador turno = ordenJuegoActual.get(turnoActualIdx);
+		while (jugadoresEnMazo.contains(turno)) {
+			turnoActualIdx++;
+			if (turnoActualIdx >= ordenJuegoActual.size()) {
+				turnoActualIdx = 0;
+			}
+		}
+		return turno;
 	}
 
 	public boolean tieneEnvites() {
