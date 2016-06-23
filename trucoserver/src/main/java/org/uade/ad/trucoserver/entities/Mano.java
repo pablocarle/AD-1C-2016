@@ -330,7 +330,7 @@ public class Mano implements ManoTerminadaObservable {
 				if (!ultimoTruco.getPareja().contieneJugador(j)) {
 					retList.addAll(ultimoTruco.getEnvite().getEnvitesPosteriores());
 				}
-			} else {
+			} else if (getUltimoTrucoCantado() == null) {
 				retList.addAll(EnviteManager.getManager().getTrucos());
 			}
 		}
