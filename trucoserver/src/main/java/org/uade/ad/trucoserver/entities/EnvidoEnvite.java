@@ -2,6 +2,7 @@ package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -36,6 +37,9 @@ public class EnvidoEnvite extends Envite {
 		Jugador ganador = null;
 		int envido = 0;
 		List<Carta> cartas = null;
+		ordenJuegoInicial = new ArrayList<>(ordenJuegoInicial);
+		//Compensamos a mano porque primer turno es el de reparto de cartas
+		Collections.rotate(ordenJuegoInicial, -1);
 		for (Jugador j : ordenJuegoInicial) {
 			cartas = new ArrayList<>(cartasAsignadas.get(j));
 			if (cartas.size() == 3) {
