@@ -259,6 +259,9 @@ finTurno = function() {
 	alMazoBtn.setAttribute("disabled", "disabled");
 	repartirCartasBtn.setAttribute("disabled", "disabled");
 
+	removeOptions(selectEnvidos);
+	removeOptions(selectTrucos);
+
 	selectEnvidos.setAttribute("disabled", "disabled");
 	selectTrucos.setAttribute("disabled", "disabled");
 	if (restoreTimerTurno) {

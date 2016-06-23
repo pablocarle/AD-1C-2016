@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -333,6 +334,7 @@ public class Mano implements ManoTerminadaObservable {
 				retList.addAll(EnviteManager.getManager().getTrucos());
 			}
 		}
+		System.out.println("Trucos disponibles para jugador " + j + ": " + Arrays.toString(retList.toArray()));
 		return retList;
 	}
 
@@ -359,6 +361,7 @@ public class Mano implements ManoTerminadaObservable {
 		Pareja p = chico.getPartida().getPareja(jugador);
 		if (trucoEnCurso) {
 			if (envite.isNoQuerido()) {
+				System.out.println("truco no aceptado");
 				envites.add(new EnvitesManoPareja(envite, this, false, 0, p));
 				Pareja p2 = p.equals(pareja1) ? pareja2 : pareja1;
 				if (p2.equals(pareja1))
@@ -367,15 +370,18 @@ public class Mano implements ManoTerminadaObservable {
 					puntosPareja2+=envite.getPuntaje();
 				notificarObserversFinMano();
 			} else if (envite.isQuerido()) {
+				System.out.println("Truco aceptado");
 				trucoEnCurso = false;
 				puntosTrucoEnJuego = envite.getPuntaje();
 				envites.add(new EnvitesManoPareja(envite, this, true, 0, p));
 				envidoEnCurso = false;
 				this.turnoActualIdx = turnoJugadorCantoEnvite;
 			} else { //Es un subir apuesta
+				System.out.println("Sube apuesta");
 				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
 			}
 		} else {
+			System.out.println("Primer canto");
 			trucoEnCurso = true;
 			if (envites == null)
 				envites = new ArrayList<>();
