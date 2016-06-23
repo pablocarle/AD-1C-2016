@@ -332,6 +332,12 @@ public class Mano implements ManoTerminadaObservable {
 				}
 			} else if (getUltimoTrucoCantado() == null) {
 				retList.addAll(EnviteManager.getManager().getTrucos());
+			} else {
+				//No hay truco en curso y ya se habia cantado un truco (se quiso)
+				EnvitesManoPareja ultimoTruco = getUltimoTrucoCantado();
+				if (ultimoTruco.getEnvite().isQuerido() && ultimoTruco.getPareja().contieneJugador(j)) {
+					retList.addAll(ultimoTruco.getEnvite().getEnvitesPosteriores());
+				}
 			}
 		}
 		System.out.println("Trucos disponibles para jugador " + j + ": " + Arrays.toString(retList.toArray()));
