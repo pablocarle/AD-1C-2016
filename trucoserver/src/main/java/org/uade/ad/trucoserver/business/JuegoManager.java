@@ -152,6 +152,7 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 					}
 				}
 				tr.commit();
+				System.out.println("Primer chico partida abierta individual con id " + primerChico.getIdChico());
 				primerChico.agregarObserver((ChicoTerminadoObserver)partida);
 				primerChico.agregarObserver((ManoTerminadaObserver)partida);
 				partida.agregarObserver((ChicoTerminadoObserver)this);

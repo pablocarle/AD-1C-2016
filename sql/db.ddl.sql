@@ -171,7 +171,7 @@ create table envites_pareja_mano (
 create unique index envites_parejas_idx on envites_pareja_mano ( idMano, idTipoEnvite );
 
 create table bazas (
-	idBaza int not null,
+	idBaza int not null auto_increment,
     idMano int not null,
     rondaBaza int not null,
     fechaInicio date not null,
@@ -183,7 +183,7 @@ create table bazas (
 create unique index bazas_idx_u on bazas ( idMano, rondaBaza );
 
 create table bazas_cartas (
-	idBazasCartas int not null,
+	idBazasCartas int not null auto_increment,
     idBaza int not null,
     idJugador int not null,
     idCarta int not null,

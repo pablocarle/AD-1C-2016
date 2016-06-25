@@ -7,8 +7,6 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,7 +20,6 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 @Entity
-@Access(AccessType.FIELD)
 @Table(name="bazas")
 public class Baza {
 	
@@ -31,6 +28,7 @@ public class Baza {
 	}
 
 	@Id
+	@Column(name="idBaza")
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private int idBaza;
 	@ManyToOne
@@ -53,10 +51,11 @@ public class Baza {
 		super();
 	}
 	
-	Baza(Mano mano, int numJugadores, List<Jugador> ordenJuego) {
+	Baza(Mano mano, int numJugadores, int rondaBaza, List<Jugador> ordenJuego) {
 		super();
 		assert(numJugadores == ordenJuego.size());
 		this.mano = mano;
+		this.rondaBaza = rondaBaza;
 		this.numJugadores = numJugadores;
 		this.ordenJuego = ordenJuego;
 	}
@@ -71,7 +70,7 @@ public class Baza {
 			cartasJugadas = new ArrayList<>();
 		}
 		if (ordenJuego.get(cartasJugadas.size()).equals(jugador)) {
-			cartasJugadas.add(new CartaJugada(jugador, carta));
+			cartasJugadas.add(new CartaJugada(this, jugador, carta));
 		} else {
 			throw new RuntimeException("No es el turno del jugador " + jugador);
 		}
@@ -148,6 +147,50 @@ public class Baza {
 		return null;
 	}
 	
+	public int getIdBaza() {
+		return idBaza;
+	}
+
+	public void setIdBaza(int idBaza) {
+		this.idBaza = idBaza;
+	}
+
+	public Mano getMano() {
+		return mano;
+	}
+
+	public void setMano(Mano mano) {
+		this.mano = mano;
+	}
+
+	public int getRondaBaza() {
+		return rondaBaza;
+	}
+
+	public void setRondaBaza(int rondaBaza) {
+		this.rondaBaza = rondaBaza;
+	}
+
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
+	}
+
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
+	public void setCartasJugadas(List<CartaJugada> cartasJugadas) {
+		this.cartasJugadas = cartasJugadas;
+	}
+
 	public static class BazaResultado {
 		
 		private Resultado resultado;

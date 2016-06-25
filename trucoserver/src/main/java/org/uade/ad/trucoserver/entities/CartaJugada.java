@@ -1,7 +1,5 @@
 package org.uade.ad.trucoserver.entities;
 
-import javax.persistence.Access;
-import javax.persistence.AccessType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,7 +9,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Access(AccessType.FIELD)
 @Table(name="bazas_cartas")
 public class CartaJugada {
 	
@@ -32,12 +29,13 @@ public class CartaJugada {
 		super();
 	}
 	
-	public CartaJugada(Jugador jugador, Carta carta) {
+	public CartaJugada(Baza baza, Jugador jugador, Carta carta) {
 		super();
 		this.jugador = jugador;
 		this.carta = carta;
+		this.baza = baza;
 	}
-
+	
 	public Jugador getJugador() {
 		return jugador;
 	}
@@ -68,5 +66,9 @@ public class CartaJugada {
 
 	public void setCarta(Carta carta) {
 		this.carta = carta;
+	}
+
+	public void setIdBazasCartas(int idBazasCartas) {
+		this.idBazasCartas = idBazasCartas;
 	}
 }

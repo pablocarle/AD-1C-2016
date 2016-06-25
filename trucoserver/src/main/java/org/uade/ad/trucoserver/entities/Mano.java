@@ -1,7 +1,6 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -129,7 +128,7 @@ public class Mano implements ManoTerminadaObservable {
 		}
 		Baza bazaActual = null;
 		if (bazas.isEmpty()) {
-			bazaActual = new Baza(this, NUM_JUGADORES, ordenJuegoInicial);
+			bazaActual = new Baza(this, NUM_JUGADORES, 0, ordenJuegoInicial);
 			bazas.add(bazaActual);
 			bazaActual.jugarCarta(jugador, carta);
 			turnoActualIdx = 1;
@@ -137,7 +136,7 @@ public class Mano implements ManoTerminadaObservable {
 			Jugador ganadorAnterior = null;
 			bazaActual = bazas.get(bazas.size() - 1);
 			if (bazaActual.esCompleta() && getGanador() == Pareja.Null) {
-				bazaActual = new Baza(this, NUM_JUGADORES, ordenJuegoActual);
+				bazaActual = new Baza(this, NUM_JUGADORES, bazas.size(), ordenJuegoActual);
 				bazaActual.jugarCarta(jugador, carta);
 				bazas.add(bazaActual);
 				turnoActualIdx++;
@@ -308,7 +307,7 @@ public class Mano implements ManoTerminadaObservable {
 	
 	public List<Envite> getEnvidosDisponibles(Jugador j) {
 		List<Envite> retList = new ArrayList<>();
-		if(!terminada() && esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1) {
+		if(!terminada() && esTurno(j) && bazas != null && !bazas.isEmpty() && bazas.size() == 1 && !bazas.get(0).esCompleta()) {
 			List<Envite> cantados = getEnvidosCantados();
 			if (cantados.isEmpty() && bazas.get(0).getNumCartasJugadas() >= 2) {
 				retList.addAll(EnviteManager.getManager().getEnvidos());
@@ -340,7 +339,7 @@ public class Mano implements ManoTerminadaObservable {
 				}
 			}
 		}
-		System.out.println("Trucos disponibles para jugador " + j + ": " + Arrays.toString(retList.toArray()));
+//		System.out.println("Trucos disponibles para jugador " + j + ": " + Arrays.toString(retList.toArray()));
 		return retList;
 	}
 

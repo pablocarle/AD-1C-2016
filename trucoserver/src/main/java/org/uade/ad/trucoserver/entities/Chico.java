@@ -15,6 +15,8 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -46,6 +48,8 @@ import org.uade.ad.trucoserver.business.OnEnvidoQuerido;
 public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTerminadaObservable, ChicoTerminadoObservable {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@Column(name="idChico")
 	private int idChico;
 	@OneToMany(mappedBy="chico", fetch=FetchType.LAZY, cascade=CascadeType.ALL)
 	private List<Mano> manos;
@@ -228,12 +232,14 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 			
 			List<Jugador> ordenJuego = null;
 			if ((ordenJuegoActual == null || ordenJuegoActual.isEmpty())) {
-				ordenJuego = primerOrdenJuego;
+				ordenJuego = new ArrayList<>(primerOrdenJuego);
 			} else {
-				ordenJuego = ordenJuegoActual;
+				ordenJuego = new ArrayList<>(ordenJuegoActual);
 			}
-			Collections.rotate(ordenJuego, -1);
-			Mano mano = new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, new ArrayList<>(ordenJuego));
+			if (manos == null || manos.isEmpty()) {
+				Collections.rotate(ordenJuego, -1);
+			}
+			Mano mano = new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego);
 			manos.add(mano);
 			mano.agregarObserver(this);
 		}
@@ -459,7 +465,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 		}
 		return false;
 	}
-
+	
 	@Override
 	public void manoTerminada(ManoTerminadaEvent event) throws JuegoException {
 		System.out.println("Chico notificado de Mano terminada");
