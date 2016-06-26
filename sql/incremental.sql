@@ -25,4 +25,4 @@ values (49,'Vale Cuatro','T',-1,44);
 insert into tipo_envites ( idtipoEnvite , nombreEnvite, tipoEnvite, puntaje, enviteAnterior) 
 values (50,'Vale Cuatro_Querido','T',4,49);
 insert into tipo_envites ( idtipoEnvite , nombreEnvite, tipoEnvite, puntaje, enviteAnterior) 
-values (51,'Vale Cuatro_Querido','T',3,49);
+values (51,'Vale Cuatro_NoQuerido','T',3,49);

@@ -72,9 +72,6 @@ public class GrupoDetalle {
 	@Embeddable
 	public static class GrupoDetallePk implements Serializable {
 
-		/**
-		 * 
-		 */
 		private static final long serialVersionUID = 1L;
 		
 		@ManyToOne

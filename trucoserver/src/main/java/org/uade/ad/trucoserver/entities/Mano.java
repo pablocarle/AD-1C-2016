@@ -384,6 +384,7 @@ public class Mano implements ManoTerminadaObservable {
 			} else { //Es un subir apuesta
 				System.out.println("Sube apuesta");
 				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
+				this.turnoActualIdx++;
 			}
 		} else {
 			System.out.println("Primer canto");
@@ -431,6 +432,7 @@ public class Mano implements ManoTerminadaObservable {
 				}
 			} else {
 				envites.add(new EnvitesManoPareja(envite, this, null, 0, p));
+				this.turnoActualIdx++;
 			}
 		} else {
 			envidoEnCurso = true;

@@ -93,6 +93,14 @@ public final class Server {
 			System.out.println("Juego Manager: " + "//localhost/" + JuegoService.SERVICENAME);
 			System.out.println("Sesion Manager: " + "//localhost/" + SesionService.SERVICENAME);
 			System.out.println("Ranking Manager: " + "//localhost/" + RankingService.SERVICENAME);
+//			try {
+//			ParejaDao dao = ParejaDaoImpl.getDAO();
+//			Transaction tr = dao.getSession().beginTransaction();
+//			ParejaDaoImpl.getDAO().getParejaNoGrupo(7, 8);
+//			tr.commit();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
 		} catch (RemoteException e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
