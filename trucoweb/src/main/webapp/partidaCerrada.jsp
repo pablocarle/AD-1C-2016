@@ -10,7 +10,6 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Nueva partida Cerrada</title>
 <link rel="stylesheet" type="text/css" href="css/global.css">
-<link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" type="text/css" href="css/buttons.css">
 <link rel="stylesheet" type="text/css"
 	href="css/bootstrap/bootstrap.min.css">

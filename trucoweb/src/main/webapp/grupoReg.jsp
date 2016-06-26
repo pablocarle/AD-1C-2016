@@ -9,7 +9,6 @@
 	
 </script>
 <link rel="stylesheet" type="text/css" href="css/global.css">
-<link rel="stylesheet" type="text/css" href="css/main.css">
 <link rel="stylesheet" type="text/css" href="css/buttons.css">
 <link rel="stylesheet" type="text/css"
 	href="css/bootstrap/bootstrap.min.css">

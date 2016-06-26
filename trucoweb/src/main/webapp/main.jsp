@@ -93,32 +93,32 @@
 			<button
 				onclick="location.href='/trucoweb/PartidaServlet/NuevaPartida?tipoPartida=abierta'"
 				class="button button--wapasha button--round-s">
-				<i class="button__icon icon icon-map-marker"></i><span>ABIERTA
+				<i class="fa fa-user" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> ABIERTA
 					INDIVIDUAL</span>
 			</button>
 			<button onclick="location.href='/trucoweb/SeleccionPareja'"
 				class="button button--wapasha button--round-s">
-				<i class="button__icon icon icon-map-marker"></i><span>ABIERTA
+				<i class="fa fa-users" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> ABIERTA
 					GRUPAL</span>
 			</button>
 			<button onclick="location.href='/trucoweb/partidaCerrada.jsp'"
 				class="button button--wapasha button--round-s">
-				<i class="button__icon icon icon-map-marker"></i><span>CERRADA</span>
+				<i class="fa fa-user-times" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> CERRADA</span>
 			</button>
 		</div>
 		<div class="col-md-offset-2 col-md-8">
 			<button onclick="location.href='/trucoweb/RankingServlet'"
 				class="button button--wapasha button--round-s">
-				<i class="button__icon icon icon-map-marker"></i><span>RANKING</span>
+				<i class="fa fa-trophy" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> RANKING</span>
 			</button>
 			<button onclick="location.href='/trucoweb/grupoReg.jsp'"
 				class="button button--wapasha button--round-s">
-				<i class="button__icon icon icon-map-marker"></i><span>NUEVO
+				<i class="fa fa-user-plus" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> NUEVO
 					GRUPO</span>
 			</button>
 			<button onclick="location.href='/trucoweb/index.jsp'"
 				class="button button--wapasha button--round-s">
-				<i class="button__icon icon icon-map-marker"></i><span>SALIR</span>
+				<i class="fa fa-sign-out" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> SALIR</span>
 			</button>
 		</div>
 	</div>
