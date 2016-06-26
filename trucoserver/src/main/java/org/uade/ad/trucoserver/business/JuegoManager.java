@@ -85,6 +85,7 @@ public class JuegoManager implements ChicoTerminadoObserver, ManoTerminadaObserv
 		Partida partida = null;
 		try {
 			partida = new PartidaCerrada(grupo);
+			partida.setTipoPartida(getTipoPartida(PARTIDA_CERRADA));
 			Chico primerChico = new Chico(sortOrden(partida.getParejas()));
 			partida.agregarChico(primerChico);
 			pDao.guardar(partida);

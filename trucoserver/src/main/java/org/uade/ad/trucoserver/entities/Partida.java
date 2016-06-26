@@ -1,6 +1,7 @@
 package org.uade.ad.trucoserver.entities;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class Partida implements HasDTO<PartidaDTO>, PartidaTerminadaObservable, 
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	protected int idPartida;
 	@Column(nullable=false)
-	protected Date fechaInicio;
+	protected Date fechaInicio = Calendar.getInstance().getTime();
 	@Column(nullable=true)
 	protected Date fechaFin;
 	@ManyToMany

@@ -17,6 +17,7 @@ import org.uade.ad.trucoserver.entities.LogJuego;
 import org.uade.ad.trucoserver.entities.Mano;
 import org.uade.ad.trucoserver.entities.Pareja;
 import org.uade.ad.trucoserver.entities.Partida;
+import org.uade.ad.trucoserver.entities.PartidaCerrada;
 import org.uade.ad.trucoserver.entities.TipoPartida;
 import org.uade.ad.trucoserver.entities.TrucoEnvite;
 
@@ -40,6 +41,7 @@ public final class HibernateUtil {
         	 conf.addAnnotatedClass(Chico.class);
         	 conf.addAnnotatedClass(TipoPartida.class);
         	 conf.addAnnotatedClass(Partida.class);
+        	 conf.addAnnotatedClass(PartidaCerrada.class);
         	 conf.addAnnotatedClass(GrupoDetalle.class);
         	 conf.addAnnotatedClass(TrucoEnvite.class);
         	 conf.addAnnotatedClass(EnvidoEnvite.class);
