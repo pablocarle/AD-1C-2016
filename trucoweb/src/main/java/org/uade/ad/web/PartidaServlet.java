@@ -213,6 +213,7 @@ public class PartidaServlet extends HttpServlet {
 		try {
 			switch (getTipoAccion(idCartaStr, idEnviteStr, alMazoStr, repartirCartas)) {
 				case ALMAZO:
+					System.out.println("Seleccionada accion de irse al mazo");
 					partida = delegate.irAlMazo(jugador, idPartida);
 					xmlResponse(partida, request, response);
 					break;

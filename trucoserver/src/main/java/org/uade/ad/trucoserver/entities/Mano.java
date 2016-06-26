@@ -525,6 +525,7 @@ public class Mano implements ManoTerminadaObservable {
 			}
 			notificarObserversFinMano();
 		}
+		this.turnoActualIdx++;
 	}
 
 	private void notificarObserversFinMano() throws JuegoException {
@@ -534,6 +535,8 @@ public class Mano implements ManoTerminadaObservable {
 	}
 
 	public List<Carta> getCartasDisponibles(Jugador j) {
+		if (jugadoresEnMazo.contains(j))
+			return new ArrayList<>();
 		Set<Carta> cartasAsignadas = new HashSet<>(getCartasAsignadas().get(j));
 		if (bazas != null) {
 			Carta jugada = null;

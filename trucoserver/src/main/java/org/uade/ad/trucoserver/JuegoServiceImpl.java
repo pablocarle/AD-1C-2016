@@ -105,6 +105,7 @@ public class JuegoServiceImpl extends Context implements JuegoService, PartidaTe
 	@Override
 	public PartidaDTO irAlMazo(int idPartida, JugadorDTO jugador) throws RemoteException, JuegoException {
 		assertJugadorPartida(jugador.getApodo(), idPartida);
+		System.out.println("Irse al mazo (JuegoServiceImpl)");
 		PartidaDTO dto = manager.irAlMazo(idPartida, jugador.getApodo(), this).getDTO();
 		return dto;
 	}
