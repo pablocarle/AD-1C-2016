@@ -13,7 +13,6 @@ public class RankingItemDTO implements Serializable {
 	private long partidasJugadas;
 	private long promedioGanadas;
 	private long posicion;
-	
 		
 	public RankingItemDTO() {
 		super();
@@ -103,9 +102,4 @@ public class RankingItemDTO implements Serializable {
 	public void setPosicion(long posicion) {
 		this.posicion = posicion;
 	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-
 }
