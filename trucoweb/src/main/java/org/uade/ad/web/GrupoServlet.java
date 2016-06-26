@@ -82,6 +82,7 @@ public class GrupoServlet extends HttpServlet {
 		if (message.length() == 0) {
 			try {
 				GrupoDTO grupo = delegate.crearGrupo(nombreGrupo, jugador.getApodo(), apodoJugador1, apodoJugador2, apodoJugador3);
+				jugador.agregarGrupo(grupo);
 				session.setAttribute("regResult", "Grupo " + grupo.getNombre() + " generado correctamente");
 			} catch (GrupoException e) {
 				session.setAttribute("regResult", e.getMessage());

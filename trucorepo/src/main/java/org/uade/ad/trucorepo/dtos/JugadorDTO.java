@@ -1,6 +1,7 @@
 package org.uade.ad.trucorepo.dtos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -132,5 +133,12 @@ public class JugadorDTO implements Serializable {
 			}
 		}
 		return false;
+	}
+
+	public void agregarGrupo(GrupoDTO grupo) {
+		if (grupos == null)
+			grupos = new ArrayList<>();
+		if (!grupos.contains(grupo))
+			grupos.add(grupo);
 	}
 }

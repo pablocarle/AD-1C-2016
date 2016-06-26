@@ -3,14 +3,16 @@ package org.uade.ad.trucoserver.entities;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.uade.ad.trucorepo.dtos.GrupoDTO;
@@ -25,11 +27,11 @@ public class Grupo implements HasDTO<GrupoDTO> {
 	private int idGrupo;
 	@Column
 	private String nombre;
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name="idJugadorAdmin")
 	private Jugador admin;
 	
-	@OneToMany(mappedBy="pk.grupo")
+	@OneToMany(mappedBy="pk.grupo", cascade=CascadeType.ALL, fetch=FetchType.EAGER)
 	private List<GrupoDetalle> detalle;
 	
 	public Grupo() {
@@ -119,9 +121,10 @@ public class Grupo implements HasDTO<GrupoDTO> {
 	@Override
 	public GrupoDTO getDTO() {
 		GrupoDTO dto = new GrupoDTO();
+		dto.setIdGrupo(idGrupo);
 		dto.setPareja1(getParejaNum(0).getDTO());
 		dto.setPareja2(getParejaNum(1).getDTO());
-		dto.setAdmin(admin.getDTO());
+		dto.setAdmin(admin.getApodo());
 		dto.setNombre(nombre);
 		return dto;
 	}

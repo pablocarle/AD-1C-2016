@@ -1,3 +1,4 @@
+<%@page import="java.util.ArrayList"%>
 <%@page import="org.uade.ad.trucorepo.dtos.GrupoDTO"%>
 <%@page import="java.util.List"%>
 <%@page import="org.uade.ad.trucorepo.dtos.JugadorDTO"%>
@@ -16,8 +17,11 @@
 //Obtener los grupos del usuario
 JugadorDTO dto = (JugadorDTO)session.getAttribute("user");
 List<GrupoDTO> grupos = dto.getGrupos();
+if (grupos == null)
+	grupos = new ArrayList<GrupoDTO>();
+System.out.println("Grupos size: " + grupos.size());
 %>
-<form method="post" action="JuegoServlet" onsubmit="return validarApodoPass();" >
+<form method="get" action="/trucoweb/PartidaServlet/NuevaPartida" onsubmit="return validarApodoPass();" >
 		<table border="1" >
 			<thead>
 				<tr>
@@ -28,16 +32,17 @@ List<GrupoDTO> grupos = dto.getGrupos();
 				<tr>
 					<td>Seleccione Grupo</td>
 					<td>
-						<select name="grupoField" >
+						<select name="idGrupo" id="grupoSelectField" >
 							<%
 								for (GrupoDTO g : grupos) {
 							%>
-								<option value=<%=g.getNombre() %> />
+								<option value=<%= g.getIdGrupo() %> >
+								<%= g.getNombre() %>
+								</option>
 							<%
 								}
 							%>
 						</select>
-						<input type="text" id="apodoField" name="apodo" value="" />
 						<input type="hidden" name="tipoPartida" value="cerrada" />
 					</td>
 				</tr>

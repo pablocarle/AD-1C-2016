@@ -13,7 +13,7 @@ public class GrupoDTO implements Serializable {
 	private int idGrupo;
 	private ParejaDTO pareja1;
 	private ParejaDTO pareja2;
-	private JugadorDTO admin;
+	private String admin;
 	
 	public GrupoDTO() {
 		super();
@@ -68,19 +68,19 @@ public class GrupoDTO implements Serializable {
 		this.pareja2 = pareja2;
 	}
 
-	public JugadorDTO getAdmin() {
-		return admin;
-	}
-
-	public void setAdmin(JugadorDTO admin) {
-		this.admin = admin;
-	}
-
 	public int getIdGrupo() {
 		return idGrupo;
 	}
 
 	public void setIdGrupo(int idGrupo) {
 		this.idGrupo = idGrupo;
+	}
+
+	public String getAdmin() {
+		return admin;
+	}
+
+	public void setAdmin(String admin) {
+		this.admin = admin;
 	}
 }

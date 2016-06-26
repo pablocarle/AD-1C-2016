@@ -138,8 +138,8 @@ public class Pareja implements HasDTO<ParejaDTO> {
 	@Override
 	public ParejaDTO getDTO() {
 		ParejaDTO dto = new ParejaDTO();
-		dto.setJugador1(jugador1.getDTO());
-		dto.setJugador2(jugador2.getDTO());
+		dto.setJugador1(jugador1.getApodo());
+		dto.setJugador2(jugador2.getApodo());
 		return dto;
 	}
 }
