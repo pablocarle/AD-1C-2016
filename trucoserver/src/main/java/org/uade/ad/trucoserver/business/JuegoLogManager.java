@@ -38,6 +38,7 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 			entity.setJugador(ganador);
 			entity.setPuntos(partida.getPartida().getPuntosObtenidos(ganador));
 			entity.setVictoria(true);
+			entity.setPartida(partida.getPartida());
 			dao.guardar(entity);
 		}
 		for (Jugador perdedor : partida.getPerdedores()) {
@@ -46,6 +47,7 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 			entity.setJugador(perdedor);
 			entity.setPuntos(partida.getPartida().getPuntosObtenidos(perdedor));
 			entity.setVictoria(false);
+			entity.setPartida(partida.getPartida());
 			dao.guardar(entity);
 		}
 		tr.commit();

@@ -23,6 +23,9 @@ public class LogJuego {
 	@ManyToOne
 	@JoinColumn(name="idJugador")
 	private Jugador jugador;
+	@ManyToOne
+	@JoinColumn(name="idPartida")
+	private Partida partida;
 	@Column(columnDefinition="bit")
 	private boolean victoria;
 	@Column
@@ -98,5 +101,13 @@ public class LogJuego {
 
 	public void setPuntos(int puntos) {
 		this.puntos = puntos;
+	}
+
+	public Partida getPartida() {
+		return partida;
+	}
+
+	public void setPartida(Partida partida) {
+		this.partida = partida;
 	}
 }

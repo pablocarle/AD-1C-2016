@@ -62,11 +62,13 @@ create table parejas (
 create table juego_log (
 	idLog int not null auto_increment,
     idJugador int not null,
+    idPartida int not null,
     fecha date not null,
     victoria boolean not null,
     puntos int not null,
     constraint juego_log primary key ( idLog ),
-    constraint juego_log_jugador_fk foreign key ( idJugador ) references jugadores ( idJugador )
+    constraint juego_log_jugador_fk foreign key ( idJugador ) references jugadores ( idJugador ),
+    constraint juego_log_partida_fk foreign key ( idPartida ) references partidas ( idPartida )
 );
 
 create table grupos (
