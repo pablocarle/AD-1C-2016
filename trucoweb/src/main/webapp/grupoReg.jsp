@@ -17,6 +17,11 @@
 	href="css/font-awesome/font-awesome.min.css">
 </head>
 <body>
+	<div class="page-header" style="color:white">
+		<h1>
+			CREACION DE GRUPO
+		</h1>
+	</div>
 	<div class="row" style="margin-top: 50px; color: white">
 		<div class="col-md-offset-2 col-md-8">
 			<form class="form-horizontal" method="post" action="GrupoServlet"
