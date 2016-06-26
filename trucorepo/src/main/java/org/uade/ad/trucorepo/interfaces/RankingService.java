@@ -11,8 +11,10 @@ public interface RankingService extends Remote {
 	
 	public static final String SERVICENAME = "rankingService";
 
-	RankingDTO getRankingGeneral() throws RemoteException, RankingException;
+	RankingDTO getRankingGeneral(JugadorDTO jugador) throws RemoteException, RankingException;
 
 	RankingDTO getRankingGrupo(int idGrupo, JugadorDTO jugador) throws RemoteException, RankingException;
+
+
 
 }

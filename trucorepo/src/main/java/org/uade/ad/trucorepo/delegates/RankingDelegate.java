@@ -28,9 +28,9 @@ public class RankingDelegate extends BusinessDelegate {
 
 	}
 
-	public RankingDTO getRankingGeneral() throws RankingException {
+	public RankingDTO getRankingGeneral(JugadorDTO jugador) throws RankingException {
 		try {
-			return rankingService.getRankingGeneral();
+			return rankingService.getRankingGeneral(jugador);
 		} catch (RemoteException e) {
 			throw new RankingException(e);
 		}

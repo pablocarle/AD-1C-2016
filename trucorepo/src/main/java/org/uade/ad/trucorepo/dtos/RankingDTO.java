@@ -15,6 +15,19 @@ public class RankingDTO implements Serializable {
 		this.items = items;
 	}
 
+	public RankingDTO() {
+		// TODO Auto-generated constructor stub
+	}
+	
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setItems(List<RankingItemDTO> items) {
+		this.items = items;
+	}
+
 	public List<RankingItemDTO> getItems() {
 		return new ArrayList<>(items);
 	}
