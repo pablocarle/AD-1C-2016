@@ -54,23 +54,6 @@ create table parejas (
     constraint parejas_jugador2_fk foreign key ( idJugador2 ) references jugadores ( idJugador )
 );
 
--- Tabla de ranking. En realidad registra log de partidas ganadas / perdidas
--- Armar vista para obtener los datos reales del ranking ?
-
--- drop table juego_log;
-
-create table juego_log (
-	idLog int not null auto_increment,
-    idJugador int not null,
-    idPartida int not null,
-    fecha date not null,
-    victoria boolean not null,
-    puntos int not null,
-    constraint juego_log primary key ( idLog ),
-    constraint juego_log_jugador_fk foreign key ( idJugador ) references jugadores ( idJugador ),
-    constraint juego_log_partida_fk foreign key ( idPartida ) references partidas ( idPartida )
-);
-
 create table grupos (
 	idGrupo int not null auto_increment,
     nombre varchar(100) not null,
@@ -109,6 +92,25 @@ create table partidas (
     constraint partidas_pk primary key ( idPartida ),
     constraint partidas_tipopartida_fk foreign key ( idTipoPartida ) references tipopartidas ( idTipoPartida )
 );
+
+
+-- Tabla de ranking. En realidad registra log de partidas ganadas / perdidas
+-- Armar vista para obtener los datos reales del ranking ?
+
+-- drop table juego_log;
+
+create table juego_log (
+	idLog int not null auto_increment,
+    idJugador int not null,
+    idPartida int not null,
+    fecha date not null,
+    victoria boolean not null,
+    puntos int not null,
+    constraint juego_log primary key ( idLog ),
+    constraint juego_log_jugador_fk foreign key ( idJugador ) references jugadores ( idJugador ),
+    constraint juego_log_partida_fk foreign key ( idPartida ) references partidas ( idPartida )
+);
+
 
 create table partidas_cerradas (
 	idPartida int not null,
