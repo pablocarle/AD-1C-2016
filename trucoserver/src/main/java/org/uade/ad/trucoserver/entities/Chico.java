@@ -26,6 +26,7 @@ import javax.persistence.Transient;
 
 import org.uade.ad.trucorepo.dtos.ChicoDTO;
 import org.uade.ad.trucorepo.exceptions.JuegoException;
+import org.uade.ad.trucoserver.Server;
 import org.uade.ad.trucoserver.business.CartasManager;
 import org.uade.ad.trucoserver.business.ChicoTerminadoEvent;
 import org.uade.ad.trucoserver.business.ChicoTerminadoObservable;
@@ -253,7 +254,13 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 	 * @return
 	 */
 	public boolean enCurso() {
-		if (pareja1Score < 30 && pareja2Score < 30)
+		String conf = Server.getConfig("partida.score");
+		int maxScore = 0;
+		if (conf == null || conf.length() == 0)
+			maxScore = 30;
+		else
+			maxScore = Integer.parseInt(conf);
+		if (pareja1Score < maxScore && pareja2Score < maxScore)
 			return true;
 		else {
 			System.out.println("pareja1Score: " + pareja1Score + "         pareja2Score: " + pareja2Score);
