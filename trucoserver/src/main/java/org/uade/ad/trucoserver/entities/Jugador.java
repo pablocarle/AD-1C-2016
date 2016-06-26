@@ -93,6 +93,14 @@ public class Jugador implements HasDTO<JugadorDTO> {
 		return true;
 	}
 
+	public List<Grupo> getGrupos() {
+		return grupos;
+	}
+
+	public void setGrupos(List<Grupo> grupos) {
+		this.grupos = grupos;
+	}
+
 	public int getIdJugador() {
 		return idJugador;
 	}

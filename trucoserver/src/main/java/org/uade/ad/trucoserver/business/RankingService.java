@@ -20,12 +20,14 @@ public class RankingService implements PartidaTerminadaObserver {
 		return instance;
 	}
 	
+
+
 	private Juego_LogDao logDao;
 	{
 		logDao = Juego_LogDaoImpl.getDAO();
 	}
 	
-	private SortedSet<RankingItem> rankingItems;
+	public SortedSet<RankingItem> rankingItems;
 	{
 		rankingItems = cargaRanking();
 	}
@@ -54,7 +56,7 @@ public class RankingService implements PartidaTerminadaObserver {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		RankingItem item = null;

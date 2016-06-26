@@ -60,7 +60,7 @@ public class RankingServlet extends HttpServlet {
 		if (idGrupo != null && idGrupo.length() > 0) {
 			generarRankingGrupo(idGrupo, jugador, request, response);
 		} else {
-			generarRankingGeneral(request, response);
+			generarRankingGeneral(jugador,request, response);
 		}
 	}
 
@@ -70,9 +70,9 @@ public class RankingServlet extends HttpServlet {
 		request.getRequestDispatcher("/error.jsp").forward(request, response);;
 	}
 
-	private void generarRankingGeneral(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void generarRankingGeneral(JugadorDTO jugador,HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		try {
-			RankingDTO ranking = delegate.getRankingGeneral();
+			RankingDTO ranking = delegate.getRankingGeneral(jugador);
 			request.setAttribute("ranking", ranking);
 			request.getRequestDispatcher("/trucoweb/ranking.jsp").forward(request, response);
 		} catch (RankingException e) {

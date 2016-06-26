@@ -53,6 +53,7 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		str.append("sum(j.puntos) as puntos ");
 		str.append("from LogJuego j ");
 		str.append("group by j.jugador ");
+		str.append("order by puntos ");
 		return str.toString();
 	}
 
