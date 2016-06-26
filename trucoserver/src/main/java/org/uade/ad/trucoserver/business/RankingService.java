@@ -47,6 +47,16 @@ public class RankingService implements PartidaTerminadaObserver {
 		}
 	}
 	
+	private SortedSet<RankingItem> cargaRankingGrupo(int idGrupo) {
+		try {
+			Transaction tr = logDao.getSession().beginTransaction();
+			SortedSet<RankingItem> items = new TreeSet<>(logDao.getAgrupadoJugadorTotalesGrupo(idGrupo));
+			tr.commit();
+			return items;
+		} catch (Exception e) {
+			throw new RuntimeException("No se pudo cargar ranking", e);
+		}
+	}
 	public RankingItem getItem(int idJugador) {
 		//Malisimo, pero es el tp, ya fue
 		for (RankingItem ri : rankingItems) {

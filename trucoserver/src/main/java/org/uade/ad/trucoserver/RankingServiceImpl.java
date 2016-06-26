@@ -42,6 +42,7 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 					item.setPuntos(ri.getPuntos());
 					item.setPosicion(i);
 					rankitemdto.add(item);
+					
 				}
 				i++;
 			}
@@ -62,19 +63,16 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 			SortedSet<RankingItem> resSet = rs.rankingItems;
 			RankingDTO rankdto = new RankingDTO();
 			List<RankingItemDTO> rankitemdto = new ArrayList<RankingItemDTO>();
-//			List<int> idsgrupo = new ArrayList<int>();
 			for (RankingItem ri: resSet){
-//				if(ri.getJugador().getGrupos().contains(o)){
-//					RankingItemDTO item = new RankingItemDTO();
-//					item.setJugador(jugador);
-//					item.setPartidasGanadas(ri.getPartidasGanadas());
-//					item.setPartidasJugadas(ri.getPartidasJugadas());
-//					item.setPromedioGanadas(ri.getPromedioGanadas());
-//					item.setPuntos(ri.getPuntos());
-//					item.setPosicion(i);
-//					rankitemdto.add(item);
-//				}
-//				i++;
+					RankingItemDTO item = new RankingItemDTO();
+					item.setJugador(jugador);
+					item.setPartidasGanadas(ri.getPartidasGanadas());
+					item.setPartidasJugadas(ri.getPartidasJugadas());
+					item.setPromedioGanadas(ri.getPromedioGanadas());
+					item.setPuntos(ri.getPuntos());
+					item.setPosicion(i);
+					rankitemdto.add(item);
+					i++;
 			}
 			rankdto.setItems(rankitemdto);
 			return rankdto;

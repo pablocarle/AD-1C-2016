@@ -44,6 +44,26 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		}
 		return retSet;
 	}
+	
+	public SortedSet<RankingItem> getAgrupadoJugadorTotalesGrupo(int idGrupo) {
+		Session session = getSession();
+		String queryStr = buildAgrupadoJugadorTotalesGrupoQuery(idGrupo);
+		Query query = session.createQuery(queryStr);
+		List<?> data = query.list();
+		SortedSet<RankingItem> retSet = new TreeSet<>();
+		if (data != null && !data.isEmpty()) {
+			Object[] array = null;
+			for (Object o : data) {
+				if (o instanceof Object[] && ((Object[]) o).length == 4) {
+					array = (Object[]) o;
+					retSet.add(new RankingItem((Jugador) array[0], ((Number) array[3]).longValue(), ((Number) array[2]).longValue(), ((Number) array[1]).longValue()));
+				} else {
+					throw new RuntimeException("Se esperaba array de 4 elementos. Se obtuvo: " + o);
+				}
+			}
+		}
+		return retSet;
+	}
 
 	private String buildAgrupadoJugadorTotalesQuery() {
 		StringBuilder str = new StringBuilder();
@@ -57,4 +77,22 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		return str.toString();
 	}
 
+	private String buildAgrupadoJugadorTotalesGrupoQuery(int idGrupo) {
+		StringBuilder str = new StringBuilder();
+		str.append("select j.jugador, ");
+		str.append("count(*) as cantidad_jugados, ");
+		str.append("sum(case when victoria = true then 1 else 0 END) as cantidad_victorias, ");
+		str.append("sum(j.puntos) as puntos ");
+		str.append("from LogJuego j ");
+		str.append("inner join PartidaCerrada pc ");
+		str.append("on pc.idPartida = j.idPartida ");
+		str.append("and pc.grupo.idGrupo = " + idGrupo + " ");
+		str.append("group by j.jugador ");
+		str.append("order by puntos ");
+		return str.toString();
+	}
+
+
+
+	
 }

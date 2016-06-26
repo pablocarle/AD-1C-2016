@@ -9,4 +9,6 @@ public interface Juego_LogDao extends GenericDao<LogJuego, Integer> {
 
 	SortedSet<RankingItem> getAgrupadoJugadorTotales();
 
+	SortedSet<RankingItem> getAgrupadoJugadorTotalesGrupo(int idGrupo);
+
 }
