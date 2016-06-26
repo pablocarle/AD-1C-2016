@@ -176,7 +176,7 @@ public class Carta implements Comparable<Carta>, HasDTO<CartaDTO> {
 		public int compare(Carta o1, Carta o2) {
 			if (o1.pesoEnvido < o2.pesoEnvido) {
 				return -1 * order;
-			} else if (o1.pesoEnvido < o2.pesoEnvido) {
+			} else if (o1.pesoEnvido > o2.pesoEnvido) {
 				return 1 * order;
 			}
 			return 0;
