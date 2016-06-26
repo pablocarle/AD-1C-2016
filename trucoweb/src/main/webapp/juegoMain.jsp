@@ -449,6 +449,7 @@ cantartruco = function() {
 };
 
 </script>
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
 </head>
 <body>
 <%

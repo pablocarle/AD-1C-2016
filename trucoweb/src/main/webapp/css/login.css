@@ -61,7 +61,7 @@ body {
 }
 
 .login input[type=text] {
-	width: 250px;
+	width: 100%;
 	height: 30px;
 	background: transparent;
 	border: 1px solid rgba(255, 255, 255, 0.6);
@@ -74,7 +74,7 @@ body {
 }
 
 .login input[type=password] {
-	width: 250px;
+	width: 100%;
 	height: 30px;
 	background: transparent;
 	border: 1px solid rgba(255, 255, 255, 0.6);
@@ -88,7 +88,7 @@ body {
 }
 
 .login input[type=submit] {
-	width: 260px;
+	width: 100%;
 	height: 35px;
 	background: #fff;
 	border: 1px solid #fff;
@@ -125,12 +125,12 @@ body {
 }
 
 .login div {
-	padding-top: 5px;	
+	padding-top: 5px;
 }
 
-.login div span a{
+.login div span a {
 	font-weight: bold;
-	color: white;	
+	color: white;
 }
 
 ::-webkit-input-placeholder {

@@ -9,6 +9,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Nueva partida Cerrada</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap/bootstrap.min.css">
 </head>
 <body>
 <!-- El usuario debe seleccionar el grupo que desea utilizar (se muestran los grupos de los cuales es administrador) -->

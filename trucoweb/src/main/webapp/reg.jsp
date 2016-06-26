@@ -23,6 +23,8 @@
 </script>
 <link rel="stylesheet" type="text/css" href="css/global.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
+<link rel="stylesheet" type="text/css"
+	href="css/bootstrap/bootstrap.min.css">
 </head>
 <body>
 	<form id="regForm" method="post" action="RegisterServlet"
@@ -37,9 +39,10 @@
 		<br>
 		<div class="login">
 			<input type="text" id="apodoField" placeholder="apodo" name="apodo"><br>
-			<input type="text" style="margin-top: 10px;"id="emailField" placeholder="email" name="email"><br>
-			<input type="password" id="passField" placeholder="password"
-				name="pass"><br> <input type="submit" value="Registrar">
+			<input type="text" style="margin-top: 10px;" id="emailField"
+				placeholder="email" name="email"><br> <input
+				type="password" id="passField" placeholder="password" name="pass"><br>
+			<input type="submit" value="Registrar">
 			<%
 				String regResult = "Falta completar campos"; //Malisimo: Por default falta algun campo
 				boolean showMessage = false;
@@ -65,7 +68,8 @@
 				}
 			%>
 			<div>
-				<span>Ya tengo usuario! <a href="index.jsp">INGRESAR</a></span>
+				<span class="label label-default">Ya tengo usuario! <a
+					href="index.jsp">INGRESAR</a></span>
 			</div>
 		</div>
 	</form>

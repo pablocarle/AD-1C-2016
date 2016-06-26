@@ -24,6 +24,8 @@
 </script>
 <link rel="stylesheet" type="text/css" href="css/global.css">
 <link rel="stylesheet" type="text/css" href="css/login.css">
+<link rel="stylesheet" type="text/css"
+	href="css/bootstrap/bootstrap.min.css">
 </head>
 <body>
 	<!-- Estamos usando el submit del form como viene. Se podria reemplazar por llamada ajax (ECMA o jquery) -->
@@ -46,14 +48,15 @@
 						&& !((Boolean) session.getAttribute("loginResult"))) {
 					session.removeAttribute("loginResult");
 			%>
-			<div id="messageRow">
-				<span id="message">Login incorrecto</span>
+			<div>
+				<span class="label label-danger"><strong>Error!</strong> Login incorrecto.</span>
 			</div>
 			<%
 				}
 			%>
 			<div>
-				<span>No tengo usuario! <a href="reg.jsp">REGISTRARME</a></span>
+				<span class="label label-default">No tengo usuario! <a
+					href="reg.jsp">REGISTRARME</a></span>
 			</div>
 		</div>
 	</form>

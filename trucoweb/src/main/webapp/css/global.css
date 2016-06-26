@@ -4,9 +4,13 @@ body {
 	background: -moz-linear-gradient(right, #76b852, #8DC26F);
 	background: -o-linear-gradient(right, #76b852, #8DC26F);
 	background: linear-gradient(to left, #76b852, #8DC26F);
+	background: url("../images/wood-1.jpg") no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+	background-size: cover;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
-	background: url("../images/wood-1.jpg");
 }
 
 /* Change the white to any color ;) */
