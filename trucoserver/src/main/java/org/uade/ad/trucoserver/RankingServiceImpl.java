@@ -38,7 +38,7 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 					item.setJugador(ri.getJugador().getDTO());
 					item.setPartidasGanadas(ri.getPartidasGanadas());
 					item.setPartidasJugadas(ri.getPartidasJugadas());
-					item.setPromedioGanadas(ri.getPromedioGanadas());
+					item.setPromedioGanadas(ri.getPuntos()/ri.getPartidasJugadas());
 					item.setPuntos(ri.getPuntos());
 					item.setPosicion(i);
 					rankitemdto.add(item);
