@@ -29,7 +29,7 @@
 	%>
 	<div class="page-header" style="color: white">
 		<h1>
-			SELECCIONAR GRUPO PARA <small style="border: 1px solid; color: white">RANKING</small>
+			RANKING <small style="border: 1px solid; color: white">GRUPO</small>
 		</h1>
 	</div>
 	<div class="row" style="margin-top: 50px; color: white">
@@ -56,7 +56,7 @@
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
-						<button type="submit" class="btn btn-default" value="Iniciar">Iniciar</button>
+						<button type="submit" class="btn btn-default" value="Iniciar">Ver</button>
 						<button onclick="location.href='/trucoweb/main.jsp'" type="button"
 							class="btn btn-default">Volver</button>
 					</div>

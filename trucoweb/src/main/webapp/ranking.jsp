@@ -14,6 +14,16 @@
 	href="css/bootstrap/bootstrap.min.css">
 <link rel="stylesheet" type="text/css"
 	href="css/font-awesome/font-awesome.min.css">
+<style>
+thead th {
+	background-color: white;
+	color: black;
+}
+
+tbody td {
+	background-color: grey;
+}
+</style>
 </head>
 <body>
 	<div class="page-header" style="color: white">
@@ -30,7 +40,7 @@
 				} else {
 			%>
 			<div class="table-responsive">
-				<table class="table table-inverse">
+				<table class="table table-bordered">
 					<thead>
 						<tr>
 							<th>Apodo</th>
@@ -42,21 +52,23 @@
 					</thead>
 					<tbody>
 						<%
-							JugadorDTO user = (JugadorDTO)session.getAttribute("user");
-							System.out.println("apodo usuario:" + user.getApodo());	
-							for (RankingItemDTO item : ranking.getItems()) {
+							JugadorDTO user = (JugadorDTO) session.getAttribute("user");
+								System.out.println("apodo usuario:" + user.getApodo());
+								for (RankingItemDTO item : ranking.getItems()) {
 						%>
-						<tr><%
-
-						System.out.println("apodo jugador:" + item.getJugador().getApodo());
-						if(item.getJugador().getApodo()==user.getApodo()) { %>
+						<tr>
+							<%
+								System.out.println("apodo jugador:"
+												+ item.getJugador().getApodo());
+										if (item.getJugador().getApodo() == user.getApodo()) {
+							%>
 							<td Style="background-color: green !important;"><b><%=item.getJugador().getApodo()%></b></td>
 							<td Style="background-color: green !important;"><b><%=item.getPuntos()%></b></td>
 							<td Style="background-color: green !important;"><b><%=item.getPartidasGanadas()%></b></td>
 							<td Style="background-color: green !important;"><b><%=item.getPartidasJugadas()%></b></td>
 							<td Style="background-color: green !important;"><b><%=item.getPromedioGanadas()%></b></td>
-							<% 
-							}else{
+							<%
+								} else {
 							%>
 							<td><%=item.getJugador().getApodo()%></td>
 							<td><%=item.getPuntos()%></td>
@@ -64,8 +76,8 @@
 							<td><%=item.getPartidasJugadas()%></td>
 							<td><%=item.getPromedioGanadas()%></td>
 							<%
-							}
-							%>						
+								}
+							%>
 						</tr>
 						<%
 							}
