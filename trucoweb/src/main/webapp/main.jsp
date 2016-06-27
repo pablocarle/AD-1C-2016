@@ -109,7 +109,7 @@
 		<div class="col-md-offset-2 col-md-8">
 			<button onclick="location.href='/trucoweb/RankingServlet'"
 				class="button button--wapasha button--round-s">
-				<i class="fa fa-trophy" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> RANKING</span>
+				<i class="fa fa-trophy" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> RANKING GENERAL</span>
 			</button>
 			<button onclick="location.href='/trucoweb/grupoReg.jsp'"
 				class="button button--wapasha button--round-s">
@@ -119,6 +119,12 @@
 			<button onclick="location.href='/trucoweb/index.jsp'"
 				class="button button--wapasha button--round-s">
 				<i class="fa fa-sign-out" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> SALIR</span>
+			</button>
+		</div>
+		<div class="col-md-offset-2 col-md-8">
+			<button onclick="location.href='/trucoweb/rankingGrupo.jsp'"
+				class="button button--wapasha button--round-s">
+				<i class="fa fa-trophy" style="font-size:24px; vertical-align: middle" aria-hidden="true"></i><span> RANKING GRUPO</span>
 			</button>
 		</div>
 	</div>
