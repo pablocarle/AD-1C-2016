@@ -33,9 +33,9 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 			RankingDTO rankdto = new RankingDTO();
 			List<RankingItemDTO> rankitemdto = new ArrayList<RankingItemDTO>();
 			for (RankingItem ri: resSet){
-				if(ri.getJugador().getApodo()==jugador.getApodo()){
+//				if(ri.getJugador().getApodo()==jugador.getApodo()){
 					RankingItemDTO item = new RankingItemDTO();
-					item.setJugador(jugador);
+					item.setJugador(ri.getJugador().getDTO());
 					item.setPartidasGanadas(ri.getPartidasGanadas());
 					item.setPartidasJugadas(ri.getPartidasJugadas());
 					item.setPromedioGanadas(ri.getPromedioGanadas());
@@ -43,7 +43,7 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 					item.setPosicion(i);
 					rankitemdto.add(item);
 					
-				}
+//				}
 				i++;
 			}
 			rankdto.setItems(rankitemdto);

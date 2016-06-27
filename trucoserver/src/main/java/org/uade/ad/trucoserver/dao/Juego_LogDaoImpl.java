@@ -73,7 +73,7 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		str.append("sum(j.puntos) as puntos ");
 		str.append("from LogJuego j ");
 		str.append("group by j.jugador ");
-		str.append("order by puntos desc");
+		str.append("order by puntos asc");
 		return str.toString();
 	}
 
@@ -88,7 +88,7 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		str.append("on pc.idPartida = j.idPartida ");
 		str.append("and pc.grupo.idGrupo = " + idGrupo + " ");
 		str.append("group by j.jugador ");
-		str.append("order by puntos desc");
+		str.append("order by puntos asc");
 		return str.toString();
 	}
 

@@ -52,6 +52,7 @@ public class RankingServlet extends HttpServlet {
 			error("No hay sesion", request, response);
 			return;
 		}
+
 		JugadorDTO jugador = (JugadorDTO) session.getAttribute("user");
 		if (jugador == null) {
 			error("No hay jugador logueado", request, response);
