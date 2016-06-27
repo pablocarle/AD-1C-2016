@@ -144,9 +144,13 @@ public class Mano implements ManoTerminadaObservable {
 				bazaActual.jugarCarta(jugador, carta);
 				turnoActualIdx++;
 				if (bazaActual.esCompleta()) {
-					ganadorAnterior = bazaActual.getResultado().getJugador(); 
-					ordenJuegoActual = getNuevoOrdenJuego(ganadorAnterior, ordenJuegoInicial);
-					turnoActualIdx = 0;
+					ganadorAnterior = bazaActual.getResultado().getJugador();
+					if (bazaActual.getResultado().isParda()) {
+						turnoActualIdx = 0;
+					} else {
+						ordenJuegoActual = getNuevoOrdenJuego(ganadorAnterior, ordenJuegoInicial);
+						turnoActualIdx = 0;
+					}
 				}
 				if (terminada()) {
 					Pareja ganador = getGanador();
