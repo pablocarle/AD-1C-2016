@@ -50,11 +50,11 @@
 
 						System.out.println("apodo jugador:" + item.getJugador().getApodo());
 						if(item.getJugador().getApodo()==user.getApodo()) { %>
-							<td Style="background-color: green !important;"><%=item.getJugador().getApodo()%></td>
-							<td Style="background-color: green !important;"><%=item.getPuntos()%></td>
-							<td Style="background-color: green !important;"><%=item.getPartidasGanadas()%></td>
-							<td Style="background-color: green !important;"><%=item.getPartidasJugadas()%></td>
-							<td Style="background-color: green !important;"><%=item.getPromedioGanadas()%></td>
+							<td Style="background-color: green !important;"><b><%=item.getJugador().getApodo()%></b></td>
+							<td Style="background-color: green !important;"><b><%=item.getPuntos()%></b></td>
+							<td Style="background-color: green !important;"><b><%=item.getPartidasGanadas()%></b></td>
+							<td Style="background-color: green !important;"><b><%=item.getPartidasJugadas()%></b></td>
+							<td Style="background-color: green !important;"><b><%=item.getPromedioGanadas()%></b></td>
 							<% 
 							}else{
 							%>
