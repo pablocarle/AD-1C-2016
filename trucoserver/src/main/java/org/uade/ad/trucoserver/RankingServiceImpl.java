@@ -65,7 +65,7 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 			List<RankingItemDTO> rankitemdto = new ArrayList<RankingItemDTO>();
 			for (RankingItem ri: resSet){
 					RankingItemDTO item = new RankingItemDTO();
-					item.setJugador(jugador);
+					item.setJugador(ri.getJugador().getDTO());
 					item.setPartidasGanadas(ri.getPartidasGanadas());
 					item.setPartidasJugadas(ri.getPartidasJugadas());
 					item.setPromedioGanadas(ri.getPuntos()/ri.getPartidasJugadas());
