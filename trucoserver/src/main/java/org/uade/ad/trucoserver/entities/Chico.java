@@ -214,7 +214,6 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 			throw new JuegoException("No es el turno de " + j.getApodo());
 		Mano manoActual = getManoActual();
 		if (manoActual == null || manoActual.terminada() || !manoActual.tieneMovimientos()) {
-			circularOrdenJuego();
 			Map<Integer, Set<Carta>> r = CartasManager.getManager().getRandomSets(partida.getParejas().size()*2);
 			cartas = new HashMap<>(partida.getParejas().size()*2);
 			Jugador jugador = null;
@@ -237,9 +236,7 @@ public class Chico implements HasDTO<ChicoDTO>, ManoTerminadaObserver, ManoTermi
 			} else {
 				ordenJuego = new ArrayList<>(ordenJuegoActual);
 			}
-			if (manos == null || manos.isEmpty()) {
-				Collections.rotate(ordenJuego, -1);
-			}
+			Collections.rotate(ordenJuego, -1);
 			Mano mano = new Mano(this, partida.getParejas().get(0), partida.getParejas().get(1), cartas, ordenJuego);
 			manos.add(mano);
 			mano.agregarObserver(this);
