@@ -43,15 +43,18 @@
 					<tbody>
 						<%
 							JugadorDTO user = (JugadorDTO)session.getAttribute("user");
+							System.out.println("apodo usuario:" + user.getApodo());	
 							for (RankingItemDTO item : ranking.getItems()) {
 						%>
 						<tr><%
-							if(item.getJugador().getApodo()==user.getApodo()) { %>
-							<td bgcolor="green"><%=item.getJugador().getApodo()%></td>
-							<td bgcolor="green"><%=item.getPuntos()%></td>
-							<td bgcolor="green"><%=item.getPartidasGanadas()%></td>
-							<td bgcolor="green"><%=item.getPartidasJugadas()%></td>
-							<td bgcolor="green"><%=item.getPromedioGanadas()%></td>
+
+						System.out.println("apodo jugador:" + item.getJugador().getApodo());
+						if(item.getJugador().getApodo()==user.getApodo()) { %>
+							<td Style="background-color: green !important;"><%=item.getJugador().getApodo()%></td>
+							<td Style="background-color: green !important;"><%=item.getPuntos()%></td>
+							<td Style="background-color: green !important;"><%=item.getPartidasGanadas()%></td>
+							<td Style="background-color: green !important;"><%=item.getPartidasJugadas()%></td>
+							<td Style="background-color: green !important;"><%=item.getPromedioGanadas()%></td>
 							<% 
 							}else{
 							%>
