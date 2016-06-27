@@ -49,6 +49,7 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		Session session = getSession();
 		String queryStr = buildAgrupadoJugadorTotalesGrupoQuery(idGrupo);
 		Query query = session.createQuery(queryStr);
+		query.setParameter("idGrupo", idGrupo);
 		List<?> data = query.list();
 		SortedSet<RankingItem> retSet = new TreeSet<>();
 		if (data != null && !data.isEmpty()) {
@@ -83,10 +84,9 @@ public class Juego_LogDaoImpl extends GenericDaoImpl<LogJuego, Integer> implemen
 		str.append("count(*) as cantidad_jugados, ");
 		str.append("sum(case when victoria = true then 1 else 0 END) as cantidad_victorias, ");
 		str.append("sum(j.puntos) as puntos ");
-		str.append("from LogJuego j ");
-		str.append("inner join PartidaCerrada pc ");
-		str.append("on pc.idPartida = j.idPartida ");
-		str.append("and pc.grupo.idGrupo = " + idGrupo + " ");
+		str.append("from LogJuego j, PartidaCerrada pc ");
+		str.append("where pc = j.partida ");
+		str.append("and pc.grupo.idGrupo = :idGrupo ");
 		str.append("group by j.jugador ");
 		str.append("order by puntos asc");
 		return str.toString();

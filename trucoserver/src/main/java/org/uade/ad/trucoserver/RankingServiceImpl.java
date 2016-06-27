@@ -60,7 +60,7 @@ public class RankingServiceImpl extends Context implements org.uade.ad.trucorepo
 		try {
 			int i=1;
 			RankingService rs = RankingService.getService();
-			SortedSet<RankingItem> resSet = rs.rankingItems;
+			SortedSet<RankingItem> resSet = rs.cargaRankingGrupo(idGrupo);
 			RankingDTO rankdto = new RankingDTO();
 			List<RankingItemDTO> rankitemdto = new ArrayList<RankingItemDTO>();
 			for (RankingItem ri: resSet){

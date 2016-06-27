@@ -47,7 +47,7 @@ public class RankingService implements PartidaTerminadaObserver {
 		}
 	}
 	
-	private SortedSet<RankingItem> cargaRankingGrupo(int idGrupo) {
+	public SortedSet<RankingItem> cargaRankingGrupo(int idGrupo) {
 		try {
 			Transaction tr = logDao.getSession().beginTransaction();
 			SortedSet<RankingItem> items = new TreeSet<>(logDao.getAgrupadoJugadorTotalesGrupo(idGrupo));
