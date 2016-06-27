@@ -1,4 +1,5 @@
 <%@page import="org.uade.ad.trucorepo.dtos.RankingItemDTO"%>
+<%@page import="org.uade.ad.trucorepo.dtos.JugadorDTO"%>
 <%@page import="org.uade.ad.trucorepo.dtos.RankingDTO"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -41,14 +42,27 @@
 					</thead>
 					<tbody>
 						<%
+							JugadorDTO user = (JugadorDTO)session.getAttribute("user");
 							for (RankingItemDTO item : ranking.getItems()) {
 						%>
-						<tr>
+						<tr><%
+							if(item.getJugador().getApodo()==user.getApodo()) { %>
+							<td bgcolor="green"><%=item.getJugador().getApodo()%></td>
+							<td bgcolor="green"><%=item.getPuntos()%></td>
+							<td bgcolor="green"><%=item.getPartidasGanadas()%></td>
+							<td bgcolor="green"><%=item.getPartidasJugadas()%></td>
+							<td bgcolor="green"><%=item.getPromedioGanadas()%></td>
+							<% 
+							}else{
+							%>
 							<td><%=item.getJugador().getApodo()%></td>
 							<td><%=item.getPuntos()%></td>
 							<td><%=item.getPartidasGanadas()%></td>
 							<td><%=item.getPartidasJugadas()%></td>
 							<td><%=item.getPromedioGanadas()%></td>
+							<%
+							}
+							%>						
 						</tr>
 						<%
 							}
