@@ -30,7 +30,12 @@ public class CategoriaPromocionService implements PartidaTerminadaObserver {
 	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		RankingItem rankingItem = null;
 		Categoria categoriaCalculada = null;
-		Transaction tr = jDao.getSession().beginTransaction();
+		Transaction tr = jDao.getSession().getTransaction();
+		boolean commit = false;
+		if (tr == null || !tr.isActive()) {
+			tr = jDao.getSession().beginTransaction();
+			commit = true;
+		}
 		for (Jugador ganador : partida.getGanadores()) {
 			rankingItem = RankingService.getService().getItem(ganador.getIdJugador());
 			if (rankingItem == null)
@@ -42,7 +47,8 @@ public class CategoriaPromocionService implements PartidaTerminadaObserver {
 				jDao.actualizar(ganador);
 			}
 		}
-		tr.commit();
+		if (commit)
+			tr.commit();
 	}
 
 	private Categoria calcularCategoria(RankingItem rankingItem) {

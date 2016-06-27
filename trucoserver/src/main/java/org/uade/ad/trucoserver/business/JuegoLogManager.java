@@ -30,7 +30,12 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 	@Override
 	public void finPartida(PartidaTerminadaEvent partida) throws JuegoException {
 		//Actualizar log
-		Transaction tr = dao.getSession().beginTransaction();
+		Transaction tr = dao.getSession().getTransaction();
+		boolean commit = false;
+		if (tr == null || !tr.isActive()) {
+			tr = dao.getSession().beginTransaction();
+			commit = true;
+		}
 		LogJuego entity = null;
 		for (Jugador ganador : partida.getGanadores()) {
 			entity = new LogJuego();
@@ -50,6 +55,7 @@ public class JuegoLogManager implements PartidaTerminadaObserver {
 			entity.setPartida(partida.getPartida());
 			dao.guardar(entity);
 		}
-		tr.commit();
+		if (commit)
+			tr.commit();
 	}
 }
